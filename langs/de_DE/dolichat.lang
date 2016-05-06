@@ -1,0 +1,111 @@
+﻿/*
+* @ Backbone internet service GMBH AT
+* Guido Schratzer, Niklas Spanring
+* Language code: de_DE
+* QA release date 2016-03-03
+* 
+*/
+DelShowInt=Chat Benachrichtigung neben dem Login Namen? (deaktivieren wenn nicht die main.inc.php nicht verändert wurde! Gemäß der Readme.txt)
+DelShowLinkAsItOwn=Chat als eigenes Main Menu anzeigen?
+DelShowLink=Beim Main Menu Partner Chat Link anzeigen?
+DelShowLinkAgenda=Beim Main Menu Agenda Chat Link anzeigen?
+DelUseInWebapp=Chat auch im Module Webapp aktivieren?
+DelTimeUse=Nach einem bestimmten Alter die Chat Einträge nicht mehr Anzeigen?
+DelTime=Anzahl an Tagen die ein Eintrag alt sein muss um nicht mehr angezeigt zu werden.
+userconf=Benutzer Einstellungen
+confkontakt=Kontakt Einstellungen
+makegroup=Gruppe erstellen
+ordgroup=Gruppe verwalten
+loadingwithdots = Lade ...
+Senden=Senden
+Textübernehmen=Text übernehmen?
+Sendenan=Senden an:
+Einstellungen=Einstellungen
+IBklkeFa=Ihr Browser kann leider keine eingebetteten Frames anzeigen
+NibidCG=Nutzer ist bereits in der Chat Gruppe!
+Namec=Name:
+Beschreibungc=Beschreibung:
+Nein=Nein
+Ja=Ja
+SchreibeBerechtigung=Schreibe Berechtigung?:
+BilderHochladenBerechtigung=Bilder Hochladen Berechtigung?:
+Speichern=Speichern
+Einstellungenmitklammer=(Einstellungen)
+GuppeVerlassen=(Gruppe Verlassen)
+GuppeLöschen=(Gruppe Löschen)
+Nutzerhinzufügen=(Nutzer hinzufügen)
+Benutzerc=Benutzer:
+Blacklist=Blacklist
+Whitelist=Whitelist
+Serachc=Suchen:
+GruppenNamec=Gruppen Name:
+GruppenBeschreibungc=Gruppen Beschreibung:
+GruppenRechtec=Gruppen Rechte:
+Write=Schreiben
+PicUpload=Bilder Hochladen
+GruppenBenutzerc=Gruppen Benutzer:
+Speichernc=Speichern:
+StandartauswahlcKSendenancK=Standard Auswahl: (Senden an:) 
+BilderAnzeigenf=Bilder Anzeigen?
+SekundenK3isrecommendedK=Sekunden (3 ist empfohlen)
+Kontakteverwalten=Kontakte verwalten
+LinkzumKontakteverwalten=Link zum Kontakte verwalten
+GruppenEinstllungen=Gruppen Einstellungen
+GruppeErstellen=Gruppe Erstellen
+AusGruppeaustrehten=Aus Gruppe austreten
+GruppenVerwaltenKnurAdminK=Gruppen Verwalten
+zum=zum
+BitteNachrichteingeben=Bitte Nachricht eingeben
+Nachricht bei Klick Löschen=Nachricht bei Klick Löschen
+Linke Spalte ausblenden?=Linke Spalte ausblenden?
+So=Son
+Mo=Mon
+Di=Die
+Mi=Mit
+Do=Don
+Fr=Fr
+Sa=Sam
+DisplayInfo=Info Einblendungen
+Werbung1=Durch dem Erwerb von dolichat ist es sehr empfohlen das Module Webapp zu
+Werbung2=Das Module Webapp field staff bietet außerdem auch: (+ Termine einsehen und Produkt Verkäufe eingeben) und Funktioniert auf iPhone und Android 
+Werbung3=Das Module Webapp field staff bietet außerdem auch: (+ Kontakte bearbeiten, hinzufügen, Anrufen)
+Werbung4=Das Module Webapp field staff bietet außerdem auch: (+ Google Map Funktion integriert zum leichten finden der Termine)
+Werbung5=Das Module Webapp field staff bietet außerdem auch: (+ Chat mit dolichat Module)
+Werbung6=Das Module Webapp field staff bietet außerdem auch: (+ Statistiken)
+Kaufen=Kaufen
+WhatsAppDesc=Dolichat kann durch die WhatsApp Funktion erweitert werden. Hier definieren Sie das WhatsApp Konto des Dolibarr-System:
+WhatsAppSetup=WhatsApp Einstellungen
+MAIN_DISABLE_WHATSAPP=WhatsApp Funktion abschalten
+MAIN_WHATSAPP_UN=WhatsApp - Benutzername 
+MAIN_WHATSAPP_NN=WhatsApp - Nickname
+MAIN_WHATSAPP_PW=WhatsApp - Passwort
+WhatsAppUNDescTitle=WhatsApp Benutzer
+WhatsAppUNDescDesc=Telefonnummer mit Vorwahl ohne "00" oder "+"
+WhatsAppPWDescTitle=WhatsApp Passwort
+WhatsAppPWDescDesc=Mit einem gerooteten Mobiltelefon kann dies z.B. gelesen werden
+WhatsAppNNDescTitle=WhatsApp Nickname
+WhatsAppNNDescDesc=This is the username (or nickname) displayed by WhatsApp clients
+WhatsAppPWDescTitle=WhatsApp Passwort
+WhatsAppPWDescDesc=WhatsApp Registrierungs-Passwort
+WAText=Nachricht
+WhatsAppTo=Empfängeradresse
+MAIN_WHATSAPP_STATUS=WhatsApp - Status
+WhatsAppStatusDescTitle=Status
+WhatsAppStatusDescDesc=der Status ist für alle WhatsApp-Kontakte sichtbar - z.B. Benutze gerade WhatsApp
+
+### Next Gen Chat ###
+
+PressEnterToSend=Enter zum Senden 
+Send=Senden
+Chats=Unterhaltungen
+Contacts=Kontakte
+UserSearchDotDotDot=Kontakt Suche ...
+ImagefromaURL=Bild von einer URL
+ShowaImagefromaotherServerdot=Zeige ein Bild von einen externen Server.
+OK=OK
+UrlfromanImage=http://server.com/image.jpg ...
+OnlineStatusGrey=Offline
+OnlineStatusGreen=Online
+OnlineStatusOrange=Abwesend
+Mute=Stumm schalten
+OnlineStatusUnknow=Unbekannt

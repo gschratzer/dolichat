@@ -1,0 +1,93 @@
+﻿*/
+
+
+CHARSET=UTF-8
+
+
+
+DelShowInt=Discuter alerte à côté du nom de connexion? (Désactiver sinon main.inc.php n'a pas été modifié! Acc Readme.txt) 
+DelShowLinkAsItOwn=Voir le chat comme un menu principal séparé? 
+DelShowLink=Afficher le Menu principal partenaire chat Link? 
+DelShowLinkAgenda=Afficher le menu principal ordre du jour une discussion en lien? 
+DelUseInWebapp=Discuter dans les modules permettent webapp? 
+DelTimeUse=Après un certain âge, les messages de chat ne s'affiche pas? 
+DelTime=Nombre de jours qui doit être de plus semble être une ancienne entrée. 
+userconf=préférences de l'utilisateur 
+confkontakt=paramètres des contacts 
+makegroup=Créer un groupe 
+ordgroup=gérer groupe 
+loadingwithdots = Chargement en cours ... 
+Senden=envoyer 
+Textübernehmen=Prendre sur le texte? 
+Sendenan=Envoyer à: 
+Einstellungen=paramètres 
+IBklkeFa=Votre navigateur ne supporte pas les iframes 
+NibidCG=L'utilisateur est déjà dans le groupe de discussion! 
+Namec=nom: 
+Beschreibungc=Description: 
+Nein=aucun 
+Ja=oui 
+SchreibeBerechtigung=Donnez votre permission?: 
+BilderHochladenBerechtigung=Téléchargez autorisation?: 
+Speichern=Enregistrer 
+Einstellungenmitklammer=(Paramètres) 
+GuppeVerlassen=(Guppe Exit) 
+GuppeLöschen=(Guppe Supprimer) 
+Nutzerhinzufügen=(Ajouter un utilisateur) 
+Benutzerc=utilisateur: 
+Blacklist=Blacklist 
+Whitelist=Liste blanche 
+Serachc=Zerah: 
+GruppenNamec=Nom du groupe: 
+GruppenBeschreibungc=Description du groupe: 
+GruppenRechtec=Des groupes de droits: 
+Write=lettre 
+PicUpload=Télécharger 
+GruppenBenutzerc=Les groupes d'utilisateurs: 
+Speichernc=Économisez: 
+StandartauswahlcKSendenancK=Choix Standart: à (envoyer :) 
+BilderAnzeigenf=Annonces de photo? 
+SekundenK3isrecommendedK=Secondes (3 Il est fortement déconseillé) 
+Kontakteverwalten=gérer les contacts 
+LinkzumKontakteverwalten=Lien de gérer les contacts 
+GruppenEinstllungen=groupes Paramètres 
+GruppeErstellen=Créer un groupe 
+AusGruppeaustrehten=Emerge du groupe 
+GruppenVerwaltenKnurAdminK=général du Groupe 
+zum=pour 
+BitteNachrichteingeben=Saisissez votre message
+Nachricht bei Klick Löschen=
+Linke Spalte ausblenden?=Cacher la colonne de gauche?
+So=dim
+Mo=lun
+Di=mar
+Mi=mer
+Do=jeu
+Fr=ven
+Sa=sam
+DisplayInfo=Display Info
+Werbung1=Grâce à l'acquisition de dolichat il est fortement recommandé que les modules webapp à
+Werbung2=Le personnel de terrain de webapp modules offre également aussi: (voir + dates et saisissez les ventes de produits) et fonctionne sur iPhone et Android
+Werbung3=Le personnel de terrain de webapp modules offre également aussi: (+ modifier des contacts, ajouter des appels)
+Werbung4=Le personnel de terrain de webapp modules offre également aussi: (+ Google fonction de carte est intégré pour faciliter trouver les dates)
+Werbung5=Le personnel de terrain de webapp modules offre également aussi: (+ Chat avec des modules de dolichat)
+Werbung6=Les modules webapp personnel de terrain offre également: (+ stats)
+Kaufen=
+acheter
+
+### Next Gen Chat ###
+
+PressEnterToSend=Enter to Send
+Send=Send
+Chats=Chats
+Contacts=Contacts
+UserSearchDotDotDot=Contacts Search ...
+ImagefromaURL=Image from an URL
+ShowaImagefromaotherServerdot=Show a Image from an external server.
+OK=OK
+UrlfromanImage=http://server.com/image.jpg ...
+OnlineStatusGrey=Offline
+OnlineStatusGreen=Online
+OnlineStatusOrange=Absent
+Mute=Mute
+OnlineStatusUnknow=Unkown

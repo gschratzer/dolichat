@@ -1,0 +1,104 @@
+﻿
+/*
+* NIKLAS SPANRING @ Backbone internet service GMBH AT
+* Language code: en_UK
+* QA release date 2014-08-18
+* $langs->trans("");
+* 
+* 
+* 
+*/
+
+
+
+CHARSET=UTF-8
+
+
+
+
+DelShowInt=Chat alert next to the login name? (disable if not main.inc.php was not changed! acc the Readme.txt) 
+DelShowLinkAsItOwn=View chat as a separate Main Menu? 
+DelShowLink=Show the Main Menu partner Chat Link? 
+DelShowLinkAgenda=Show the Main Menu Agenda Chat Link? 
+DelUseInWebapp=Chat in modules enable webapp? 
+DelTimeUse=After a certain age the chat messages not displaying? 
+DelTime=Number of days that must to be to no longer appears to be an old entry. 
+userconf=user Preferences 
+confkontakt=Contact settings 
+makegroup=Create group
+ordgroup=Manage group 
+loadingwithdots = Loading ... 
+Senden=send 
+Textübernehmen=Take over text? 
+Sendenan=Send to: 
+Einstellungen=settings 
+IBklkeFa=Your browser does not support iframes 
+NibidCG=User is already in the group chat! 
+Namec=name: 
+Beschreibungc=Description: 
+Nein=no 
+Ja=yes 
+SchreibeBerechtigung=Write permission?: 
+BilderHochladenBerechtigung=Upload permission?: 
+Speichern=save 
+Einstellungenmitklammer=(Settings) 
+GuppeVerlassen=(Exit) 
+GuppeLöschen=(group Delete) 
+Nutzerhinzufügen=(Add User) 
+Benutzerc=user: 
+Blacklist=blacklist 
+Whitelist=whitelist 
+Serachc=Zerah: 
+GruppenNamec=Group name: 
+GruppenBeschreibungc=Group Description: 
+GruppenRechtec=Rights groups: 
+Write=letter 
+PicUpload=Upload 
+GruppenBenutzerc=User groups: 
+Speichernc=Save: 
+StandartauswahlcKSendenancK=Standart choice: to (send :) 
+BilderAnzeigenf=Photo ads? 
+SekundenK3isrecommendedK=Seconds (3 is strongly discouraged) 
+Kontakteverwalten=Manage contacts 
+LinkzumKontakteverwalten=Link to manage contacts 
+GruppenEinstllungen=groups settings 
+GruppeErstellen=
+AusGruppeaustrehten=Emerge from group 
+GruppenVerwaltenKnurAdminK=Group Managing 
+zum=for 
+BitteNachrichteingeben=Enter your message
+Nachricht bei Klick Löschen=Nachricht bei Klick Löschen
+Linke Spalte ausblenden?=Hide left column?
+So=Sun
+Mo=Mon 
+Di=Tue 
+Mi=Wed
+Do=Thu
+Fr=Fri
+Sa=Sat
+DisplayInfo=Display Info
+Werbung1=Through the acquisition of dolichat it is highly recommended that modules webapp to
+Werbung2=The modules webapp field staff also offers also: (see + dates and enter product sales) and Works on iPhone and Android
+Werbung3=The modules webapp field staff also offers also: (+ edit contacts, add calls)
+Werbung4=The modules webapp field staff also offers also: (+ Google map function is integrated for easy find the dates)
+Werbung5=The modules webapp field staff also offers also: (+ Chat with dolichat modules)
+Werbung6=The modules webapp field staff also offers: (+ stats)
+Kaufen=buy
+
+
+### Next Gen Chat ###
+
+PressEnterToSend=Enter to Send
+Send=Send
+Chats=Chats
+Contacts=Contacts
+UserSearchDotDotDot=Contacts Search ...
+ImagefromaURL=Image from an URL
+ShowaImagefromaotherServerdot=Show a Image from an external server.
+OK=OK
+UrlfromanImage=http://server.com/image.jpg ...
+OnlineStatusGrey=Offline
+OnlineStatusGreen=Online
+OnlineStatusOrange=Absent
+Mute=Mute
+OnlineStatusUnknow=Unkown

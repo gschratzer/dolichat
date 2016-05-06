@@ -1,0 +1,91 @@
+﻿
+/*
+* NIKLAS SPANRING @ Backbone internet service GMBH AT
+* Language code: en_UK
+* QA release date 2014-08-18
+* $langs->trans("");
+* 
+* 
+* 
+*/
+
+
+
+CHARSET=
+*/
+
+
+CHARSET                        UTF-8
+
+
+DelShowInt=Chatear alerta junto al nombre de inicio de sesión? (Desactivar si no main.inc.php no fue cambiada! Según el Readme.txt) 
+DelShowLinkAsItOwn=Ver el chat como un menú principal separada? 
+DelShowLink=Mostrar el menú principal socio Chat en Link? 
+DelShowLinkAgenda=Mostrar el menú principal Agenda Chat en Link? 
+DelUseInWebapp=Chatea en módulos permiten webapp? 
+DelTimeUse=Después de cierta edad los mensajes de chat no se presentan? 
+DelTime=Número de días que deben ser para ya no parece ser una entrada antigua. 
+
+
+userconf=Preferencias de Usuario 
+confkontakt=configuraciones de contacto 
+makegroup=crear un Grupo 
+ordgroup=Gestionar grupo 
+loadingwithdots =
+
+
+Senden=Enviar 
+Textübernehmen=Hacerse cargo de texto? 
+Sendenan=Enviar a: 
+Einstellungen=
+IBklkeFa=Su navegador no soporta iframes 
+NibidCG=El usuario ya está en el grupo de chat! 
+Namec=nombre: 
+Beschreibungc=Descripción: 
+Nein=No 
+Ja=Sí 
+SchreibeBerechtigung=Permiso de escritura?: 
+BilderHochladenBerechtigung=Sube autorización?: 
+Speichern=Guardar 
+Einstellungenmitklammer=(Ajustes) 
+GuppeVerlassen=(Grupo saliente) 
+GuppeLöschen=(Borrar grupo) 
+Nutzerhinzufügen=(Agregar usuario) 
+Benutzerc=usuario: 
+Blacklist=Blacklist 
+Whitelist=Lista blanca 
+Serachc=buscar: 
+GruppenNamec=Nombre del grupo: 
+GruppenBeschreibungc=Descripción del Grupo: 
+GruppenRechtec=Grupos de derechos humanos: 
+Write=Carta 
+PicUpload=Subir 
+GruppenBenutzerc=Grupos de usuarios: 
+Speichernc=Ahorra: 
+StandartauswahlcKSendenancK=Selección estándar: (enviar a :) 
+BilderAnzeigenf=Anuncios foto? 
+SekundenK3isrecommendedK=Segundos (3 recomendado) 
+Kontakteverwalten=Gestión de contactos 
+LinkzumKontakteverwalten=Enlace para gestionar contactos 
+GruppenEinstllungen=Configuración del grupo 
+GruppeErstellen=crear grupo 
+AusGruppeaustrehten=Emerge de grupo 
+GruppenVerwaltenKnurAdminK=General del Grupo 
+zum=para 
+BitteNachrichteingeben=Escriba su mensaje 
+Nachricht bei Klick Löschen=Mensaje al hacer clic en Eliminar 
+Linke Spalte ausblenden?=Ocultar la columna de la izquierda?
+So=Dom
+Mo=Lun
+Di=Mar
+Mi=Mié
+Do=Jue
+Fr=Vie
+Sa=Sáb
+Werbung1=A través de la adquisición de dolichat es muy recomendable que los módulos webapp para
+Werbung2=El personal de campo de los módulos de aplicación Web también ofrece también: (ver + fechas y entrar en la venta de productos) y funciona en iPhone y Android
+Werbung3=El personal de campo de los módulos de aplicación Web también ofrece también: (+ editar contactos, añadir las llamadas)
+Werbung4=El personal de campo de los módulos de aplicación Web también ofrece también: (+ función de mapa de Google está integrada para una fácil encontrar las fechas)
+Werbung5=El personal de campo de los módulos de aplicación Web también ofrece también: (+ Chatea con módulos dolichat)
+Werbung6=Los módulos webapp personal de campo también ofrece: (+ Estadísticas)
+Kaufen=Comprar
