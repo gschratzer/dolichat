@@ -42,43 +42,37 @@ class Actionsdolichat {
 
       function printTopRightMenu() {
         global $langs, $user, $db, $conf, $hookmanager;
-			/*	
-					$temp_user_id = $user->id;
-					
-        	if($user->rights->dolichat->UseChat && $conf->global->dolichat_SHOW_INT){
-            
-                $anzahlchat = 0;
-                $sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where privat IN (0, ".$user->id.") OR user_id = ".$user->id;
-                $sql.= " ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` DESC"; 
-                $ergebnis = $this->db->query($sql);
-                while($row = $this->db->fetch_object($ergebnis)) 
-                { 
-                    if($row->gesehen==0){
-                        if($row->user_id==$user->id){
-    
-                        }elseif($row->privat==$user->id){
-                            $anzahlchat++;
-                        }
-                    }
-                    if($row->privat==0){
-                        if($row->user_id==$user->id){
-    
-                        }else{
-                            $ids = $row->gesehen_Broadcast;    // z.b: "11, 2, 4, 6, 15, 22" wehr hat bereits den Cast gesehen als user id
-                            $ids_ex = explode(", ", $ids);      // $ids_ex[0] == 11 ... $ids_ex[1] == 2
-                            if (in_array($user->id, $ids_ex)) {
-                            }else{
-                                $anzahlchat++;
-                            }
-                        }
-                    }  	
+       		//print '<div class="login"><a href="test">test</a></div>';
+				
+			$temp_user_id = $user->id;
+        	if($user->rights->dolichat->UseChat && $_SERVER['PHP_SELF'] != "/dolichat/index.php" && $_SERVER['PHP_SELF'] != "htdocs/dolichat/index.php")
+        	{
+				$sql1 = "SELECT * FROM `llx_chattext`";
+				$sql1.= " Where privat = ".$user->id;
+				$sql1.= " and gesehen = 0 Group by user_id";
+				$res1 = $db->query($sql1);
+				$gese = $db->fetch_object($res1);
+				if($gese->rowid > 0)
+				{
+					$unseen = true;
+					$callsign = '!';
+					$ch_user = '?user='.$gese->user_id;
+				}
+				else
+				{
+					$unseen = false;
+				}
 
-                }   
-	
-						$css = 'font-size: 17px; background-color: rgba(0, 255, 31, 0.42); border-radius: 30px; padding: 0px 5px 0px 6px;';
-            		// $hookmanager->resPrint.=  '<div class="login_block_elem"><div class="login"><a href="'.DOL_URL_ROOT.'/dolichat/index.php" target="_blank" style="'.$css.'" id="anzahlchat_id">'.$anzahlchat.'</a></div></div>';
+				$hookmanager->resPrint .= '<div class="login"><a href="/dolichat/index.php'.$ch_user.'" id="dolichat_alert_global" target="_blank">';
+					$hookmanager->resPrint .= '<img src="/dolichat/img/dolichat.png" style="width:20px;">';
+					$hookmanager->resPrint .= '<span style="color: rgba(255, 255, 255, 0.75); font-size: 20px;" id="dolichat_alert_global_count">'.$callsign.'</span>';
+				$hookmanager->resPrint .= '</a></div>';
+				$hookmanager->resPrint .= '<input type="hidden" id="userid_input" value="'.$user->id.'">';
+				$hookmanager->resPrint .= '<input type="hidden" id="dolichat_unseen" value="'.$unseen.'">';
+				$hookmanager->resPrint .= '<script type="text/javascript" src="/dolichat/js/global_chat.js"></script>';
+				return '';
         	}
-			*/
+			
       	return 1;
 
       }

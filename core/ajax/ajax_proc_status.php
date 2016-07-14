@@ -9,6 +9,7 @@ require '../../../main.inc.php';
     $userid = $_GET['userid'];
     $tmp_userid = $_GET['tmp_user'];
     $chat_stat = $_GET['chat_stat'];
+    $get_user_info = $_GET['get_user_info'];
 
     if(isset($id) && $del == 0){ 
     
@@ -137,6 +138,12 @@ require '../../../main.inc.php';
             elseif($row->chattext) echo $rowid.'%<>%'.$ruser.'%<>%'.$row->chattext.'%<>%'.date('H:i', strtotime($row->timestamp)).'%<>%'.$user->id.'%<>%'.$row->user_id; // .'-'.$sql
             echo '%<>%'.$cn_gesehen;
             //echo '%<>%'.$sql;
+
+            $staticuser=new User($db);
+            $staticuser->fetch($row->user_id);
+
+            echo '%<>%'.($staticuser->lastname).' '.($staticuser->firstname);
+
             $first = false;
         }
     }

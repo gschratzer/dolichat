@@ -6,6 +6,8 @@
 	var org_user;
 	// DOCUMENT READY FUNCTION
 	$(document).ready(function(){
+		eraseCookie('chatmessage_alert');
+		
 		if (("Notification" in window))
 		{
 			Notification.requestPermission();

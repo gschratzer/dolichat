@@ -26,6 +26,11 @@ if(!$conf->global->MAIN_MODULE_DOLICHAT){ accessforbidden();}
  		### Dolichat Aktion and Processing ###
  */
 
+	if($_GET['user'] > 0)
+	{
+		setcookie('chat_user'.$user->id, $_GET['user']);
+	}
+
 	$chat_user = $dolichat->get_Dolichat_user();
 	foreach($chat_user as $key => $cuser)
 	{
