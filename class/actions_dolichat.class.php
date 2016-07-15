@@ -63,7 +63,7 @@ class Actionsdolichat {
 					$unseen = false;
 				}
 
-				$hookmanager->resPrint .= '<div class="login"><a href="/dolichat/index.php'.$ch_user.'" id="dolichat_alert_global" target="_blank">';
+				$hookmanager->resPrint .= '<div class="inline-block"><a href="/dolichat/index.php'.$ch_user.'" id="dolichat_alert_global" target="_blank">';
 					$hookmanager->resPrint .= '<img src="/dolichat/img/dolichat.png" style="width:20px;">';
 					$hookmanager->resPrint .= '<span style="color: rgba(255, 255, 255, 0.75); font-size: 20px;" id="dolichat_alert_global_count">'.$callsign.'</span>';
 				$hookmanager->resPrint .= '</a></div>';

@@ -188,19 +188,19 @@ class modDolichat extends DolibarrModules
 		// ##########################################################################################################################################################################################################
 		
 		// Example to declare another Left Menu entry:
-		$this->menu[$r] = array('fk_menu' => 0, // Put 0 if this is a top menu
-                        			'type' => 'top', // This is a Top menu entry
-                        			'titre' => 'Chat',
-                        			'mainmenu' => 'chat',
-                        			'leftmenu' => '0', // Use 1 if you also want to add left menu entries using this descriptor.
-                        			'url' => '/dolichat/index.php',
-                        			'langs' => 'dolichat@dolichat', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-                        			'position' => 100,
-                        			'enabled' => '$conf->global->dolichat_SHOW_LINK_AS_IT_OWN', // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-                        			'perms' => '$user->rights->dolichat->UseChat', // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
-                        			'target' => '_blank',
-                        			'user'=>0);    // 0=Menu for internal users, 1=external users, 2=both
-        $r++;
+		//$this->menu[$r] = array('fk_menu' => 0, // Put 0 if this is a top menu
+        //                			'type' => 'top', // This is a Top menu entry
+        //                			'titre' => 'Chat',
+        //                			'mainmenu' => 'chat',
+        //                			'leftmenu' => '0', // Use 1 if you also want to add left menu entries using this descriptor.
+        //                			'url' => '/dolichat/index.php',
+        //                			'langs' => 'dolichat@dolichat', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+        //                			'position' => 100,
+        //                			'enabled' => '$conf->global->dolichat_SHOW_LINK_AS_IT_OWN', // Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible //if module is enabled.
+        //                			'perms' => '$user->rights->dolichat->UseChat', // Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+        //                			'target' => '_blank',
+        //                			'user'=>0);    // 0=Menu for internal users, 1=external users, 2=both
+        //$r++;
 
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=companies',	// Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy'
 									'type'=>'left',			                // This is a Left menu entry
