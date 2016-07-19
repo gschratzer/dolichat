@@ -260,6 +260,10 @@ print '</table>';
 
 print "<br>";
 }
+
+print $langs->trans("ChatAdminFunction").': <p>';
+print $langs->trans("DelAllMessages").': <b>/clear</b>';
+
 print_titre($langs->trans("OtherOptions"));
 
 // Mode
@@ -273,37 +277,37 @@ print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("Parameters").'</td><td>'.$langs->trans("Value").'</td>';
 print "</tr>\n";
 
-$var=! $var;
-print '<tr '.$bc[$var].'><td>';
-print $langs->trans("DelShowInt");
-print '<td colspan="2">';
-print $html->selectyesno("dolichat_SHOW_INT",$conf->global->dolichat_SHOW_INT,1,$disable);
-if($disable)print '<input type="hidden" name="dolichat_SHOW_INT" value="'.$conf->global->dolichat_SHOW_INT.'">';
-print "</td></tr>\n";
+//$var=! $var;
+//print '<tr '.$bc[$var].'><td>';
+//print $langs->trans("DelShowInt");
+//print '<td colspan="2">';
+//print $html->selectyesno("dolichat_SHOW_INT",$conf->global->dolichat_SHOW_INT,1,$disable);
+//if($disable)print '<input type="hidden" name="dolichat_SHOW_INT" value="'.$conf->global->dolichat_SHOW_INT.'">';
+//print "</td></tr>\n";
 
-$var=! $var;
-print '<tr '.$bc[$var].'><td>';
-print $langs->trans("DelShowLinkAsItOwn");
-print '<td colspan="2">';
-print $html->selectyesno("dolichat_SHOW_LINK_AS_IT_OWN",$conf->global->dolichat_SHOW_LINK_AS_IT_OWN,1,$disable);
-if($disable)print '<input type="hidden" name="dolichat_SHOW_LINK_AS_IT_OWN" value="'.$conf->global->dolichat_SHOW_LINK_AS_IT_OWN.'">';
-print "</td></tr>\n";
+//$var=! $var;
+//print '<tr '.$bc[$var].'><td>';
+//print $langs->trans("DelShowLinkAsItOwn");
+//print '<td colspan="2">';
+//print $html->selectyesno("dolichat_SHOW_LINK_AS_IT_OWN",$conf->global->dolichat_SHOW_LINK_AS_IT_OWN,1,$disable);
+//if($disable)print '<input type="hidden" name="dolichat_SHOW_LINK_AS_IT_OWN" value="'.$conf->global->dolichat_SHOW_LINK_AS_IT_OWN.'">';
+//print "</td></tr>\n";
 
-$var=! $var;
-print '<tr '.$bc[$var].'><td>';
-print $langs->trans("DelShowLink");
-print '<td colspan="2">';
-print $html->selectyesno("dolichat_SHOW_LINK",$conf->global->dolichat_SHOW_LINK,1,$disable);
-if($disable)print '<input type="hidden" name="dolichat_SHOW_LINK" value="'.$conf->global->dolichat_SHOW_LINK.'">';
-print "</td></tr>\n";
+//$var=! $var;
+//print '<tr '.$bc[$var].'><td>';
+//print $langs->trans("DelShowLink");
+//print '<td colspan="2">';
+//print $html->selectyesno("dolichat_SHOW_LINK",$conf->global->dolichat_SHOW_LINK,1,$disable);
+//if($disable)print '<input type="hidden" name="dolichat_SHOW_LINK" value="'.$conf->global->dolichat_SHOW_LINK.'">';
+//print "</td></tr>\n";
 
-$var=! $var;
-print '<tr '.$bc[$var].'><td>';
-print $langs->trans("DelShowLinkAgenda");
-print '<td colspan="2">';
-print $html->selectyesno("dolichat_SHOW_LINK_AGENDA",$conf->global->dolichat_SHOW_LINK_AGENDA,1,$disable);
-if($disable)print '<input type="hidden" name="dolichat_SHOW_LINK_AGENDA" value="'.$conf->global->dolichat_SHOW_LINK_AGENDA.'">';
-print "</td></tr>\n";
+//$var=! $var;
+//print '<tr '.$bc[$var].'><td>';
+//print $langs->trans("DelShowLinkAgenda");
+//print '<td colspan="2">';
+//print $html->selectyesno("dolichat_SHOW_LINK_AGENDA",$conf->global->dolichat_SHOW_LINK_AGENDA,1,$disable);
+//if($disable)print '<input type="hidden" name="dolichat_SHOW_LINK_AGENDA" value="'.$conf->global->dolichat_SHOW_LINK_AGENDA.'">';
+//print "</td></tr>\n";
 
 /*
 $var=! $var;
@@ -315,13 +319,13 @@ if($disable)print '<input type="hidden" name="dolichat_USE_IN_WEBAPP" value="'.$
 print "</td></tr>\n";
 */
 
-$var=! $var;
-print '<tr '.$bc[$var].'><td>';
-print $langs->trans("DelTimeUse");
-print '<td colspan="2">';
-print $html->selectyesno("dolichat_USE_DEL_TIME",$conf->global->dolichat_USE_DEL_TIME,1,$disable);
-if($disable)print '<input type="hidden" name="dolichat_USE_DEL_TIME" value="'.$conf->global->dolichat_USE_DEL_TIME.'">';
-print "</td></tr>\n";
+//$var=! $var;
+//print '<tr '.$bc[$var].'><td>';
+//print $langs->trans("DelTimeUse");
+//print '<td colspan="2">';
+//print $html->selectyesno("dolichat_USE_DEL_TIME",$conf->global->dolichat_USE_DEL_TIME,1,$disable);
+//if($disable)print '<input type="hidden" name="dolichat_USE_DEL_TIME" value="'.$conf->global->dolichat_USE_DEL_TIME.'">';
+//print "</td></tr>\n";
 
 $var=! $var;
 print '<tr '.$bc[$var].'>';
@@ -329,13 +333,13 @@ print '<td>'.$langs->trans("DelTime").'</td>';
 print '<td><input type="text" class="flat" name="dolichat_DEL_TIME" value="'. ($_POST["dolichat_DEL_TIME"]?$_POST["dolichat_DEL_TIME"]:$conf->global->dolichat_DEL_TIME) . '" size="8"> '.$langs->trans("Days").'</td>';
 print '</tr>';
 
-$var=! $var;
-print '<tr '.$bc[$var].'><td>';
-print $langs->trans("DisplayInfo");
-print '<td colspan="2">';
-print $html->selectyesno("dolichat_WERBUNG",$conf->global->dolichat_WERBUNG,1,$disable);
-if($disable)print '<input type="hidden" name="dolichat_WERBUNG" value="'.$conf->global->dolichat_WERBUNG.'">';
-print "</td></tr>\n";
+//$var=! $var;
+//print '<tr '.$bc[$var].'><td>';
+//print $langs->trans("DisplayInfo");
+//print '<td colspan="2">';
+//print $html->selectyesno("dolichat_WERBUNG",$conf->global->dolichat_WERBUNG,1,$disable);
+//if($disable)print '<input type="hidden" name="dolichat_WERBUNG" value="'.$conf->global->dolichat_WERBUNG.'">';
+//print "</td></tr>\n";
 
 print '</table>';
 print '<br>';
@@ -344,7 +348,7 @@ print '<center><input type="submit" class="button" value="'.$langs->trans("Save"
 
 print "</form>\n";
 
-/* WhatsApp Settings */
+/* WhatsApp Settings 
 print_fiche_titre($langs->trans("WhatsAppSetup"),'','setup');
 
 print $langs->trans("WhatsAppDesc")."<br>\n";

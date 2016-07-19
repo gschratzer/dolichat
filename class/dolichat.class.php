@@ -173,8 +173,8 @@ class dolichat extends CommonObject
         if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
         if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
-        $sql.= " AND u.statut<>0 ";
-        $sql.= " AND u.rowid>1 ";
+        $sql.= " AND u.statut <> 0 ";
+        $sql.= " AND u.rowid > 0 ";
         $sql.= " AND u.rowid!='".$user->id."' ";        
         $sql.= " ORDER BY u.lastname ASC";
 

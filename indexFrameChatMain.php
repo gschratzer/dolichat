@@ -88,30 +88,30 @@ $form=new Form($db);
 <link rel="author" title="Dolibarr Development Team" href="http://www.dolibarr.org">
 <title>Finanzkonten</title>
 <!-- Includes CSS for JQuery (Ajax library) -->
-<link rel="stylesheet" type="text/css" href="/includes/jquery/css/smoothness/jquery-ui.css?version=3.9.0">
-<link rel="stylesheet" type="text/css" href="/includes/jquery/plugins/tiptip/tipTip.css?version=3.9.0">
-<link rel="stylesheet" type="text/css" href="/includes/jquery/plugins/jnotify/jquery.jnotify-alt.min.css?version=3.9.0">
-<link rel="stylesheet" type="text/css" href="/includes/jquery/plugins/select2/select2.css?version=3.9.0">
+<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/includes/jquery/css/smoothness/jquery-ui.css?version=3.9.0">
+<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/tiptip/tipTip.css?version=3.9.0">
+<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/jnotify/jquery.jnotify-alt.min.css?version=3.9.0">
+<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/select2/select2.css?version=3.9.0">
 <!-- Includes CSS for Dolibarr theme -->
-<link rel="stylesheet" type="text/css" href="/theme/eldy/style.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
+<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/theme/eldy/style.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
 <!-- Includes CSS added by module dolichat -->
-<link rel="stylesheet" type="text/css" href="/dolichat/css/dolichat.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
-<link href="css/dolichat.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/dolichat/css/dolichat.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
+<link href="<?php print DOL_URL_ROOT ?>/dolichat/css/dolichat.css" rel="stylesheet" />
 <!-- Includes JS for JQuery -->
-<script type="text/javascript" src="/includes/jquery/js/jquery.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/js/jquery-ui.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/tablednd/jquery.tablednd.0.6.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/tiptip/jquery.tipTip.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/jnotify/jquery.jnotify.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/core/js/jnotify.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/flot/jquery.flot.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/flot/jquery.flot.pie.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/flot/jquery.flot.stack.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/includes/jquery/plugins/select2/select2.min.js?version=3.9.0"></script>
-<script type="text/javascript" src="/core/js/select2_locale.js.php?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/js/jquery.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/js/jquery-ui.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/tablednd/jquery.tablednd.0.6.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/tiptip/jquery.tipTip.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/jnotify/jquery.jnotify.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/core/js/jnotify.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/flot/jquery.flot.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/flot/jquery.flot.pie.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/flot/jquery.flot.stack.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/plugins/select2/select2.min.js?version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/core/js/select2_locale.js.php?version=3.9.0"></script>
 <!-- Includes JS of Dolibarr -->
-<script type="text/javascript" src="/core/js/lib_head.js.php?version=3.9.0&amp;version=3.9.0"></script>
-<script type="text/javascript" src="/core/js/datepicker.js.php?lang=de_DE&amp;version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/core/js/lib_head.js.php?version=3.9.0&amp;version=3.9.0"></script>
+<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/core/js/datepicker.js.php?lang=de_DE&amp;version=3.9.0"></script>
 </head>
 <body style="background:none;">
 <?php   

@@ -11,7 +11,7 @@ DelShowLink=Beim Main Menu Partner Chat Link anzeigen?
 DelShowLinkAgenda=Beim Main Menu Agenda Chat Link anzeigen?
 DelUseInWebapp=Chat auch im Module Webapp aktivieren?
 DelTimeUse=Nach einem bestimmten Alter die Chat Einträge nicht mehr Anzeigen?
-DelTime=Anzahl an Tagen die ein Eintrag alt sein muss um nicht mehr angezeigt zu werden.
+DelTime=Max. Alter angezeigter Chatnachrichten (Standard 0 = alle Nachrichten anzeigen)
 userconf=Benutzer Einstellungen
 confkontakt=Kontakt Einstellungen
 makegroup=Gruppe erstellen
@@ -109,3 +109,8 @@ OnlineStatusGreen=Online
 OnlineStatusOrange=Abwesend
 Mute=Stumm schalten
 OnlineStatusUnknow=Unbekannt
+
+### Admin ###
+
+ChatAdminFunction=Chat Admin funktionen (befehle sind direkt im chat auszuführen)
+DelAllMessages=Lösche alle nachrichten

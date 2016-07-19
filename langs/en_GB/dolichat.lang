@@ -102,3 +102,8 @@ OnlineStatusGreen=Online
 OnlineStatusOrange=Absent
 Mute=Mute
 OnlineStatusUnknow=Unkown
+
+### Admin ###
+
+ChatAdminFunction=Chat Admin function (write your action direct in the chat)
+DelAllMessages=Delete all messages from every user

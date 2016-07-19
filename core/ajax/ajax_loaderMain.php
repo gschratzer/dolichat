@@ -7,7 +7,7 @@ $sqlPic="SELECT * FROM ".MAIN_DB_PREFIX."user_param WHERE fk_user = ".$user->id.
 $resqlPic= $db->query($sqlPic);
 $objPic = $db->fetch_object($resqlPic);
 $Bildernum = $objPic->value;
-
+$conf->global->dolichat_USE_DEL_TIME = 1;
         $cuser = $_GET['cuser'];
         $alldays = $_GET['alldays'];
         $fromrow = $_GET['getnew'];
@@ -15,50 +15,26 @@ $Bildernum = $objPic->value;
 
 		$neu = ''; 	
         $testFgroup = $cuser[0];
-        if($testFgroup == "G")
-        {
-            if($conf->global->dolichat_USE_DEL_TIME)
-            {
-                $Tage = $conf->global->dolichat_DEL_TIME;
-    
-                //  Timestamp bsp.: 2014-08-12 09:35:20
-                $timestamp = strtotime('- '.$Tage.' day'); 
-                $inTagen = date("Y-m-d H:i:s",$timestamp);                
-                
-                //  WHERE timestamp < '".$inTagen."'";
 
-                $sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where privat = '".$cuser."' ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` ASC  LIMIT 0 , 10"; 
-
-            }
-            else
-            {
-
-                $sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where privat = '".$cuser."' ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` ASC  LIMIT 0 , 10"; 
-
-            }
-        }
-        else
-        {
-				  if($conf->global->dolichat_USE_DEL_TIME)
-				  {
-            //$Tage = $conf->global->dolichat_DEL_TIME;
+            $Tage = $conf->global->dolichat_DEL_TIME;
 
             //  Timestamp bsp.: 2014-08-12 09:35:20                
-            //$inTagen = date("Y-m-d", strtotime(date('Y-m-d H:i:s') . ' -1day'));
+            $inTagen = strtotime(date('Y-m-d H:i:s') . ' -' . $Tage . ' day');
             //  WHERE timestamp < '".$inTagen."'";
 
             if($cuser > 0)
             {
-            		$sql_m = "SELECT Count(rowid) as max FROM ".MAIN_DB_PREFIX."chattext where (privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser.")";
+            		$sql_m = "SELECT Count(rowid) as max FROM ".MAIN_DB_PREFIX."chattext where ((privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser."))";
+                if($Tage > 0) $sql_m.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
             		$res_m = $db->query($sql_m); 
             		$max = $db->fetch_object($res_m);
             		
                 $sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext ";
-                $sql.= "WHERE (privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser.") ";
+                $sql.= "WHERE ((privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser."))";
+                if($Tage > 0) $sql.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
                 $sql.= "ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` ASC ";
-               
-                if($max->max > 10)
-                {
+                
+                if($max->max < 10) $max->max = 10;
                   if(!$alldays)
                   {
                   	$sql.= "LIMIT ".($max->max - 10)." , 10"; 
@@ -67,7 +43,6 @@ $Bildernum = $objPic->value;
                   {
                   	$sql.= "LIMIT 0 , ".($max->max - 10); 
                   }
-                }
             }
             elseif($cuser == 0)
             {
@@ -79,7 +54,9 @@ $Bildernum = $objPic->value;
             	{       
             		$sql = " SELECT * 
 													FROM llx_chattext
-														WHERE (privat IN (0, ".$user->id.") OR user_id = ".$user->id.")
+														WHERE ((privat IN (0, ".$user->id.") OR user_id = ".$user->id."))";
+     if($Tage > 0) $sql.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
+                   $sql.= "
 														AND rowid IN (														
 															SELECT foo.rowid
 															FROM ( 														
@@ -96,7 +73,9 @@ $Bildernum = $objPic->value;
           		{
             		$sql = "SELECT * 
 												FROM llx_chattext
-												WHERE (privat IN (0, ".$user->id.") OR user_id = ".$user->id.")
+												  WHERE ((privat IN (0, ".$user->id.") OR user_id = ".$user->id."))";
+  if($Tage > 0) $sql.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
+                $sql.=  "
 												AND rowid NOT IN (														
 													SELECT foo.rowid
 													FROM ( 														
@@ -109,27 +88,7 @@ $Bildernum = $objPic->value;
 												ORDER BY  `llx_chattext`.`timestamp` ASC "; 
 							}
             }
-          }
-          else
-          {
-          	if($cuser > 0)
-          	{       
-          		$sql_m = "SELECT Count(rowid) as max FROM ".MAIN_DB_PREFIX."chattext where (privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser.")";
-          		$res_m = $db->query($sql_m); 
-          		$max = $db->fetch_object($res_m);
-            	$sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where (privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser.") ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` ASC ";
-              if($max->max > 10) $sql.= " LIMIT ".($max->max - 10)." , 10"; 
-            }
-            elseif($cuser == 0)
-            {
-            	$sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where privat = 0 ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` ASC"; 
-            }
-            elseif($cuser == -1)
-            {                
-           		$sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where privat IN (0, ".$user->id.") OR user_id = ".$user->id." ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` ASC LIMIT 0 , 10"; 
-            }
-          }
-        }
+
 				
 				if($fromrow)
 				{
@@ -277,15 +236,22 @@ $Bildernum = $objPic->value;
                       foreach($PIC as $label => $ImagesLink){
                           if(($label % 2)==0){}else{$styleUngerade = 'float:left;';}
                           if($label != 0){
-                            if (strpos($ImagesLink, 'http://') !== false || strpos($ImagesLink, 'https://') !== false) {
+                            if (strpos($ImagesLink, 'http://') !== false || strpos($ImagesLink, 'https://') !== false) 
+                            {
+                              ini_set('default_socket_timeout', 1);
+                              $headers = @get_headers($ImagesLink);
+                              if(strpos($headers[0],'200')===false){
+                                $Bild.= '[Error] Url does not exist!';
+                              }else{
                                 $Bild.= '<a href="'.$ImagesLink.'" target="_blank">
                                               <img src="'.$ImagesLink.'" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
                                           </a>';
+                              }
+                              ini_set('default_socket_timeout', 30);
                             }
                             else
                             {
                               $Bild.= '<a href="../document.php?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
-                                          
                                           <img src="../document.php?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
                                       </a>';
                             }

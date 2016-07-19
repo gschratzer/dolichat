@@ -156,7 +156,7 @@ class modDolichat extends DolibarrModules
 		$this->rights[$r][0] = $n;
 		$this->rights[$r][1] = 'Chat Admin';
 		$this->rights[$r][2] = 'w';
-		$this->rights[$r][3] = 1;
+		$this->rights[$r][3] = 0;
 		$this->rights[$r][4] = 'Admin';
 		$r++; $n++;	
 		
@@ -202,43 +202,43 @@ class modDolichat extends DolibarrModules
         //                			'user'=>0);    // 0=Menu for internal users, 1=external users, 2=both
         //$r++;
 
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=companies',	// Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy'
-									'type'=>'left',			                // This is a Left menu entry
-									'titre'=>'Chat',
-									'mainmenu'=>'companies',
-									'leftmenu'=>'chat',
-									'url'=>'/dolichat/index.php?leftmenu=chat',
-									'langs'=>'dolichat@dolichat',	                // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-									'position'=>101,
-									'enabled'=>'$conf->global->dolichat_SHOW_LINK',  // Define condition to show or hide menu entry. Use '$conf->moaauth->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-									'perms'=>'$user->rights->dolichat->UseChat',			                // Use 'perms'=>'$user->rights->moaauth->level1->level2' if you want your menu with a permission rules
-									'target'=>'_blank',
-									'user'=>0);		
-		$r++;
-
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=agenda',	// Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy'
-									'type'=>'left',			                // This is a Left menu entry
-									'titre'=>'Chat',
-									'mainmenu'=>'agenda',
-									'leftmenu'=>'chat',
-									'url'=>'/dolichat/index.php',
-									'langs'=>'dolichat@dolichat',	                // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-									'position'=>102,
-									'enabled'=>'$conf->global->dolichat_SHOW_LINK_AGENDA',  // Define condition to show or hide menu entry. Use '$conf->moaauth->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-									'perms'=>'$user->rights->dolichat->UseChat',			                // Use 'perms'=>'$user->rights->moaauth->level1->level2' if you want your menu with a permission rules
-									'target'=>'_blank',
-									'user'=>0);		
-		$r++;
-		 
+		//$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=companies',	// Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy'
+		//							'type'=>'left',			                // This is a Left menu entry
+		//							'titre'=>'Chat',
+		//							'mainmenu'=>'companies',
+		//							'leftmenu'=>'chat',
+		//							'url'=>'/dolichat/index.php?leftmenu=chat',
+		//							'langs'=>'dolichat@dolichat',	                // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+		//							'position'=>101,
+		//							'enabled'=>'$conf->global->dolichat_SHOW_LINK',  // Define condition to show or hide menu entry. Use '$conf->moaauth->enabled' if entry must be visible if module is //enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+		//							'perms'=>'$user->rights->dolichat->UseChat',			                // Use 'perms'=>'$user->rights->moaauth->level1->level2' if you want your menu with a //permission rules
+		//							'target'=>'_blank',
+		//							'user'=>0);		
+		//$r++;
+		//$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=agenda',	// Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy'
+		//							'type'=>'left',			                // This is a Left menu entry
+		//							'titre'=>'Chat',
+		//							'mainmenu'=>'agenda',
+		//							'leftmenu'=>'chat',
+		//							'url'=>'/dolichat/index.php',
+		//							'langs'=>'dolichat@dolichat',	                // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+		//							'position'=>102,
+		//							'enabled'=>'$conf->global->dolichat_SHOW_LINK_AGENDA',  // Define condition to show or hide menu entry. Use '$conf->moaauth->enabled' if entry must be visible if //module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+		//							'perms'=>'$user->rights->dolichat->UseChat',			                // Use 'perms'=>'$user->rights->moaauth->level1->level2' if you want your menu with a //permission rules
+		//							'target'=>'_blank',
+		//							'user'=>0);		
+		//$r++;
 	}
 
-	/**
+/**
 	 *		Function called when module is enabled.
 	 *		The init function add constants, boxes, permissions and menus (defined in constructor) into Dolibarr database.
-	 *		It also creates data directories.
-	 *      @return     int             1 if OK, 0 if KO
+	 *		It also creates data directories
+	 *
+     *      @param      string	$options    Options when enabling module ('', 'noboxes')
+	 *      @return     int             	1 if OK, 0 if KO
 	 */
-	function init()
+	function init($options='')
 	{
 		global $db, $conf;
 		require_once(DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php');
@@ -291,7 +291,7 @@ class modDolichat extends DolibarrModules
 	 *		Data directories are not deleted.
 	 *      @return     int             1 if OK, 0 if KO
 	 */
-	function remove()
+	function remove($options = '')
 	{
 		$sql = array();
 

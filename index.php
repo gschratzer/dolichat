@@ -32,6 +32,7 @@ if(!$conf->global->MAIN_MODULE_DOLICHAT){ accessforbidden();}
 	}
 
 	$chat_user = $dolichat->get_Dolichat_user();
+	if(is_array($chat_user))
 	foreach($chat_user as $key => $cuser)
 	{
 		if($cuser->rowid != $user->id)
@@ -41,8 +42,11 @@ if(!$conf->global->MAIN_MODULE_DOLICHAT){ accessforbidden();}
 			else $no_chat_user_arr[] = $cuser;
 		}
 	}
+
+	if(is_array($chat_user_arr))
 	$ksort_res = krsort($chat_user_arr);
 	
+	if(is_array($no_chat_user_arr))
 	foreach($no_chat_user_arr as $key => $cval)
 	{
 		$chat_user_arr[$key] = $cval;
@@ -72,6 +76,9 @@ if(!$conf->global->MAIN_MODULE_DOLICHAT){ accessforbidden();}
 	        width:      100%;
 	        min-width:  700px;
 	        _width:     700px; /* min-width for IE6 */
+	    }
+	    .pane-in {
+	   		overflow-y: hidden !important;
 	    }
 	</style>";
 	$moreheadjs=empty($conf->use_javascript_ajax)?"":"
@@ -139,6 +146,8 @@ print '<input type="hidden" id="OnlineStatus0" value="'.$langs->trans("OnlineSta
 print '<input type="hidden" id="OnlineStatus1" value="'.$langs->trans("OnlineStatusGreen").'">';
 print '<input type="hidden" id="OnlineStatus2" value="'.$langs->trans("OnlineStatusOrange").'">';
 
+print '<input type="hidden" id="DOL_URL_ROOT" value="'.DOL_URL_ROOT.'">';
+
 print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
 	/* TOOL Bar Global Chat 
 	print '<div id="ecm-layout-north" class="toolbar largebutton">';
@@ -179,6 +188,7 @@ print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
 			print '<div class="UserChatDivOut">';
 				print '<div class="UserChatDivIn">';
 				
+				if(is_array($chat_user_arr))
 				foreach($chat_user_arr as $key => $cuser)
 				{
 					if($cuser->rowid != $user->id)
@@ -287,10 +297,10 @@ print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
 				
 				// IMG UPL
 				print '<input type="hidden" id="SavedPicID'.$standard_user.'">';
-				print '<iframe src="/dolichat/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe>'; // title="'.$langs->trans('UploadImg').'"
+				print '<iframe src="'.DOL_URL_ROOT.'/dolichat/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe>'; // title="'.$langs->trans('UploadImg').'"
 				
 				// IMG URL
-				print '<img title="'.$langs->trans('UploadImgWithURL').'" src="/dolichat/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';
+				//print '<img title="'.$langs->trans('UploadImgWithURL').'" src="'.DOL_URL_ROOT.'/dolichat/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';
 
 				print '<div class="entertosend">';
 					print '<span style="position: relative; bottom: 3px;">'.$langs->trans("PressEnterToSend").' </span>';
@@ -327,6 +337,7 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
 			'.$langs->trans("ShowaImagefromaotherServerdot").'
 			<p>
 			<form id="pic_url_form">
+				<span id="url_info"></span><br>
 				<input id="pic_url" type="url" value="" name="pic_url" placeholder="'.$langs->trans("UrlfromanImage").'">
 				<input type="submit" value="'.$langs->trans("OK").'">
 			</form>
@@ -355,12 +366,32 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
 		});
 	});
 
+	var url_ok = false;
 	$( document ).ready(function(){
+		$('#pic_url').on('change', function(){
+			$.ajax({
+				type: 'HEAD',
+				url: $('#pic_url').val(),
+				success: function(){
+					//callback(true);
+					$('#url_info').html('URL: OK!');
+					url_ok = true;
+				},
+				error: function() {
+					//callback(false);
+					$('#url_info').html('URL: WRONG!');
+					url_ok = false;
+				}
+			});
+		});
 		$('#pic_url_form').on('submit', function(event){
 			event.preventDefault();
-			$('#message').val('%picto=' + $('#pic_url').val());
-			SendText(<?php print "'".$user->lastname." ".$user->firstname."'"; ?>);
-			$( '#dialog' ).dialog( 'close' );
+			if(url_ok == true)
+			{
+				$('#message').val('%picto=' + $('#pic_url').val());
+				SendText(<?php print "'".$user->lastname." ".$user->firstname."'"; ?>);
+				$( '#dialog' ).dialog( 'close' );
+			}
 		});
 	});
 </script>

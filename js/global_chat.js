@@ -221,7 +221,7 @@
     	$(document).ready(function(){
 	    	$.ajax({
 			    method: "GET",
-			    url: "/dolichat/core/ajax/ajax_proc_status.php",
+			    url: "dolichat/core/ajax/ajax_proc_status.php",
 			    data: { pruf: 2, tmp_user: org_user, get_user_info: 1 }
 			})
 			.done(function( msg1 ) {

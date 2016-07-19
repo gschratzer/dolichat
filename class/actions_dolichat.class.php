@@ -45,7 +45,7 @@ class Actionsdolichat {
        		//print '<div class="login"><a href="test">test</a></div>';
 				
 			$temp_user_id = $user->id;
-        	if($user->rights->dolichat->UseChat && $_SERVER['PHP_SELF'] != "/dolichat/index.php" && $_SERVER['PHP_SELF'] != "htdocs/dolichat/index.php")
+        	if($user->rights->dolichat->UseChat && $_SERVER['PHP_SELF'] != "/dolichat/index.php" && $_SERVER['PHP_SELF'] != "htdocs/dolichat/index.php" && $_SERVER['PHP_SELF'] != DOL_URL_ROOT."/dolichat/index.php")
         	{
 				$sql1 = "SELECT * FROM `llx_chattext`";
 				$sql1.= " Where privat = ".$user->id;
@@ -63,14 +63,14 @@ class Actionsdolichat {
 					$unseen = false;
 				}
 
-				$hookmanager->resPrint .= '<div class="inline-block"><a href="/dolichat/index.php'.$ch_user.'" id="dolichat_alert_global" target="_blank">';
-					$hookmanager->resPrint .= '<img src="/dolichat/img/dolichat.png" style="width:20px;">';
+				$hookmanager->resPrint .= '<div class="inline-block"><a href="'.DOL_URL_ROOT.'/dolichat/index.php'.$ch_user.'" id="dolichat_alert_global" target="_blank">';
+					$hookmanager->resPrint .= '<img src="'.DOL_URL_ROOT.'/dolichat/img/dolichat.png" style="width:20px;">';
 					$hookmanager->resPrint .= '<span style="color: rgba(255, 255, 255, 0.75); font-size: 20px;" id="dolichat_alert_global_count">'.$callsign.'</span>';
 				$hookmanager->resPrint .= '</a></div>';
 				$hookmanager->resPrint .= '<input type="hidden" id="userid_input" value="'.$user->id.'">';
 				$hookmanager->resPrint .= '<input type="hidden" id="dolichat_unseen" value="'.$unseen.'">';
-				$hookmanager->resPrint .= '<script type="text/javascript" src="/dolichat/js/global_chat.js"></script>';
-				return '';
+				$hookmanager->resPrint .= '<script type="text/javascript" src="'.DOL_URL_ROOT.'/dolichat/js/global_chat.js"></script>';
+				return 1;
         	}
 			
       	return 1;

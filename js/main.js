@@ -166,14 +166,15 @@
 	var user_id_tmp = 0;
 	function change_chat_user(userid)
 	{
+		eraseCookie('chat_user' + userselfid);
 		createCookie('chat_user' + userselfid, userid, 365);
 		$('div[name="user_box_chat"]').css('background-color', '');
 		$('div[name="user_box_kontakt"]').css('background-color', '');
 		$('#user_detail_box_'+userid).css('background-color', '#DDFFE0');
 
 		user_id_tmp = userid;
-		$('#uploadF').attr('src', '/dolichat/lib/indexN.php?cuser='+userid); // for User Pic Upload
-		$('#mainframe').attr('src', '/dolichat/indexFrameChatMain.php?cuser='+userid); // for User Chat
+		$('#uploadF').attr('src', $('#DOL_URL_ROOT').val()+'/dolichat/lib/indexN.php?cuser='+userid); // for User Pic Upload
+		$('#mainframe').attr('src', $('#DOL_URL_ROOT').val()+'/dolichat/indexFrameChatMain.php?cuser='+userid); // for User Chat
 
 		tmp_html = $('#user_detail_box_' + userid).html();
 		$('#chat_detail').html(tmp_html);
@@ -379,7 +380,7 @@
 		if (!("Notification" in window)) 
 		{
 			// Let's check if the browser supports notifications
-			alert("This browser does not support system notifications");
+			// alert("This browser does not support system notifications");
 		} 
 		else if (Notification.permission === "granted") 
 		{

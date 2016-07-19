@@ -89,3 +89,25 @@ Werbung4=El personal de campo de los módulos de aplicación Web también ofrece
 Werbung5=El personal de campo de los módulos de aplicación Web también ofrece también: (+ Chatea con módulos dolichat)
 Werbung6=Los módulos webapp personal de campo también ofrece: (+ Estadísticas)
 Kaufen=Comprar
+
+### Next Gen Chat ###
+
+PressEnterToSend=Enter to Send
+Send=Send
+Chats=Chats
+Contacts=Contacts
+UserSearchDotDotDot=Contacts Search ...
+ImagefromaURL=Image from an URL
+ShowaImagefromaotherServerdot=Show a Image from an external server.
+OK=OK
+UrlfromanImage=http://server.com/image.jpg ...
+OnlineStatusGrey=Offline
+OnlineStatusGreen=Online
+OnlineStatusOrange=Absent
+Mute=Mute
+OnlineStatusUnknow=Unkown
+
+### Admin ###
+
+ChatAdminFunction=Chat Admin function (write your action direct in the chat)
+DelAllMessages=Delete all messages from every user

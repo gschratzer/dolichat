@@ -34,7 +34,7 @@ require '../../main.inc.php';
 		<!-- Google web fonts -->
 		<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700" rel='stylesheet' />
 		
-		<script type="text/javascript" src="/includes/jquery/js/jquery.min.js"></script>
+		<script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/js/jquery.min.js"></script>
 		<!-- The main CSS file 
 		<link href="assets/css/style.css" rel="stylesheet" />-->
 		<style>

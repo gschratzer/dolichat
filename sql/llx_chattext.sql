@@ -57,3 +57,5 @@ ALTER TABLE `llx_chattext`
 --
 ALTER TABLE `llx_chattext`
   MODIFY `rowid` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `llx_chattext` ADD `chattextblob` blob NOT NULL;

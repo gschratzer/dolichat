@@ -59,24 +59,25 @@ require '../../../main.inc.php';
         $up_gelöscht = $db->query($sql);
     }elseif($pruf == 1){
 
+        $sql0 = "SELECT * FROM ".MAIN_DB_PREFIX."chatstat where user_id = ".$user->id;
+        $res0 = $db->query($sql0);
+        $stat = $db->fetch_object($res0);
+
+        if(empty($stat))
+        {
+            $sql = "INSERT INTO ".MAIN_DB_PREFIX."chatstat (`rowid`, `user_id`, `online`, `last_stat`) VALUES (NULL, '".$user->id."', '1', CURRENT_TIMESTAMP);";
+            $db->query($sql);
+        }
+
         $sql0 = "SELECT * FROM ".MAIN_DB_PREFIX."chatstat";
         $res0 = $db->query($sql0);
-
         while($stat = $db->fetch_object($res0))
         {
             if($stat->user_id == $user->id)
             {
-                if(empty($stat))
-                {
-                    $sql = "INSERT INTO ".MAIN_DB_PREFIX."chatstat (`rowid`, `user_id`, `online`, `last_stat`) VALUES (NULL, '".$user->id."', '1', CURRENT_TIMESTAMP);";
-                    $db->query($sql);
-                }
-                else
-                {
-                    if(empty($chat_stat)) $chat_stat = 1;
-                    $sql = "UPDATE ".MAIN_DB_PREFIX."chatstat SET `checks` = '".($stat->checks + 1)."', online = '".$chat_stat."' WHERE `llx_chatstat`.`user_id` = ".$user->id.";";
-                    $db->query($sql);
-                }
+                if(empty($chat_stat)) $chat_stat = 1;
+                $sql = "UPDATE ".MAIN_DB_PREFIX."chatstat SET `checks` = '".($stat->checks + 1)."', online = '".$chat_stat."' WHERE `llx_chatstat`.`user_id` = ".$user->id.";";
+                $db->query($sql);
             }
             else
             {
@@ -84,6 +85,7 @@ require '../../../main.inc.php';
                 if(strtotime($stat->last_stat) < strtotime('- 10 sec.')) $chat_users_stats[$stat->user_id] = 0;
             }
         }
+
 
         $sql ="SELECT rowid FROM ".MAIN_DB_PREFIX."chattext ";
         if($userid > 0) $sql.= " Where user_id = ".$userid." and privat = ".$user->id;
