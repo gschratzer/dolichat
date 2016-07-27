@@ -868,7 +868,7 @@ class dolichat extends CommonObject
                 $inTagen.= ' 00:00:00';
                 //  WHERE timestamp < '".$inTagen."'";
             
-                $sql = "SELECT * FROM ".MAIN_DB_PREFIX."chattext where privat IN (0, ".$user->id.") AND timestamp > '".$inTagen."' ORDER BY `".MAIN_DB_PREFIX."chattext`.`timestamp` DESC"; 
+                $sql = "SELECT * FROM llx_chattext where privat IN (0, ".$user->id.") AND timestamp > '".$inTagen."' ORDER BY `llx_chattext`.`timestamp` DESC"; 
 
                 $ergebnis = $db->query($sql);
                 $i = 1;

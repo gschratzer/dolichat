@@ -1020,7 +1020,7 @@ class Actionsdolichat {
 								{
 									foreach($_SESSION['MainChatBox'] as $userid => $mode)
 									{
-										$sql ="SELECT rowid FROM ".MAIN_DB_PREFIX."chattext ";
+										$sql ="SELECT rowid FROM llx_chattext ";
 				            if($userid > 0) $sql.= " Where user_id = ".$userid." and privat = ".$temp_user_id;
 				            $sql.=" ORDER BY rowid  DESC ";
 				            $sql.=" LIMIT 0 , 1";

@@ -14,7 +14,7 @@ $staticuser2=new User($db);
     $Pic_text = '';
     if($PicSavedID)
     {
-        $sql ="SELECT * FROM  ".MAIN_DB_PREFIX."chatpic where MsgID = '".$PicSavedID."' ORDER BY  ".MAIN_DB_PREFIX."chatpic.rowid DESC ";
+        $sql ="SELECT * FROM  llx_chatpic where MsgID = '".$PicSavedID."' ORDER BY  llx_chatpic.rowid DESC ";
         $ergebnis = $db->query($sql);      
         while($row = $db->fetch_object($resql)) 
         { 
@@ -30,7 +30,7 @@ $staticuser2=new User($db);
     if($testFgroup == "G")
     {
         $rowidG = substr($cuser,1);
-        $sql ="SELECT * FROM  ".MAIN_DB_PREFIX."chatgroup where rowid = '".$rowidG."'";
+        $sql ="SELECT * FROM  llx_chatgroup where rowid = '".$rowidG."'";
         $resql=$db->query($sql);
         $obj = $db->fetch_object($resql);
         $write = $obj->G_write;        
@@ -93,7 +93,7 @@ $staticuser2=new User($db);
 
             if($alles == "/clear" && $user->admin)
             {
-                $sql ="DELETE FROM `".MAIN_DB_PREFIX."chattext` WHERE 1";
+                $sql ="DELETE FROM `llx_chattext` WHERE 1";
             }
             else
             {
@@ -104,7 +104,7 @@ $staticuser2=new User($db);
                 {
                     //Nick + Eintrag in die Datenbank schreiben 
                     //".MAIN_DB_PREFIX."
-                    $sql ="INSERT INTO ".MAIN_DB_PREFIX."chattext (";
+                    $sql ="INSERT INTO llx_chattext (";
                     $sql.="rowid ,";
                     $sql.="chattextblob ,";
                     $sql.="user ,";
@@ -122,7 +122,7 @@ $staticuser2=new User($db);
             //exit;
             $res = $db->query($sql);
     
-            $sql='UPDATE '.MAIN_DB_PREFIX.'chattext';
+            $sql='UPDATE llx_chattext';
             $sql.= ' SET gesehen =  "1"';
             $sql.= ' WHERE privat = '.$user->id.' ;'; 
             //print $sql;

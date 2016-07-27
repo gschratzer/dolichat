@@ -10,10 +10,10 @@ require '../../main.inc.php';
 	$boxid = $_GET['boxid'];
 	$del = $_GET['delimg'];
 
-	$sql ="DELETE FROM ".MAIN_DB_PREFIX."chatpic Where MsgID = ".$rowid." AND PicName = '".$del."'";
+	$sql ="DELETE FROM llx_chatpic Where MsgID = ".$rowid." AND PicName = '".$del."'";
 	$res = $db->query($sql);
 
-	$sql ="SELECT rowid FROM ".MAIN_DB_PREFIX."chattext ";
+	$sql ="SELECT rowid FROM llx_chattext ";
 	$sql.="ORDER BY rowid  DESC ";
 	$sql.="LIMIT 0 , 1";
 	$res = $db->query($sql);
