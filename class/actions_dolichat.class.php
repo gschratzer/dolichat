@@ -47,7 +47,7 @@ class Actionsdolichat {
 			$temp_user_id = $user->id;
         	if($user->rights->dolichat->UseChat && $_SERVER['PHP_SELF'] != "/dolichat/index.php" && $_SERVER['PHP_SELF'] != "htdocs/dolichat/index.php" && $_SERVER['PHP_SELF'] != DOL_URL_ROOT."/dolichat/index.php")
         	{
-				$sql1 = "SELECT * FROM `llx_chattext`";
+				$sql1 = "SELECT * FROM `" . MAIN_DB_PREFIX . "chattext`";
 				$sql1.= " Where privat = ".$user->id;
 				$sql1.= " and gesehen = 0 Group by user_id";
 				$res1 = $db->query($sql1);
@@ -1020,7 +1020,7 @@ class Actionsdolichat {
 								{
 									foreach($_SESSION['MainChatBox'] as $userid => $mode)
 									{
-										$sql ="SELECT rowid FROM llx_chattext ";
+										$sql ="SELECT rowid FROM " . MAIN_DB_PREFIX . "chattext ";
 				            if($userid > 0) $sql.= " Where user_id = ".$userid." and privat = ".$temp_user_id;
 				            $sql.=" ORDER BY rowid  DESC ";
 				            $sql.=" LIMIT 0 , 1";

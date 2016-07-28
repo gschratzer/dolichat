@@ -1,7 +1,21 @@
 <?php
-/* Copyright (C) 2014 Guido Schratzer <guido.schratzer@backbone.co.at>
- * Copyright (C) 2011 Laurent Destailleur  <eldy@users.sourceforge.net>
+/* 
+ * Copyright (C) 2016 Guido Schratzer <guido.schratzer@backbone.co.at>
+ * Copyright (C) 2016 Niklas Spanring <n.spanring@backbone.co.at>
  * Licensed under the GNU GPL v3 or higher (See file gpl-3.0.html)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -32,20 +46,26 @@ class modDolichat extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = 52900;
+		$this->numero = 124010;
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'dolichat';
 
 		// Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
 		// It is used to group modules in module setup page
 		$this->family = "other";
+
+		$this->module_position = 001;
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
-		$this->description = "dolichat module";
+		$this->description = "Chat System module";
+		$this->descriptionlong = "Dolichat is a live communications system, links the Dolibarr users to each other and allow a simple communication.";
+		$this->editor_name = 'backbone internet service';
+		$this->editor_url = 'https://backbone.co.at';
+		$this->editor_web = 'https://backbone.co.at';
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = 'dolibarr';
-		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
+		$this->version = '4.0.1';
+		// Key used in " . MAIN_DB_PREFIX . "const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Where to store the module in setup page (0=common,1=interface,2=others,3=very specific)
 		$this->special = 1;
@@ -280,8 +300,72 @@ class modDolichat extends DolibarrModules
 			dolibarr_set_const($db,"dolichat_WERBUNG", '1','chaine',0,'',$conf->entity);
 		}
 
+		try 
+		{
+			// Test if the columm chattextblob and the table chattext exist [new colum chattextblob !!!]
+	      	$sql = "SELECT chattextblob FROM " . MAIN_DB_PREFIX . "chattext where rowid = 1"; 
+	      	$ergebnis = $db->query($sql);
+	      	$row = $db->fetch_object($ergebnis);
+	      	if($row)
+	      	{
+	      		$chattextblob_exist = true;
+	      	}
+	      	else
+	      	{
+	      		// for compatibility with older dolichat system! [new colum chattextblob !!!]
+	      		$sql = "ALTER TABLE `" . MAIN_DB_PREFIX . "chattext` ADD `chattextblob` blob NOT NULL;"; 
+		      	$ergebnis = $db->query($sql);
+	      	}
+	    } 
+	    catch (Exception $e) 
+	    {
+	    	try 
+	    	{
+	    		// for compatibility with older dolichat system! [new colum chattextblob !!!]
+		    	$sql = "ALTER TABLE `" . MAIN_DB_PREFIX . "chattext` ADD `chattextblob` blob NOT NULL;"; 
+		      	$ergebnis = $db->query($sql);
+	      	} 
+	      	catch (Exception $e) 
+	      	{
+	      		// no need to output this error (only throws when chattextblob already exist)
+	      	}
+	    }
+
 		$sql = array();
 		$result=$this->load_tables();
+
+					// chatstat
+		$sql = array("CREATE TABLE IF NOT EXISTS `" . MAIN_DB_PREFIX . "chatstat` (
+					  `rowid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					  `user_id` int(11) NOT NULL,
+					  `checks` int(11) NOT NULL,
+					  `online` int(11) NOT NULL,
+					  `last_stat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
+
+					// chattext
+					"CREATE TABLE IF NOT EXISTS `" . MAIN_DB_PREFIX . "chattext` (
+					  `rowid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					  `chattext` text NOT NULL,
+					  `chattextblob` blob NOT NULL,
+					  `user` varchar(60) NOT NULL,
+					  `user_id` int(11) NOT NULL,
+					  `privat` int(11) NOT NULL,
+					  `privat_name` varchar(60) NOT NULL,
+					  `gesehen` int(11) NOT NULL DEFAULT '0',
+					  `gesehen_Broadcast` varchar(120) NOT NULL,
+					  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
+
+					// chatpic
+					"CREATE TABLE IF NOT EXISTS `" . MAIN_DB_PREFIX . "chatpic` (
+					  `rowid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+					  `PicName` varchar(60) NOT NULL,
+					  `MsgID` int(11) NOT NULL,
+					  `UserID` int(11) NOT NULL
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+				);
+				  
 		return $this->_init($sql);
 	}
 
@@ -301,14 +385,71 @@ class modDolichat extends DolibarrModules
 
 	/**
 	 *		\brief		Create tables, keys and data required by module
-	 * 					Files llx_table1.sql, llx_table1.key.sql llx_data.sql with create table, create keys
+	 * 					Files " . MAIN_DB_PREFIX . "table1.sql, " . MAIN_DB_PREFIX . "table1.key.sql " . MAIN_DB_PREFIX . "data.sql with create table, create keys
 	 * 					and create data commands must be stored in directory /mymodule/sql/
 	 *					This function is called by this->init.
 	 * 		\return		int		<=0 if KO, >0 if OK
 	 */
 	function load_tables()
 	{
-		return $this->_load_tables('/dolichat/sql/');
+		// chatstat
+		$sql = "SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+				SET time_zone = '+00:00';
+
+				CREATE TABLE IF NOT EXISTS `" . MAIN_DB_PREFIX . "chatstat` (
+				  `rowid` int(11) NOT NULL,
+				  `user_id` int(11) NOT NULL,
+				  `checks` int(11) NOT NULL,
+				  `online` int(11) NOT NULL,
+				  `last_stat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+				) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+				ALTER TABLE `" . MAIN_DB_PREFIX . "chatstat`
+				  ADD PRIMARY KEY (`rowid`),
+				  ADD KEY `rowid` (`rowid`);
+				";
+		// chattext
+		$sql.= "CREATE TABLE IF NOT EXISTS `" . MAIN_DB_PREFIX . "chattext` (
+				  `rowid` int(11) NOT NULL,
+				  `chattext` text NOT NULL,
+				  `chattextblob` blob NOT NULL,
+				  `user` varchar(60) NOT NULL,
+				  `user_id` int(11) NOT NULL,
+				  `privat` int(11) NOT NULL,
+				  `privat_name` varchar(60) NOT NULL,
+				  `gesehen` int(11) NOT NULL DEFAULT '0',
+				  `gesehen_Broadcast` varchar(120) NOT NULL,
+				  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+				ALTER TABLE `" . MAIN_DB_PREFIX . "chattext`
+				  ADD PRIMARY KEY (`rowid`),
+				  ADD KEY `UserID` (`user_id`,`privat`),
+				  ADD KEY `GesID` (`user_id`,`privat`,`gesehen`),
+				  ADD KEY `RowidID` (`rowid`) USING BTREE,
+				  ADD KEY `UserIN` (`user_id`),
+				  ADD KEY `PrivatIN` (`privat`);
+
+				ALTER TABLE `" . MAIN_DB_PREFIX . "chattext`
+				  MODIFY `rowid` int(11) NOT NULL AUTO_INCREMENT;
+
+				ALTER TABLE `" . MAIN_DB_PREFIX . "chattext` ADD `chattextblob` blob NOT NULL;";
+		// chatpic
+		$sql.= "CREATE TABLE IF NOT EXISTS `" . MAIN_DB_PREFIX . "chatpic` (
+				  `rowid` int(11) NOT NULL,
+				  `PicName` varchar(60) NOT NULL,
+				  `MsgID` int(11) NOT NULL,
+				  `UserID` int(11) NOT NULL
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+				ALTER TABLE `" . MAIN_DB_PREFIX . "chatpic`
+				  ADD PRIMARY KEY (`rowid`);
+
+				ALTER TABLE `" . MAIN_DB_PREFIX . "chatpic`
+				  MODIFY `rowid` int(11) NOT NULL AUTO_INCREMENT;";
+				  
+        return $this->_load_tables($sql);
+		//return $this->_load_tables('/dolichat/sql/');
 	}
 }
 

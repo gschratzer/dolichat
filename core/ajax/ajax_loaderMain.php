@@ -24,15 +24,15 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
 
             if($cuser > 0)
             {
-            		$sql_m = "SELECT Count(rowid) as max FROM llx_chattext where ((privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser."))";
+            		$sql_m = "SELECT Count(rowid) as max FROM " . MAIN_DB_PREFIX . "chattext where ((privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser."))";
                 if($Tage > 0) $sql_m.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
             		$res_m = $db->query($sql_m); 
             		$max = $db->fetch_object($res_m);
             		
-                $sql = "SELECT * FROM llx_chattext ";
+                $sql = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext ";
                 $sql.= "WHERE ((privat =  ".$cuser." and user_id = ".$user->id.") OR (privat = ".$user->id." and user_id = ".$cuser."))";
                 if($Tage > 0) $sql.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
-                $sql.= "ORDER BY `llx_chattext`.`timestamp` ASC ";
+                $sql.= "ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC ";
                 
                 if($max->max < 10) $max->max = 10;
                   if(!$alldays)
@@ -46,14 +46,14 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
             }
             elseif($cuser == 0)
             {
-                $sql = "SELECT * FROM llx_chattext where privat = 0 ORDER BY `llx_chattext`.`timestamp` ASC"; 
+                $sql = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext where privat = 0 ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC"; 
             }
             elseif($cuser == -1)
             {
             	if(!$alldays)
             	{       
             		$sql = " SELECT * 
-													FROM llx_chattext
+													FROM " . MAIN_DB_PREFIX . "chattext
 														WHERE ((privat IN (0, ".$user->id.") OR user_id = ".$user->id."))";
      if($Tage > 0) $sql.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
                    $sql.= "
@@ -61,18 +61,18 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
 															SELECT foo.rowid
 															FROM ( 														
 																SELECT rowid
-																FROM  `llx_chattext` 
+																FROM  `" . MAIN_DB_PREFIX . "chattext` 
 																ORDER BY rowid DESC
 																LIMIT 10
 																) AS foo
 															)
-												ORDER BY  `llx_chattext`.`timestamp` ASC
+												ORDER BY  `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC
 												Limit 10"; 
 							}
           		elseif($alldays)
           		{
             		$sql = "SELECT * 
-												FROM llx_chattext
+												FROM " . MAIN_DB_PREFIX . "chattext
 												  WHERE ((privat IN (0, ".$user->id.") OR user_id = ".$user->id."))";
   if($Tage > 0) $sql.= " AND timestamp > now() - INTERVAL ".$Tage." DAY ";
                 $sql.=  "
@@ -80,19 +80,19 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
 													SELECT foo.rowid
 													FROM ( 														
 														SELECT rowid
-														FROM  `llx_chattext` 
+														FROM  `" . MAIN_DB_PREFIX . "chattext` 
 														ORDER BY rowid DESC 
 														LIMIT 0 , 10
 													) AS foo
 												)
-												ORDER BY  `llx_chattext`.`timestamp` ASC "; 
+												ORDER BY  `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC "; 
 							}
             }
 
 				
 				if($fromrow)
 				{
-					$sql = "SELECT * FROM llx_chattext where (privat IN (0, ".$user->id.") OR user_id = ".$user->id.") AND rowid > ".$fromrow." ORDER BY `llx_chattext`.`timestamp` ASC LIMIT 0 , 10"; 
+					$sql = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext where (privat IN (0, ".$user->id.") OR user_id = ".$user->id.") AND rowid > ".$fromrow." ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC LIMIT 0 , 10"; 
 				}
 				//echo $sql;
 				$ergebnis = $db->query($sql); 
@@ -403,7 +403,7 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                   $neu.='</div>';
                   //$neu.='<span id="test" style="clear: both; float: left; display: block;"></span>';
   	  	        if($testFgroup == "G"){
-                      $sql2 = "SELECT * FROM llx_chattext where privat LIKE '%G%' ORDER BY `llx_chattext`.`timestamp` ASC"; 
+                      $sql2 = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext where privat LIKE '%G%' ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC"; 
                       //print $sql;
                       $i=0;
                       $ergebnis2 = $db->query($sql2);
@@ -416,14 +416,14 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               }else{
                                   $nicht_gesehener_Cast = $row2->rowid;
       
-                                  $sql='UPDATE llx_chattext';
+                                  $sql='UPDATE " . MAIN_DB_PREFIX . "chattext';
                                   $sql.= ' SET gesehen_Broadcast =  "'.$row2->gesehen_Broadcast.', '.$user->id.'"';
                                   $sql.= ' WHERE rowid = '.$row2->rowid.' ;'; 
                                   //print $sql;
                                   $up_gesehen = $db->query($sql);
                               }
                           }else{
-                                  $sql='UPDATE llx_chattext';
+                                  $sql='UPDATE " . MAIN_DB_PREFIX . "chattext';
                                   $sql.= ' SET gesehen_Broadcast =  "'.$user->id.'"';
                                   $sql.= ' WHERE rowid = '.$row2->rowid.' ;'; 
                                   //print $sql;
@@ -432,7 +432,7 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                       }
                       $firstoff = 1;
                   }else{
-                      $sql2 = "SELECT * FROM llx_chattext where privat = '0' ORDER BY `llx_chattext`.`timestamp` ASC"; 
+                      $sql2 = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext where privat = '0' ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` ASC"; 
                       //print $sql;
                       $i=0;
                       $ergebnis2 = $db->query($sql2);
@@ -445,14 +445,14 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               }else{
                                   $nicht_gesehener_Cast = $row2->rowid;
       
-                                  $sql='UPDATE llx_chattext';
+                                  $sql ="UPDATE " . MAIN_DB_PREFIX . "chattext";
                                   $sql.= ' SET gesehen_Broadcast =  "'.$row2->gesehen_Broadcast.', '.$user->id.'"';
                                   $sql.= ' WHERE rowid = '.$row2->rowid.' ;'; 
                                   //print $sql;
                                   $up_gesehen = $db->query($sql);
                               }
                           }else{
-                                  $sql='UPDATE llx_chattext';
+                                  $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
                                   $sql.= ' SET gesehen_Broadcast =  "'.$user->id.'"';
                                   $sql.= ' WHERE rowid = '.$row2->rowid.' ;'; 
                                   //print $sql;

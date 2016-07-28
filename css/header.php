@@ -1418,7 +1418,7 @@ function top_menu($head, $title='', $target='', $disablejs=0, $disablehead=0, $a
         if($user->rights->dolichat->UseChat && $conf->global->dolichat_SHOW_INT){
             
                 $anzahlchat = 0;
-                $sql = "SELECT * FROM llx_chattext where privat IN (0, ".$user->id.") OR user_id = ".$user->id." ORDER BY `llx_chattext`.`timestamp` DESC"; 
+                $sql = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext where privat IN (0, ".$user->id.") OR user_id = ".$user->id." ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` DESC"; 
                 //print $sql;
                 $ergebnis = $db->query($sql);
                 while($row = $db->fetch_object($ergebnis)) 

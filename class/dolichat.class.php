@@ -193,13 +193,13 @@ class dolichat extends CommonObject
 
     function get_last_message($user_id = '', $pr_user = 0)
     {
-        $sql = "SELECT * FROM `llx_chattext` ";
+        $sql = "SELECT * FROM `" . MAIN_DB_PREFIX . "chattext` ";
         $sql.= " Where 1=1";
         $sql.= " And (user_id = '".$user_id."'";
         $sql.= " And privat = '".$pr_user."'";
         $sql.= " or user_id = '".$pr_user."'";
         $sql.= " And privat = '".$user_id."')";
-        if($user_id > 0) $sql.= " ORDER BY `llx_chattext`.`rowid` DESC";
+        if($user_id > 0) $sql.= " ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`rowid` DESC";
         
         dol_syslog(get_class($this)."::select_dolusers sql=".$sql);
         $resql=$this->db->query($sql);
@@ -868,7 +868,7 @@ class dolichat extends CommonObject
                 $inTagen.= ' 00:00:00';
                 //  WHERE timestamp < '".$inTagen."'";
             
-                $sql = "SELECT * FROM llx_chattext where privat IN (0, ".$user->id.") AND timestamp > '".$inTagen."' ORDER BY `llx_chattext`.`timestamp` DESC"; 
+                $sql = "SELECT * FROM " . MAIN_DB_PREFIX . "chattext where privat IN (0, ".$user->id.") AND timestamp > '".$inTagen."' ORDER BY `" . MAIN_DB_PREFIX . "chattext`.`timestamp` DESC"; 
 
                 $ergebnis = $db->query($sql);
                 $i = 1;

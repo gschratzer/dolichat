@@ -13,7 +13,7 @@ require '../../../main.inc.php';
 
     if(isset($id) && $del == 0){ 
     
-        $sql='UPDATE llx_chattext';
+        $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
         $sql.= ' SET gesehen =  "1"';
         $sql.= ' WHERE rowid = "'.$id.'"'; 
 
@@ -21,7 +21,7 @@ require '../../../main.inc.php';
         
     }elseif(isset($ges)){ 
     
-        $sql='UPDATE llx_chattext';
+        $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
         $sql.= ' SET gesehen =  "1"';
         $sql.= ' WHERE user_id = "'.$ges.'"'; 
         $sql.= ' AND privat = "'.$user->id.'"'; 
@@ -31,7 +31,7 @@ require '../../../main.inc.php';
         
     }elseif(isset($id) && $del == 1){
 
-        $sql = "SELECT * FROM  `llx_chattext` WHERE rowid = ".$id;
+        $sql = "SELECT * FROM  `" . MAIN_DB_PREFIX . "chattext` WHERE rowid = ".$id;
         $res = $db->query($sql);
         $row = $db->fetch_object($res);
 
@@ -55,28 +55,28 @@ require '../../../main.inc.php';
 
 
 
-        $sql="DELETE FROM llx_chattext WHERE rowid = ".$id;
+        $sql="DELETE FROM " . MAIN_DB_PREFIX . "chattext WHERE rowid = ".$id;
         $up_gelöscht = $db->query($sql);
     }elseif($pruf == 1){
 
-        $sql0 = "SELECT * FROM llx_chatstat where user_id = ".$user->id;
+        $sql0 = "SELECT * FROM " . MAIN_DB_PREFIX . "chatstat where user_id = ".$user->id;
         $res0 = $db->query($sql0);
         $stat = $db->fetch_object($res0);
 
         if(empty($stat))
         {
-            $sql = "INSERT INTO llx_chatstat (`rowid`, `user_id`, `online`, `last_stat`) VALUES (NULL, '".$user->id."', '1', CURRENT_TIMESTAMP);";
+            $sql = "INSERT INTO " . MAIN_DB_PREFIX . "chatstat (`rowid`, `user_id`, `online`, `last_stat`) VALUES (NULL, '".$user->id."', '1', CURRENT_TIMESTAMP);";
             $db->query($sql);
         }
 
-        $sql0 = "SELECT * FROM llx_chatstat";
+        $sql0 = "SELECT * FROM " . MAIN_DB_PREFIX . "chatstat";
         $res0 = $db->query($sql0);
         while($stat = $db->fetch_object($res0))
         {
             if($stat->user_id == $user->id)
             {
                 if(empty($chat_stat)) $chat_stat = 1;
-                $sql = "UPDATE llx_chatstat SET `checks` = '".($stat->checks + 1)."', online = '".$chat_stat."' WHERE `llx_chatstat`.`user_id` = ".$user->id.";";
+                $sql = "UPDATE " . MAIN_DB_PREFIX . "chatstat SET `checks` = '".($stat->checks + 1)."', online = '".$chat_stat."' WHERE `" . MAIN_DB_PREFIX . "chatstat`.`user_id` = ".$user->id.";";
                 $db->query($sql);
             }
             else
@@ -87,7 +87,7 @@ require '../../../main.inc.php';
         }
 
 
-        $sql ="SELECT rowid FROM llx_chattext ";
+        $sql ="SELECT rowid FROM " . MAIN_DB_PREFIX . "chattext ";
         if($userid > 0) $sql.= " Where user_id = ".$userid." and privat = ".$user->id;
         $sql.=" ORDER BY rowid  DESC ";
         $sql.=" LIMIT 0 , 1";
@@ -108,7 +108,7 @@ require '../../../main.inc.php';
     }
     elseif($pruf == 2)
     {
-        $sql1 = "SELECT * FROM `llx_chattext`";
+        $sql1 = "SELECT * FROM `" . MAIN_DB_PREFIX . "chattext`";
         if($user->id > 0) $sql1.= " Where privat = ".$user->id;
         $sql1.= " and gesehen = 0 Group by user_id";
         $res1 = $db->query($sql1);
@@ -117,7 +117,7 @@ require '../../../main.inc.php';
         $first = true;
         while($gese = $db->fetch_object($res1)) 
         {
-            $sql ="SELECT rowid, user_id, privat, chattext, chattextblob, timestamp FROM llx_chattext ";
+            $sql ="SELECT rowid, user_id, privat, chattext, chattextblob, timestamp FROM " . MAIN_DB_PREFIX . "chattext ";
             if($user->id > 0) $sql.= " Where user_id = ".$gese->user_id." and privat = ".$user->id.' and gesehen = 0';
             $sql.=" ORDER BY rowid DESC ";
             //$sql.=" LIMIT 0 , 1";

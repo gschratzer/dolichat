@@ -17,7 +17,7 @@ $staticuser->fetch($cuser);
 $upload = 1;
 if($testFgroup == "G"){
     $rowidG = substr($cuser,1); 
-    $sql ="SELECT * FROM llx_chatgroup where rowid = '".$rowidG."'";
+    $sql ="SELECT * FROM " . MAIN_DB_PREFIX . "chatgroup where rowid = '".$rowidG."'";
     $resql=$db->query($sql);
     $obj = $db->fetch_object($resql);
     $upload = $obj->G_upload;        
@@ -46,7 +46,7 @@ if($upload == 1){
 			$dirodt=DOL_DATA_ROOT.'/dolichat/uploads/'.$user->id;
 			dol_mkdir($dirodt);
 		
-			$sql ="SELECT rowid FROM llx_chattext ";
+			$sql ="SELECT rowid FROM " . MAIN_DB_PREFIX . "chattext ";
 			$sql.="ORDER BY rowid  DESC ";
 			$sql.="LIMIT 0 , 1";
 			$res = $db->query($sql);
@@ -70,7 +70,7 @@ if($upload == 1){
 			if(move_uploaded_file($_FILES['upl']['tmp_name'], $path)){
 				echo '{"status":"success"}';
 
-					$sql ="INSERT INTO llx_chatpic (";
+					$sql ="INSERT INTO " . MAIN_DB_PREFIX . "chatpic (";
 	    	    	$sql.="rowid ,";
 	    	    	$sql.="PicName ,";
 	    	    	$sql.="MsgID ,";
@@ -87,7 +87,7 @@ if($upload == 1){
 					{
 						$text = "%picto=".$rowid."/".$_FILES['upl']['name'];
 
-						$sql ="INSERT INTO llx_chattext ";
+						$sql ="INSERT INTO " . MAIN_DB_PREFIX . "chattext ";
 						$sql.=" (`rowid`, `chattext`, `user`, `user_id`, `privat`, `privat_name`, `gesehen`, `gesehen_Broadcast`, `timestamp`) ";
 						$sql.=" VALUES ";
 						$sql.=" (NULL, '".$text."', '19', '".$user->id."', '".$cuser."', 'Bild', '0', '', CURRENT_TIMESTAMP);";
