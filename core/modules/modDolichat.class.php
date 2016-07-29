@@ -305,17 +305,26 @@ class modDolichat extends DolibarrModules
 			// Test if the columm chattextblob and the table chattext exist [new colum chattextblob !!!]
 	      	$sql = "SELECT chattextblob FROM " . MAIN_DB_PREFIX . "chattext where rowid = 1"; 
 	      	$ergebnis = $db->query($sql);
-	      	$row = $db->fetch_object($ergebnis);
-	      	if($row)
+	      	if($ergebnis)
 	      	{
-	      		$chattextblob_exist = true;
-	      	}
-	      	else
-	      	{
-	      		// for compatibility with older dolichat system! [new colum chattextblob !!!]
-	      		$sql = "ALTER TABLE `" . MAIN_DB_PREFIX . "chattext` ADD `chattextblob` blob NOT NULL;"; 
-		      	$ergebnis = $db->query($sql);
-	      	}
+		      	$row = $db->fetch_object($ergebnis);
+		      	if($row)
+		      	{
+		      		$chattextblob_exist = true;
+		      	}
+		      	else
+		      	{
+		      		// for compatibility with older dolichat system! [new colum chattextblob !!!]
+		      		$sql = "ALTER TABLE `" . MAIN_DB_PREFIX . "chattext` ADD `chattextblob` blob NOT NULL;"; 
+			      	$ergebnis = $db->query($sql);
+		      	}
+			}
+			else
+			{
+				// for compatibility with older dolichat system! [new colum chattextblob !!!]
+		    	$sql = "ALTER TABLE `" . MAIN_DB_PREFIX . "chattext` ADD `chattextblob` blob NOT NULL;"; 
+				$ergebnis = $db->query($sql);
+			}
 	    } 
 	    catch (Exception $e) 
 	    {
