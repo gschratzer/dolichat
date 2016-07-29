@@ -97,6 +97,7 @@ require '../../../main.inc.php';
         $rowid = $row->rowid;
 		
         echo $rowid;
+        if(is_array($chat_users_stats))
         foreach($chat_users_stats as $key => $chat_user)
         {
             echo '%<|>%';
