@@ -125,6 +125,7 @@ if(!$conf->global->MAIN_MODULE_DOLICHAT){ accessforbidden();}
 	if (empty($conf->dol_use_jmobile))
 	{
 		//$head = ecm_prepare_dasboard_head('');
+		$head="";
 		dol_fiche_head($head, 'index', '', 1, '');
 	}
 

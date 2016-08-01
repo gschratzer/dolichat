@@ -1,4 +1,3 @@
-
 <?php  
 //Config auslesen 
 require '../main.inc.php';
