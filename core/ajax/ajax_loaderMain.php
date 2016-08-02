@@ -1,6 +1,11 @@
 <?php  
 //Config auslesen 
-require '../../../main.inc.php';
+$res=0;
+if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");     // to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");   // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");   // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");   // to work if your module directory is into a subdir of root htdocs directory
+if (! $res) die("Include of main fails");
 require_once(DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php');
 $langs->load("dolichat@dolichat");
 $sqlPic="SELECT * FROM ".MAIN_DB_PREFIX."user_param WHERE fk_user = ".$user->id." AND param = 'CHAT_SHOW_PIC';";
@@ -251,8 +256,8 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                             }
                             else
                             {
-                              $Bild.= '<a href="../document.php?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
-                                          <img src="../document.php?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
+                              $Bild.= '<a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
+                                          <img src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
                                       </a>';
                             }
                           }

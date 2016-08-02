@@ -5,9 +5,14 @@ global $user;
 if (! defined('REQUIRE_JQUERY_LAYOUT'))  define('REQUIRE_JQUERY_LAYOUT','1');
 if (! defined('REQUIRE_JQUERY_BLOCKUI')) define('REQUIRE_JQUERY_BLOCKUI', 1);
 
-require '../main.inc.php';
+$res=0;
+if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");			// to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
+if (! $res) die("Include of main fails");
 require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
-require_once DOL_DOCUMENT_ROOT.'/dolichat/class/dolichat.class.php';
+dol_include_once('/dolichat/class/dolichat.class.php');
 require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
 // require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
 
@@ -283,7 +288,7 @@ print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
 				print '</div>';
 
 				print '<div style="height:91%;">';
-					print '<iframe id="mainframe" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>'; // /dolichat/indexFrameChatMain.php?cuser='.$standard_user.'
+					print '<iframe id="mainframe" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>'; // dol_buildpath('/dolichat',1)./indexFrameChatMain.php?cuser='.$standard_user.'
 				print '</div>';
 
 			print '</div>';
@@ -298,10 +303,10 @@ print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
 				
 				// IMG UPL
 				print '<input type="hidden" id="SavedPicID'.$standard_user.'">';
-				print '<iframe src="'.DOL_URL_ROOT.'/dolichat/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe>'; // title="'.$langs->trans('UploadImg').'"
+				print '<iframe src="'.dol_buildpath('/dolichat',1).'/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe>'; // title="'.$langs->trans('UploadImg').'"
 				
 				// IMG URL
-				//print '<img title="'.$langs->trans('UploadImgWithURL').'" src="'.DOL_URL_ROOT.'/dolichat/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';
+				//print '<img title="'.$langs->trans('UploadImgWithURL').'" src="'.DOL_URL_ROOT.dol_buildpath('/dolichat',1).'/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';
 
 				print '<div class="entertosend">';
 					print '<span style="position: relative; bottom: 3px;">'.$langs->trans("PressEnterToSend").' </span>';

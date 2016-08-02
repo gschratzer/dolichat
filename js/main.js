@@ -173,8 +173,8 @@
 		$('#user_detail_box_'+userid).css('background-color', '#DDFFE0');
 
 		user_id_tmp = userid;
-		$('#uploadF').attr('src', $('#DOL_URL_ROOT').val()+'/dolichat/lib/indexN.php?cuser='+userid); // for User Pic Upload
-		$('#mainframe').attr('src', $('#DOL_URL_ROOT').val()+'/dolichat/indexFrameChatMain.php?cuser='+userid); // for User Chat
+		$('#uploadF').attr('src', $('#dolichat_path').val()+'/lib/indexN.php?cuser='+userid); // for User Pic Upload
+		$('#mainframe').attr('src', $('#dolichat_path').val()+'/indexFrameChatMain.php?cuser='+userid); // for User Chat
 
 		tmp_html = $('#user_detail_box_' + userid).html();
 		$('#chat_detail').html(tmp_html);

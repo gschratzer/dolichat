@@ -1439,7 +1439,7 @@ function top_menu($head, $title='', $target='', $disablejs=0, $disablehead=0, $a
                         }
                     }
                 } 
-            $logintext.=' <a href="'.DOL_URL_ROOT.'/dolichat/index.php" target="_blank">'.$anzahlchat.'</a>';
+            $logintext.=' <a href="'.DOL_URL_ROOT.dol_buildpath('/dolichat',1).'/index.php" target="_blank">'.$anzahlchat.'</a>';
             //$toprightmenu.=$form->textwithtooltip('',$langs->trans("Chat"),2,1,$toprightmenuChat,'login_block_elem',2);
         }
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

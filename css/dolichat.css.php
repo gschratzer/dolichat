@@ -24,7 +24,12 @@
  */
 session_cache_limiter(FALSE);
 
-require_once("../../main.inc.php");
+$res=0;
+if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");			// to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
+if (! $res) die("Include of main fails");
 
 // Load user to have $user->conf loaded (not done into main because of NOLOGIN constant defined)
 if (empty($user->id) && ! empty($_SESSION['dol_login'])) $user->fetch('',$_SESSION['dol_login']);

@@ -1,8 +1,13 @@
 <?php  
 //Config auslesen 
-require '../main.inc.php';
+$res=0;
+if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");         // to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");     // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
+if (! $res) die("Include of main fails");
 require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
-require_once DOL_DOCUMENT_ROOT.'/dolichat/class/dolichat.class.php';
+dol_include_once('/dolichat/class/dolichat.class.php');
 require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
 //require_once DOL_DOCUMENT_ROOT.'/dolichat/css/dolichat.css.php';
 //require_once DOL_DOCUMENT_ROOT.'/dolichat/css/header.php';
@@ -94,8 +99,8 @@ $form=new Form($db);
 <!-- Includes CSS for Dolibarr theme -->
 <link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/theme/eldy/style.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
 <!-- Includes CSS added by module dolichat -->
-<link rel="stylesheet" type="text/css" href="<?php print DOL_URL_ROOT ?>/dolichat/css/dolichat.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
-<link href="<?php print DOL_URL_ROOT ?>/dolichat/css/dolichat.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="<?php print dol_buildpath('/dolichat',1); ?>/css/dolichat.css.php?lang=de_DE&amp;theme=eldy&amp;userid=3&amp;entity=1&amp;version=3.9.0">
+<link href="<?php print dol_buildpath('/dolichat',1); ?>/css/dolichat.css" rel="stylesheet" />
 <!-- Includes JS for JQuery -->
 <script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/js/jquery.min.js?version=3.9.0"></script>
 <script type="text/javascript" src="<?php print DOL_URL_ROOT ?>/includes/jquery/js/jquery-ui.min.js?version=3.9.0"></script>

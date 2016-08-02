@@ -221,7 +221,7 @@
     	$(document).ready(function(){
 	    	$.ajax({
 			    method: "GET",
-			    url: "dolichat/core/ajax/ajax_proc_status.php",
+			    url: $('#dolichat_path').val()+"/core/ajax/ajax_proc_status.php",
 			    data: { pruf: 2, tmp_user: org_user, get_user_info: 1 }
 			})
 			.done(function( msg1 ) {
@@ -262,7 +262,7 @@
 									last_user_name = stat_arr[7];
 
 									off_notify = false;
-									$('#dolichat_alert_global').attr('href', '/dolichat/index.php?user='+stat_arr[5]);
+									$('#dolichat_alert_global').attr('href', $('#dolichat_path').val()+'/index.php?user='+stat_arr[5]);
 									alert_callsign();
 									createCookie('chatmessage_alert', 'true', 1);
 									notifyMe(stat_arr[2], stat_arr[3], last_user_name); // last_user

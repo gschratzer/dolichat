@@ -1,7 +1,14 @@
 <?php  
 //Config auslesen 
-require '../../../main.inc.php';
-require_once DOL_DOCUMENT_ROOT.'/dolichat/class/dolichat.class.php';
+$res=0;
+if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");         // to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");     // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
+if (! $res) die("Include of main fails");
+
+dol_include_once('/dolichat/class/dolichat.class.php');
+
 $dolichat=new dolichat($db);
 $langs->load("dolichat@dolichat");
 $staticuser=new User($db);
@@ -118,17 +125,15 @@ $staticuser2=new User($db);
                     $sql.=");";
                 }
             }
-            //print $sql;
-            //exit;
+
             $res = $db->query($sql);
     
             $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
             $sql.= ' SET gesehen =  "1"';
             $sql.= ' WHERE privat = '.$user->id.' ;'; 
-            //print $sql;
+
             $up_gesehen = $db->query($sql);
-            //header("Location: ".DOL_URL_ROOT.'/dolichat/index.php?cuser='.$privatuser);
-            //exit;
-            }   
+
+        }   
     }                                 
 } 

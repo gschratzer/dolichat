@@ -1,6 +1,11 @@
 <?php  
 //Config auslesen 
-require '../../../main.inc.php';
+$res=0;
+if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");         // to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");     // to work if your module directory is into a subdir of root htdocs directory
+if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
+if (! $res) die("Include of main fails");
 
     $ges = $_GET['ges_id'];
     $id = $_GET['id'];
@@ -43,10 +48,10 @@ require '../../../main.inc.php';
         $url = $row->user_id;
         if($Bildernum == 1 || $Bildernum == ""){
             if($Pic!=""){
-                $path = DOL_DATA_ROOT.'/dolichat/uploads/'.$user->id.'/'.$PIC;
+                $path = DOL_DATA_ROOT.dol_buildpath('/dolichat',1).'/uploads/'.$user->id.'/'.$PIC;
                 unlink($path);
             
-                $path2 = DOL_DATA_ROOT.'/dolichat/uploads/'.$user->id.'/t_'.$PIC;
+                $path2 = DOL_DATA_ROOT.dol_buildpath('/dolichat',1).'/uploads/'.$user->id.'/t_'.$PIC;
                 unlink($path2);
                 
             } 
