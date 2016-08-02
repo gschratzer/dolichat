@@ -554,7 +554,6 @@ class Actionsdolichat {
 			    left:45%;
 			    width:60px;
 			    height:60px;
-			    background-image: url(../images/loading.gif);
 			}
 			/*--------------------------------------RELOAD---------------------------------------------*/
 			#Reload_td{  
