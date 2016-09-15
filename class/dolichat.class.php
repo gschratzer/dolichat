@@ -170,7 +170,6 @@ class dolichat extends CommonObject
 				$sql.= " WHERE u.entity IN (0,".$conf->entity.")";
 			}
 		}
-		if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
 		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
 		$sql.= " AND u.statut <> 0 ";
