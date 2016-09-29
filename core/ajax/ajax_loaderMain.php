@@ -234,6 +234,31 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
               $PIC = substr (strrchr ($chattext_test_pic, "%picto="), 7);
               $PIC = explode("%picto=", $chattext_test_pic); // Array ( [0] => TEST [1] => 807/del.png [2] => 807/OK.png [3] => 807/gesehen.png ) 1
 
+              if ( strpos(strtolower($chattext_test_pic), 'youtube.com') !== false || strpos(strtolower($chattext_test_pic), 'youtu.be') !== false )
+              {
+                $link = explode("=", $chattext_test_pic);
+                if(strpos($chattext_test_pic, '=') !== false)
+                {
+                  $link = str_replace("\n", " ", $link[1]);
+                  $link = explode(" ", $link);
+                  $PIC[1] = '<br><iframe width="560" height="315" src="https://www.youtube.com/embed/'.$link[0].'" frameborder="0" allowfullscreen></iframe>';
+                }
+                elseif (strpos($chattext_test_pic, 'http://') !== false || strpos($chattext_test_pic, 'https://') !== false  ) 
+                {
+                  $link = str_replace("\n", " ", $chattext_test_pic);
+                  $link = explode("/", $link);
+                  $link = explode(" ", $link[3]);
+                  $PIC[1] = '<br><iframe width="560" height="315" src="https://www.youtube.com/embed/'.$link[0].'" frameborder="0" allowfullscreen></iframe>';
+                }
+                else
+                {
+                  $link = str_replace("\n", " ", $chattext_test_pic);
+                  $link = explode("/", $link);
+                  $link = explode(" ", $link[1]);
+                  $PIC[1] = '<br><iframe width="560" height="315" src="https://www.youtube.com/embed/'.$link[0].'" frameborder="0" allowfullscreen></iframe>';
+                }
+              }
+
               $Pic = $PIC[1]; 
               $url = $row->user_id;
               if($Bildernum == 1 || $Bildernum == ""){
@@ -241,7 +266,11 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                       foreach($PIC as $label => $ImagesLink){
                           if(($label % 2)==0){}else{$styleUngerade = 'float:left;';}
                           if($label != 0){
-                            if (strpos($ImagesLink, 'http://') !== false || strpos($ImagesLink, 'https://') !== false) 
+                            if(strpos($ImagesLink, '<iframe') !== false)
+                            {
+                              $Bild.= $Pic;
+                            }
+                            elseif (strpos($ImagesLink, 'http://') !== false || strpos($ImagesLink, 'https://') !== false  ) 
                             {
                               ini_set('default_socket_timeout', 1);
                               $headers = @get_headers($ImagesLink);
@@ -254,34 +283,89 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               }
                               ini_set('default_socket_timeout', 30);
                             }
-                            elseif ( strpos(strtolower($ImagesLink), '.png') !== false || strpos(strtolower($ImagesLink), '.jpg') !== false || strpos(strtolower($ImagesLink), '.gif') !== false  || strpos(strtolower($ImagesLink), '.bmp') !== false)
-                            {
-                              $Bild.= '<a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
-                                          <img src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
-                                      </a>';
-                            }
-                            elseif ( strpos(strtolower($ImagesLink), '.mp3') !== false || strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.wav') !== false)
+                            else
                             {
                               $finfo = finfo_open(FILEINFO_MIME_TYPE);
                               //$Bild.= finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).' '.DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink;
-                              $Bild.= 'Download: <a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">'.$ImagesLink.'</a><br>';
-                              $Bild.= '<audio  controls preload="metadata">';
-                                $Bild.= '<source src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'" type="'.finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).'">';
-                                $Bild.= 'Your browser does not support the video tag.';
-                              $Bild.= '</audio>';
-                            }
-                            elseif ( strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.webm') !== false || strpos(strtolower($ImagesLink), '.mp4') !== false)
-                            {
-                              $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                              $Bild.= 'Download: <a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">'.$ImagesLink.'</a><br>';
-                              $Bild.= '<video width="320" height="240" controls preload="metadata">';
-                                $Bild.= '<source src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'" type="'.finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).'">';
-                                $Bild.= 'Your browser does not support the video tag.';
-                              $Bild.= '</video>';
-                            }
-                            else
-                            {
-                              $Bild.= 'Download: <a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">'.$ImagesLink.'</a>';
+                              $name = basename(DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink);
+                              $type = finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink);
+                              $size = filesize(DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink);
+                              $size = formatFileSize($size);
+                              $fdate = date ("d.m.Y H:i", filemtime(DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink));
+
+                              $Bild.= '<span>';
+                                $Bild.= '<a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">';
+                                  $Bild.= '<img width="20%" src="'.DOL_URL_ROOT.'/dolichat/img/text-file-3-xxl.png" class="downfile">';
+                                $Bild.= '</a>';
+                              $Bild.= '</span>';
+                              $Bild.= '<span style="position: absolute; margin-left: 20px;">';
+                                $Bild.= '<table class="filedetail">';
+                                  $Bild.= '<tr>';
+                                    $Bild.= '<td>';
+                                      $Bild.= 'Filename: ';
+                                    $Bild.= '</td>';
+                                    $Bild.= '<td>';
+                                      $Bild.= $name;
+                                    $Bild.= '</td>';
+                                  $Bild.= '</tr>';
+                                  $Bild.= '<tr>';
+                                    $Bild.= '<td>';
+                                      $Bild.= 'Filetype: ';
+                                    $Bild.= '</td>';
+                                    $Bild.= '<td>';
+                                      $Bild.= $type;
+                                    $Bild.= '</td>';
+                                  $Bild.= '</tr>';
+                                  $Bild.= '<tr>';
+                                    $Bild.= '<td>';
+                                      $Bild.= 'Size: ';
+                                    $Bild.= '</td>';
+                                    $Bild.= '<td>';
+                                      $Bild.= $size;
+                                    $Bild.= '</td>';
+                                  $Bild.= '</tr>';
+                                  $Bild.= '<tr>';
+                                    $Bild.= '<td>';
+                                      $Bild.= 'Date: ';
+                                    $Bild.= '</td>';
+                                    $Bild.= '<td>';
+                                      $Bild.= $fdate;
+                                    $Bild.= '</td>';
+                                  $Bild.= '</tr>';
+                                  $Bild.= '<tr>';
+                                    $Bild.= '<td>';
+                                      $Bild.= 'Download: ';
+                                    $Bild.= '</td>';
+                                    $Bild.= '<td>';
+                                      $Bild.= '<a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'">Link</a>';
+                                    $Bild.= '</td>';
+                                  $Bild.= '</tr>';
+                                $Bild.= '</table>';
+                              $Bild.= '</span>';
+
+                              if ( strpos(strtolower($ImagesLink), '.png') !== false || strpos(strtolower($ImagesLink), '.jpg') !== false || strpos(strtolower($ImagesLink), '.gif') !== false  || strpos(strtolower($ImagesLink), '.bmp') !== false)
+                              {
+                                $Bild.= '<br><a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
+                                            <img src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
+                                        </a>';
+                              }
+                              elseif ( strpos(strtolower($ImagesLink), '.mp3') !== false || strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.wav') !== false)
+                              {
+  
+                                $Bild.= '<br>';
+                                $Bild.= '<audio  controls preload="metadata">';
+                                  $Bild.= '<source src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'" type="'.finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).'">';
+                                  $Bild.= 'Your browser does not support the audio tag.';
+                                $Bild.= '</audio>';
+                              }
+                              elseif ( strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.webm') !== false || strpos(strtolower($ImagesLink), '.mp4') !== false)
+                              {
+                                $Bild.= '<br>';
+                                $Bild.= '<video width="405px" height="240" controls preload="none" class="html5videoplayer">'; //  poster="'.DOL_URL_ROOT.'/dolichat/img/black_blank.png"
+                                  $Bild.= '<source src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'" type="'.finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).'">';
+                                  $Bild.= 'Your browser does not support the video tag.';
+                                $Bild.= '</video>';
+                              }
                             }
                           }
                           $styleUngerade = '';
@@ -497,3 +581,15 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
 		
  
     echo $neu; 
+
+function formatFileSize($bytes) {
+    if ($bytes >= 1000000000) {
+        return round($bytes / 1000000000, 2).' GB';
+    }
+
+    if ($bytes >= 1000000) {
+        return round($bytes / 1000000, 2).' MB';
+    }
+
+    return round($bytes / 1000, 2).' KB';
+}

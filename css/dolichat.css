@@ -17,6 +17,33 @@
         left: 42px;
     }
 
+    .filedetail {
+        border-collapse: collapse;
+    }
+
+    .filedetail tr td {
+        border-bottom: 1px solid grey;
+    }
+
+    .filedetail tr td:nth-child(even) {
+        /*text-align: right;*/
+        padding-left: 15px;
+        font-weight: bold;
+    }
+
+    .downfile {
+        border: 1px solid grey;
+        border-radius: 15px;
+    }
+
+    .downfile:hover {
+        background-color: rgba(241, 241, 241, 0.88);
+    }
+
+    .html5videoplayer{
+        background-color: rgb(0, 0, 0);
+    }
+
     #loding{
         font-size:24px;
         text-align: center;
@@ -94,10 +121,11 @@
 		
 		.date{
 			border-radius: 20px;
-  		padding: 10px 0px 10px 0px;
-  		background-color: #E7C74C;
+  		    padding: 10px 0px 10px 0px;
+  		    background-color: #E7C74C;
  	 		margin: 10px 26% 20px 26%;
- 	 		box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.44);
+ 	 		/*box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.44);*/
+            border: 1px solid #b3b3b3;
 		}
 /* --------------------------------------------------------------------------------    
     Tabel einstellungen o2*/
@@ -187,8 +215,8 @@
   			display: inline-block;
   			background-color: #D4FFCF; 
   			border-radius: 13px;
-  			box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.37);
-
+  			/*box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.37);*/
+            border: 1px solid #bbbbbb;
             word-wrap: break-word;
             position: relative;
             font-size:14px; 
@@ -197,7 +225,7 @@
 		}
 		
 		.chatdiv2You:before {  
-		    /* EFFFED */
+		    /* EFFFED 
 		    float: right;
     		content:"\A";
     		border-style: solid;
@@ -205,6 +233,7 @@
     		border-color: transparent transparent transparent #D4FFCF;
     		position: absolute;
     		right: -20px;
+            */
 		}
 		
 		.chatdiv2To{
@@ -214,17 +243,18 @@
   			display: inline-block;
   			background-color: #FFFFF2; 
   			border-radius: 13px;
-  			box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.37);
+  			/*box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.37);*/
+            border: 1px solid #bbbbbb;
 		}
 		
 		.chatdiv2To:before {
-				/* EFFFED */
+				/* EFFFED 
     		content:"\A";
     		border-style: solid;
     		border-width: 10px 15px 4px 0;
     		border-color: transparent #FFFFF2 transparent transparent; 
     		position: absolute;
-    		left: -15px;
+    		left: -15px;*/
 		}
 		
 		.chatdiv2Br{

@@ -152,7 +152,7 @@ if($upload == 1){
 				}
 				else
 				{
-					copy($path, $t_path);
+					//copy($path, $t_path);
 				}
 				
 				exit;

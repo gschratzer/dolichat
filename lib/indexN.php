@@ -54,7 +54,7 @@ if (! $res) die("Include of main fails");
 	print '<form id="upload" method="post" action="upload.php?N=1&eintrag='.$eintrag.'&cuser='.$cuser.'&nick='.$nick.'&rowid='.$rowid.'" enctype="multipart/form-data">';	
 	if(($phone == 0 && $tablet == 0 ) && $_GET['mobile'] == 0){
 			print '<div id="drop">';
-			print '<a style="position: absolute; top: 0px; left: 0px;"><img id="'.$boxid.'uplicon" src="../images/upload.png" style="width: 26px;"></a>';
+			print '<a style="position: absolute; top: 0px; left: 0px;"><img id="'.$boxid.'uplicon" src="../images/upload.png" style="width: 26px;border: 1px solid black; border-radius: 5px;"></a>';
 			print '<input type="file" name="upl" id="upl" multiple capture="camera"/>';
 	}else{
 			print '	<div style="background-image: url(\'../images/upload.png\');background-repeat: no-repeat; background-size: 26px; background-position: 0px 0px; width: 26px; height: 26px;">

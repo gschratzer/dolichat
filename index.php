@@ -405,7 +405,7 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
 <style>
 	#mainframe{
 		background-image: url("img/dolichat.png"); /* 381549.jpg dolichat.png*/ 
-		background-color: rgba(183, 168, 138, 0.24);
+		background-color: rgb(241, 241, 241);
 	}
 	.UserViewTool{
 		width: 100%;
