@@ -6,6 +6,24 @@
 	var org_user;
 	// DOCUMENT READY FUNCTION
 	$(document).ready(function(){
+	    $( "#progressbar" ).progressbar({
+	    		value: false
+	    });
+
+	    progressbar = $( "#progressbar" ),
+	   	progressbar.css({
+			"position": "absolute",
+        	"width": "500px",
+        	"height": "10px",
+        	"top": "15px",
+        	"left": "42px",
+        	"display": "none"
+        });
+        progressbarValue = progressbar.find( ".ui-progressbar-value" );
+	    progressbarValue.css({
+          "background": '#2dce23'
+        });
+
 		eraseCookie('chatmessage_alert');
 		
 		if (("Notification" in window))
@@ -322,6 +340,16 @@
 	    });
     }
 
+    function addimgstart()
+    {
+   		progressbar = $( "#progressbar" ),
+        progressbarValue = progressbar.find( ".ui-progressbar-value" );
+
+		progressbar.css({
+			"display": ""
+		});
+    }
+
 	function imgload(proc)
 	{
 		$( "#load_text" ).text(proc + '%');
@@ -333,6 +361,26 @@
 				$( "#load_text" ).text('Send');
 			});
 		}
+
+		progressbar = $( "#progressbar" ),
+        progressbarValue = progressbar.find( ".ui-progressbar-value" );
+
+		progressbar.progressbar( "option", {
+          value: proc
+        });
+
+        if(proc == 100){
+			progressbar.fadeOut();
+        }
+	}
+
+	function imgload_faild()
+	{
+		progressbar = $( "#progressbar" ),
+        progressbarValue = progressbar.find( ".ui-progressbar-value" );
+		progressbar.css({
+			"background": "red"
+		});
 	}
 
 	function createCookie(name, value, days) 

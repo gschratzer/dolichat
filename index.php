@@ -303,7 +303,7 @@ print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
 				
 				// IMG UPL
 				print '<input type="hidden" id="SavedPicID'.$standard_user.'">';
-				print '<iframe src="'.dol_buildpath('/dolichat',1).'/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe>'; // title="'.$langs->trans('UploadImg').'"
+				print '<iframe src="'.dol_buildpath('/dolichat',1).'/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe><div id="progressbar"></div>'; // title="'.$langs->trans('UploadImg').'"
 				
 				// IMG URL
 				//print '<img title="'.$langs->trans('UploadImgWithURL').'" src="'.DOL_URL_ROOT.dol_buildpath('/dolichat',1).'/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';

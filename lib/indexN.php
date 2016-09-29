@@ -55,7 +55,7 @@ if (! $res) die("Include of main fails");
 	if(($phone == 0 && $tablet == 0 ) && $_GET['mobile'] == 0){
 			print '<div id="drop">';
 			print '<a style="position: absolute; top: 0px; left: 0px;"><img id="'.$boxid.'uplicon" src="../images/upload.png" style="width: 26px;"></a>';
-			print '<input type="file" name="upl" id="upl" multiple accept="image/*" capture="camera"/>';
+			print '<input type="file" name="upl" id="upl" multiple capture="camera"/>';
 	}else{
 			print '	<div style="background-image: url(\'../images/upload.png\');background-repeat: no-repeat; background-size: 26px; background-position: 0px 0px; width: 26px; height: 26px;">
 									<input type="file" src="../images/upload.png" name="upl" id="upl" multiple="" accept="image/*" capture="camera" style=" width: 26px; height: 26px;opacity: 0;">

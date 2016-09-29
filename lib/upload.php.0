@@ -32,15 +32,14 @@ if($upload == 1){
 
 	
 	// A list of permitted file extensions
-	$allowed = array('PNG', 'png', 'jpg', 'JPG', 'GIF', 'gif', 'bmp', 'BMP', 'wav', 'WAV', 'mp3', 'flv', 'zip', 'svg', 'xml', 'txt', 'xcf', 'cap', 'mp4', 'acc');
-	$not_allowed = array('exe', 'php', 'html', 'js', 'py');
+	$allowed = array('PNG', 'png', 'jpg', 'JPG', 'GIF', 'gif', 'bmp', 'BMP', 'wav', 'WAV', 'mp3', 'flv');
 	print_r($_FILES);
 	if($_FILES['upl']['error'] == 0){
 	
 		$uplname = preg_replace ( '/[^a-z0-9.]/i', '', $_FILES['upl']['name'] );
 		$extension = pathinfo($_FILES['upl']['name'], PATHINFO_EXTENSION);
 	
-		if(in_array(strtolower($extension), $not_allowed)){
+		if(!in_array(strtolower($extension), $allowed)){
 			echo '{"status":"error extension"}';
 			exit;
 		}

@@ -254,11 +254,34 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               }
                               ini_set('default_socket_timeout', 30);
                             }
-                            else
+                            elseif ( strpos(strtolower($ImagesLink), '.png') !== false || strpos(strtolower($ImagesLink), '.jpg') !== false || strpos(strtolower($ImagesLink), '.gif') !== false  || strpos(strtolower($ImagesLink), '.bmp') !== false)
                             {
                               $Bild.= '<a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
                                           <img src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
                                       </a>';
+                            }
+                            elseif ( strpos(strtolower($ImagesLink), '.mp3') !== false || strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.wav') !== false)
+                            {
+                              $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                              //$Bild.= finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).' '.DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink;
+                              $Bild.= 'Download: <a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">'.$ImagesLink.'</a><br>';
+                              $Bild.= '<audio  controls preload="metadata">';
+                                $Bild.= '<source src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'" type="'.finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).'">';
+                                $Bild.= 'Your browser does not support the video tag.';
+                              $Bild.= '</audio>';
+                            }
+                            elseif ( strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.webm') !== false || strpos(strtolower($ImagesLink), '.mp4') !== false)
+                            {
+                              $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                              $Bild.= 'Download: <a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">'.$ImagesLink.'</a><br>';
+                              $Bild.= '<video width="320" height="240" controls preload="metadata">';
+                                $Bild.= '<source src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1'.'" type="'.finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink).'">';
+                                $Bild.= 'Your browser does not support the video tag.';
+                              $Bild.= '</video>';
+                            }
+                            else
+                            {
+                              $Bild.= 'Download: <a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">'.$ImagesLink.'</a>';
                             }
                           }
                           $styleUngerade = '';
@@ -310,11 +333,11 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                   $to_you_text='id="to_you_text"'; 
                   $to_you_text2='id="to_you_text2"';
                   $to_trenstrich='id="to_trenstrich"';
-                  $scriptforone = 'onclick="Nachgsehen(\''.$row->rowid.'\', 0)"';    
-                  $scriptforone3 = 'onclick="Nachgsehen(\''.$row->rowid.'\', 1)"';                     
+                  $scriptforone = 'ondblclick="Nachgsehen(\''.$row->rowid.'\', 0)"';    
+                  $scriptforone3 = 'ondblclick="Nachgsehen(\''.$row->rowid.'\', 1)"';                     
               }elseif($row->gesehen == 0){
-                  $scriptforone = 'onclick="Nachgsehen(\''.$row->rowid.'\', 0)"';
-                  $scriptforone3 = 'onclick="Nachgsehen(\''.$row->rowid.'\', 1)"';    
+                  $scriptforone = 'ondblclick="Nachgsehen(\''.$row->rowid.'\', 0)"';
+                  $scriptforone3 = 'ondblclick="Nachgsehen(\''.$row->rowid.'\', 1)"';    
                   $to_you_time='id="to_you_time_nicht_gesehen"';
                   $to_you_who='id="to_you_who_nicht_gesehen"';
                   $to_you_text='id="to_you_text_nicht_gesehen"'; 
@@ -360,7 +383,7 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                   	$delimg="";
                   	if($user->rights->dolichat->Admin){
                       	$scriptforone2=$scriptforone;
-                        $scriptfullsize = 'onclick="fullsizechattext(this)"'; // Debug
+                        $scriptfullsize = 'ondblclick="fullsizechattext(this)"'; // Debug
                       	$scriptforoneimg = 'onclick="loschenimg(\''.$row->rowid.'\')"'; // Debug
                       	$delimg='<img src="images/del.png" alt="Del" width="13px" height="12px" '.$scriptforoneimg.'>'; //    padding-right: 4px;
                   	}
