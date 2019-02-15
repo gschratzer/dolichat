@@ -277,9 +277,7 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               if(strpos($headers[0],'200')===false){
                                 $Bild.= '[Error] Url does not exist!';
                               }else{
-                                $Bild.= '<a href="'.$ImagesLink.'" target="_blank">
-                                              <img src="'.$ImagesLink.'" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
-                                          </a>';
+                                //$Bild.= '<a href="'.$ImagesLink.'" target="_blank"><img src="'.$ImagesLink.'" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'""></a>';
                               }
                               ini_set('default_socket_timeout', 30);
                             }
@@ -290,15 +288,15 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               $name = basename(DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink);
                               $type = finfo_file($finfo, DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink);
                               $size = filesize(DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink);
-                              $size = formatFileSize($size);
                               $fdate = date ("d.m.Y H:i", filemtime(DOL_DATA_ROOT.'/dolichat/uploads/'.$url.'/'.$ImagesLink));
 
                               $Bild.= '<span>';
                                 $Bild.= '<a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">';
-                                  $Bild.= '<img width="20%" src="'.DOL_URL_ROOT.'/dolichat/img/text-file-3-xxl.png" class="downfile">';
+                                  $Bild.= '<img width="20%" src="/dolibarr/documents/dolichat/uploads/'.$url.'/'.$ImagesLink.'" class="downfile" style="margin:0 auto;border-radius: 8px;">';
+                                //$Bild.= '<img width="20%" src="'.DOL_URL_ROOT.'/dolichat/img/text-file-3-xxl.png" class="downfile">';
                                 $Bild.= '</a>';
                               $Bild.= '</span>';
-                              $Bild.= '<span style="position: absolute; margin-left: 20px;">';
+                              $Bild.= '<span style="/*position: absolute;*/ margin-left: 20px;">';
                                 $Bild.= '<table class="filedetail">';
                                   $Bild.= '<tr>';
                                     $Bild.= '<td>';
@@ -346,7 +344,7 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                               if ( strpos(strtolower($ImagesLink), '.png') !== false || strpos(strtolower($ImagesLink), '.jpg') !== false || strpos(strtolower($ImagesLink), '.gif') !== false  || strpos(strtolower($ImagesLink), '.bmp') !== false)
                               {
                                 $Bild.= '<br><a href="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/'.$ImagesLink.'&cache=1" target="_blank">
-                                            <img src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">
+                                            <!--<img src="'.dol_buildpath('document.php',1).'?modulepart=dolichat&file=uploads/'.$url.'/t_'.$ImagesLink.'&cache=1" alt="Pic is Wrong" width="50%" style="min-width:124px;min-height:124;'.$styleUngerade.'"">-->
                                         </a>';
                               }
                               elseif ( strpos(strtolower($ImagesLink), '.mp3') !== false || strpos(strtolower($ImagesLink), '.ogg') !== false || strpos(strtolower($ImagesLink), '.wav') !== false)
@@ -474,8 +472,8 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                   	if($tester == 1){
                   			// ToDo Day als center 
                   			$neu.='<div id="msg-line" class="msg-lineR">';
-                  			$neu.='<div id="chattabel" '.$scriptfullsize.' class="chatdiv2You">';
-                      	$neu.='<div class="chatdiv2You2">';
+                  			$neu.='<div id="chattabel" '.$scriptfullsize.' class="chatdiv2You" style="border-radius: 13px 0px 40px 13px;">';
+                      	$neu.='<div class="chatdiv2You2" style="">';
                         $neu.='	<span '.$scriptforone3.' id="your_tr" class="your_tr_cl" style="color:'.$farbe.';">
                       						<span id="your_chattext" name="your_chattext" class="shadow2" width="'.$chattext_l.'" style="min-width:'.$minBildwiht.';">'.
                       							$chattext.' '.$Bild.
@@ -488,7 +486,7 @@ $conf->global->dolichat_USE_DEL_TIME = 1;
                   	}
                   	if($tester == 2){
                   			$neu.='<div id="msg-line" class="msg-lineL">';
-                  			$neu.='<div id="chattabel" '.$scriptfullsize.' class="chatdiv2To" style="word-wrap: break-word;position: relative; font-size:14px; max-width: 90%; max-height: 450px;">';
+                  			$neu.='<div id="chattabel" '.$scriptfullsize.' class="chatdiv2To" style="word-wrap: break-word; font-size:14px; max-width: 90%; max-height: 450px;border-radius:0px 13px 13px 40px;padding-left:28px">';
                       	$neu.='<div style="width:100%;max-height:460px; overflow:hidden; padding-right: 60px;">';
                         $neu.='	<span '.$scriptforone2.' id="to_you_tr" style="height: 30px;color:'.$farbe.';">
                       						<span '.$to_you_text.' class="shadow2" width="'.$chattext_l.'">'.$chattext.' '.$Bild.'</span>
