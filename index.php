@@ -292,7 +292,7 @@ $classviewhide="visible";
 //	// # End left panel ########################################################################################
 
 // # Rechtes Fenster  ######################################################################################
-print '<div id="ecm-layout-center" class="'.$classviewhide.'" style="border:1px solid #ccc; width:100%;border-radius: 6px;display: flex;height: 85%;">';
+print '<div id="ecm-layout-center" class="'.$classviewhide.'" style="border:1px solid #ccc; width:100%;border-radius: 6px;display: flex;">';
 
 print '<div id="pre_LeftBox" style=" width: 20%; height: 100%; max-height:100%;float: left; bottom: 0; background-color: rgba(182,232,224,0.28); position: inherit; border-right: 1px solid #ccc;">';
 
