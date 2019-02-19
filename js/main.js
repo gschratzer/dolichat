@@ -106,7 +106,6 @@
 			{
 				if(sendwithenter == true)
 				{
-					event.preventDefault();
 					SendText($('#nameforsend').val());
 				}
 			}
