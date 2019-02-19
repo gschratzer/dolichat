@@ -213,7 +213,7 @@
 	function SendText(nick) 
     {   
     	//var eintrag = CKEDITOR.instances['message'].getData();
-        var eintrag = $('#message').val();
+		var eintrag = ($('#message').val()).trim();
         //var nick = '';
         var cuser = '';
         var PicSavedID = 0;
