@@ -1,5 +1,5 @@
 <?php
-//Config auslesen 
+//Config auslesen
 $res=0;
 if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");     // to work if your module directory is into dolibarr root htdocs directory
 if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");   // to work if your module directory is into a subdir of root htdocs directory
@@ -130,9 +130,9 @@ while($row = $db->fetch_object($ergebnis))
         $days[] = substr($row->timestamp, 0, -9);
         end($days);
         if(strtotime(substr($row->timestamp, 0, -9)) >= strtotime("today")){
-            $neu.= '<div class="date" id="'.key($days).$name.'datekeydiv"><div style="text-align: center;" name="notlost" id="today" id="'.key($days).'datekey">'.$langs->trans('Today').'</div></div>';
+            $neu.= '<div class="date" id="'.key($days).$name.'datekeydiv" style="border-radius: 20px;width:15%; margin:0 auto;background:#8A89834D;border:0;"><div style="text-align: center; " name="notlost" id="today" id="'.key($days).'datekey">'.$langs->trans('Today').'</div></div>';
         }else if (strtotime(substr($row->timestamp, 0, -9)) >= strtotime("yesterday")){
-            $neu.= '<div class="date" id="'.key($days).$name.'datekeydiv"><div style="text-align: center;" name="notlost" id="'.key($days).'datekey">'.$langs->trans('Yesterday').'</div></div>';
+            $neu.= '<div class="date" id="'.key($days).$name.'datekeydiv" style="border-radius: 20px;width:15%; margin:0 auto;background:#8A89834D;border:0;"><div style="text-align: center; " name="notlost" id="'.key($days).'datekey">'.$langs->trans('Yesterday').'</div></div>';
         }else{
             $neu.= '<div class="date" id="'.key($days).$name.'datekeydiv"><div style="text-align: center;" name="notlost" id="'.key($days).'datekey">'.date("d.m.Y",strtotime(substr($row->timestamp, 0, -9))).'</div></div>';
         }
@@ -491,7 +491,7 @@ while($row = $db->fetch_object($ergebnis))
             $neu.='	<span '.$scriptforone2.' id="to_you_tr" style="height: 30px;color:'.$farbe.';">
                       						<span '.$to_you_text.' class="shadow2" width="'.$chattext_l.'">'.$chattext.' '.$Bild.'</span>
                       					</span>';
-            $neu.='	<span style="width: 70px;z-index: 1;float: right; position: absolute; bottom: 10px; right: 10px; text-align: right; padding-right: 4px; font-size: 12px;color: #838383;padding-left: 30px;">'
+            $neu.='	<span style="width: 70px;z-index: 1;float: right; position: relative; bottom: -5px; right: 10px; text-align: right; padding-right: 4px; font-size: 12px;color: #838383;padding-left: 30px;">'
                 .$time.' '.$delimg.
                 '</span>';
             $neu.='</div>';

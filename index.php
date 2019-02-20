@@ -294,7 +294,7 @@ $classviewhide="visible";
 // # Rechtes Fenster  ######################################################################################
 print '<div id="ecm-layout-center" class="'.$classviewhide.'" style="border:1px solid #ccc; width:100%;border-radius: 6px;display: flex;">';
 
-print '<div id="pre_LeftBox" style=" width: 20%; height: 100%; max-height:100%;float: left; bottom: 0; background-color: rgba(182,232,224,0.28); position: inherit; border-right: 1px solid #ccc;">';
+print '<div id="pre_LeftBox" style="width:286px; height: 100%; max-height:100%;float: left; bottom: 0; background-color: rgba(182,232,224,0.28); position: inherit; border-right: 1px solid #ccc;">';
 
 print '<div class="LeftBox">';
 
@@ -406,16 +406,16 @@ if(is_array($chat_user_arr))
         }
     }
 
-print '</div>';
+
 
 print '</div>';
-
-print '<a href="javascript:void(0)" class="btn_boots_hide" id="toggle_chat_up" style="position:absolute;margin-left: 233px;margin-top: -32px;"></a>';
+print '</div>';
 
 // UserChatDiv End
 
+print '<a href="javascript:void(0)" class="btn_boots_hide" id="toggle_chat_up"></a>';
 print '</div>';
-print '<a href="javascript:void(0)" class="b_hide btn_boots_show" id="toggle_chat_down" style="position: absolute;margin-left: 6px;top: 71px"></a>';
+print '<a href="javascript:void(0)" class="b_hide btn_boots_show" id="toggle_chat_down"></a>';
 
 print '</div>';
 
@@ -500,7 +500,7 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
                 setTimeout(function() {
                     $("#toggle_chat_up").fadeOut(500);
                     var elem = document.getElementById("pre_LeftBox");
-                    var width = 336;
+                    var width = 286;
                     var id = setInterval(frame, 20);
                     function frame() {
                         if (width === 46) {
@@ -523,7 +523,7 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
                     var width = 46;
                     var id = setInterval(frame, 20);
                     function frame() {
-                        if (width === 336) {
+                        if (width === 286) {
                             clearInterval(id);
                         } else {
                             width+=10;
@@ -591,6 +591,137 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
     </script>
     <script type="text/javascript" src="js/main.js"></script>
     <style>
+
+        /* #### Mobile Phones Portrait #### */
+        @media screen and (min-device-width: 480px){
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 233px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+            #mainframe body{overflow-x:hidden}
+        }
+        /* #### Mobile Phones Portrait #### */
+        @media screen and (max-device-width: 480px){
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 233px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+
+            #mainframe body{overflow-x:hidden}
+        }
+
+        /* Small devices (portrait tablets and large phones, 600px and up) */
+        @media only screen and (min-width: 600px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 233px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+            #mainframe body{overflow-x:hidden}
+        }
+
+        /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and (min-width: 768px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 169px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+            #mainframe body{overflow-x:hidden}
+        }
+
+        /* Large devices (laptops/desktops, 992px and up) */
+        @media only screen and (min-width: 992px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 179px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+        }
+
+        /* Extra large devices (large laptops and desktops, 1200px and up) */
+        @media only screen and (min-width: 1200px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 195px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+        }
+
+        /* Extra large devices (large laptops and desktops, 1400px and up) */
+        @media screen and (min-width: 1400px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 200px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+        }
+
+        /* Extra large devices (l laptops and desktops, 1600px and up) */
+        @media screen and (min-width: 1600px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 211px;
+                margin-top: -34px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+        }
+
+        /* Extra large devices (large desktops, 1900px and up) */
+        @media screen and (min-width: 1900px) {
+            .btn_boots_hide {
+                position:absolute;
+                margin-left: 213px;
+                margin-top: -32px;
+            }
+            .btn_boots_show{
+                position: absolute;
+                margin-left: 6px;
+                top: 71px;
+            }
+        }
+
         #mainframe{
             /*background-image: url("img/dolichat.png"); /* 381549.jpg dolichat.png*/
             background-color: rgb(241, 241, 241);
@@ -684,7 +815,6 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
             text-align: center;
         }
         .date {
-            border-bottom: 3px dotted #b3b3b3 !important;
 
         }
         #chat_detail{
@@ -694,8 +824,6 @@ print ' <div id="dialog" title="'.$langs->trans("ImagefromaURL").'" style="displ
         }
         .textmessage{
             width: 94%;
-            height: 56px;
-            height: 36px;
             border-radius: 5px 5px 5px;
         }
         .UserDetailCNTclass
