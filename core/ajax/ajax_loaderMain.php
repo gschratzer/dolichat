@@ -491,7 +491,7 @@ while($row = $db->fetch_object($ergebnis))
             $neu.='	<span '.$scriptforone2.' id="to_you_tr" style="height: 30px;color:'.$farbe.';">
                       						<span '.$to_you_text.' class="shadow2" width="'.$chattext_l.'">'.$chattext.' '.$Bild.'</span>
                       					</span>';
-            $neu.='	<span style="width: 70px;z-index: 1;float: right; position: relative; bottom: -5px; right: 10px; text-align: right; padding-right: 4px; font-size: 12px;color: #838383;padding-left: 30px;">'
+            $neu.='	<span style="width: 70px;z-index: 1;float: right; position: relative; bottom: 0px; right: 10px; text-align: right; padding-right: 4px; font-size: 12px;color: #838383;padding-left: 30px;">'
                 .$time.' '.$delimg.
                 '</span>';
             $neu.='</div>';

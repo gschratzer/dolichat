@@ -57,10 +57,10 @@ $ausblendnum = $objP->value;
 
 
 if($reloadnum == ""){
-    $reloadnum = 3;
+    $reloadnum = 5;
 }
 if($objRel->entity == 0 || $objRel->entity == ""){
-    $reloadnum = 3;
+    $reloadnum = 5;
 }
 
 $cuser = $_GET['cuser'];
