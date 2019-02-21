@@ -188,6 +188,16 @@ while($row = $db->fetch_object($ergebnis))
     $chattext = str_replace(">", "&gt;", $chattext);
     $chattext = str_replace("\n", "<br>", $chattext);
 
+    $reg_exUrl = "/(http|https|ftp|ftps|www)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+
+    if (preg_match($reg_exUrl, $chattext, $url)) {
+        if (strpos($url[0],'.jpg')!==false) {
+            $chattext = preg_replace($reg_exUrl, '<br><a href="'.$url[0].'" target="_blank"><img src="'.$url[0].'" style="width:200px;height:auto;padding: 10px;float: left;margin-right: 20px;border-radius: 20px;"></a><br>', $chattext);
+        } else {
+            $chattext = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $chattext);
+        }
+    }
+
     if(!empty($row->chattextblob)) $chattext_test = base64_decode($row->chattextblob);
     else $chattext_test = $row->chattext;
     //$chattext = wordwrap( $chattext, 37, "<br>\n", true);
