@@ -51,6 +51,8 @@ div.mainmenu.chat {
 }
 
 <?php
+
+
 if (is_object($db)) $db->close();
 }
 ?>
