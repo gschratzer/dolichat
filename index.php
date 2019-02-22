@@ -28,51 +28,51 @@ if (!$staticuser->rights->dolichat->UseChat) accessforbidden();
 if(!$conf->global->MAIN_MODULE_DOLICHAT){ accessforbidden();}
 
 /**
-### Dolichat Aktion and Processing ###
+ 		### Dolichat Aktion and Processing ###
  */
 
-if($_GET['user'] > 0)
-{
-    setcookie('chat_user'.$user->id, $_GET['user']);
-}
+	if($_GET['user'] > 0)
+	{
+		setcookie('chat_user'.$user->id, $_GET['user']);
+	}
 
-$chat_user = $dolichat->get_Dolichat_user();
-if(is_array($chat_user))
-    foreach($chat_user as $key => $cuser)
-    {
-        if($cuser->rowid != $user->id)
-        {
-            $lmassage = $dolichat->get_last_message($cuser->rowid, $user->id);
-            if($lmassage) $chat_user_arr[strtotime($lmassage->timestamp)] = $cuser;
-            else $no_chat_user_arr[] = $cuser;
-        }
-    }
+	$chat_user = $dolichat->get_Dolichat_user();
+	if(is_array($chat_user))
+	foreach($chat_user as $key => $cuser)
+	{
+		if($cuser->rowid != $user->id)
+		{
+			$lmassage = $dolichat->get_last_message($cuser->rowid, $user->id);
+			if($lmassage) $chat_user_arr[strtotime($lmassage->timestamp)] = $cuser;
+			else $no_chat_user_arr[] = $cuser;
+		}
+	}
 
-if(is_array($chat_user_arr))
-    $ksort_res = krsort($chat_user_arr);
+	if(is_array($chat_user_arr))
+	$ksort_res = krsort($chat_user_arr);
 
-if(is_array($no_chat_user_arr))
-    foreach($no_chat_user_arr as $key => $cval)
-    {
-        $chat_user_arr[$key] = $cval;
-    }
-//print_r($chat_user_arr);
-$standard_user = 0;
+	if(is_array($no_chat_user_arr))
+	foreach($no_chat_user_arr as $key => $cval)
+	{
+		$chat_user_arr[$key] = $cval;
+	}
+	//print_r($chat_user_arr);
+	$standard_user = 0;
 
 /**
-### Dolichat Aktion and Processing ###
+		### Dolichat Aktion and Processing ###
  */
 
 /**
-### Desing Processing ###
+ 		### Desing Processing ###
  */
-// Define height of file area (depends on $_SESSION["dol_screenheight"])
-//print $_SESSION["dol_screenheight"];
-$maxheightwin=(isset($_SESSION["dol_screenheight"]) && $_SESSION["dol_screenheight"] > 466)?($_SESSION["dol_screenheight"]-186):660;	// Also into index_auto.php file
+	// Define height of file area (depends on $_SESSION["dol_screenheight"])
+	//print $_SESSION["dol_screenheight"];
+	$maxheightwin=(isset($_SESSION["dol_screenheight"]) && $_SESSION["dol_screenheight"] > 466)?($_SESSION["dol_screenheight"]-186):660;	// Also into index_auto.php file
 
-$morejs=array();
-if (empty($conf->global->MAIN_ECM_DISABLE_JS)) $morejs=array("/includes/jquery/plugins/jqueryFileTree/jqueryFileTree.js");
-$moreheadcss="
+	$morejs=array();
+	if (empty($conf->global->MAIN_ECM_DISABLE_JS)) $morejs=array("/includes/jquery/plugins/jqueryFileTree/jqueryFileTree.js");
+	$moreheadcss="
 	<!-- dol_screenheight=".$_SESSION["dol_screenheight"]." -->
 	<style type=\"text/css\">
 	    #containerlayout {
@@ -86,7 +86,7 @@ $moreheadcss="
 	   		overflow-y: hidden !important;
 	    }
 	</style>";
-$moreheadjs=empty($conf->use_javascript_ajax)?"":"
+	$moreheadjs=empty($conf->use_javascript_ajax)?"":"
 	<script type=\"text/javascript\">
 	    jQuery(document).ready(function () {
 	        jQuery('#containerlayout').layout({
@@ -120,32 +120,32 @@ $moreheadjs=empty($conf->use_javascript_ajax)?"":"
 	    });
 	</script>";
 
-llxHeader($moreheadcss.$moreheadjs,$langs->trans("Dolichat"),'','','','',$morejs,'',0,0);
+	llxHeader($moreheadcss.$moreheadjs,$langs->trans("Dolichat"),'','','','',$morejs,'',0,0);
 
 
-if (! empty($conf->use_javascript_ajax)) $classviewhide='hidden';
-else $classviewhide='visible';
+	if (! empty($conf->use_javascript_ajax)) $classviewhide='hidden';
+	else $classviewhide='visible';
 
 
-if (empty($conf->dol_use_jmobile))
-{
-    //$head = ecm_prepare_dasboard_head('');
-    $head="";
-    dol_fiche_head($head, 'index', '', 1, '');
-}
+	if (empty($conf->dol_use_jmobile))
+	{
+		//$head = ecm_prepare_dasboard_head('');
+		$head="";
+		dol_fiche_head($head, 'index', '', 1, '');
+	}
 
 /**
-### Desing Processing END ###
+ 		### Desing Processing END ###
  */
 
 /**
-### VIEW ###
+ 		### VIEW ###
  */
 // Status Processing
 print '<input type="hidden" id="active_stat" value="1">';
 // Audio Processing
 print '<audio id="note_sound" controls style="display:none;">';
-print '<source src="sound/newmessage.wav" type="audio/wav">';
+	print '<source src="sound/newmessage.wav" type="audio/wav">';
 print '</audio>';
 
 print '<input type="hidden" id="OnlineStatus0" value="'.$langs->trans("OnlineStatusGrey").'">';
@@ -155,24 +155,24 @@ print '<input type="hidden" id="OnlineStatus2" value="'.$langs->trans("OnlineSta
 print '<input type="hidden" id="DOL_URL_ROOT" value="'.DOL_URL_ROOT.'">';
 
 print '<div id="containerlayout"> <!-- begin div id="containerlayout" -->';
-/* TOOL Bar Global Chat
+	/* TOOL Bar Global Chat
 
-print '<div id="ecm-layout-north" class="toolbar largebutton">';
+	print '<div id="ecm-layout-north" class="toolbar largebutton">';
 
-    // Start top panel, toolbar
-    print '<div class="toolbarbutton">';
-        print 'Tool';
-    print '</div>';
+		// Start top panel, toolbar
+		print '<div class="toolbarbutton">';
+			print 'Tool';
+		print '</div>';
 
-// End top panel, toolbar
-print '</div>';
-*/
+	// End top panel, toolbar
+	print '</div>';
+	*/
 
 
-// Linkes Fenster ##########################################################################################
+	// Linkes Fenster ##########################################################################################
 
-$classviewhide="visible";
-//print '<div id="ecm-layout-west" class="'.$classviewhide.'">';
+   $classviewhide="visible";
+	 //print '<div id="ecm-layout-west" class="'.$classviewhide.'">';
 //		print '<div class="LeftBox">';
 //
 //			// Chat Tool Box
@@ -291,169 +291,171 @@ $classviewhide="visible";
 //	print '</div>';
 //	// # End left panel ########################################################################################
 
-// # Rechtes Fenster  ######################################################################################
-print '<div id="ecm-layout-center" class="'.$classviewhide.'" style="border:1px solid #ccc; width:100%;border-radius: 6px;display: flex;">';
+	// # Rechtes Fenster  ######################################################################################
+	print '<div id="ecm-layout-center" class="'.$classviewhide.'" style="border:1px solid #ccc; width:100%;border-radius: 6px;display: flex;">';
 
-print '<div id="pre_LeftBox" style="width:286px; height: 100%; max-height:100%;float: left; bottom: 0; background-color: rgba(182,232,224,0.28); position: inherit; border-right: 1px solid #ccc;">';
+        print '<div id="pre_LeftBox" style="width:286px; height: 100%; max-height:100%;float: left; bottom: 0; background-color: rgba(182,232,224,0.28); position: inherit; border-right: 1px solid #ccc;">';
 
-print '<div class="LeftBox">';
+                    print '<div class="LeftBox">';
 
-// Chat Tool Box
-print '<div style="height: 30px; border-bottom: 1px solid #BBBBBB;">';
-print '<div style="clear:both;">';
-print '<div style="float: left; width: 50%;height: 30px;">';
-print '<input class="UserViewTool" type="button" name="chats" value="'.$langs->trans("Chats").'" style="border-right: 1px solid #BBBBBB;" onclick="switch_user_chat()">';
-print '</div>';
-print '<div style="float: right; width: 50%;">';
-print '<input class="UserViewTool" type="button" name="contacts" value="'.$langs->trans("Contacts").'" onclick="switch_user_contatct()">';
-print '</div>';
-print '</div>';
-print '</div>';
-print '<div style="height:31px;">';
-print '<input type="text" value="" id="user_search" class="UserSearch" placeholder="'.$langs->trans("UserSearchDotDotDot").'">';
-//print '<div class="UserSearchButton">';
-print '<img id="mute" src="img/mute.png" class="muteclass" title="'.$langs->trans("Mute").'">';
-//print '</div>';
-print '</div>';
+                    // Chat Tool Box
+                    print '<div style="height: 30px; border-bottom: 1px solid #BBBBBB;">';
+                    print '<div style="clear:both;">';
+                    print '<div style="float: left; width: 50%;height: 30px;">';
+                    print '<input class="UserViewTool" type="button" name="chats" value="'.$langs->trans("Chats").'" style="border-right: 1px solid #BBBBBB;" onclick="switch_user_chat()">';
+                    print '</div>';
+                    print '<div style="float: right; width: 50%;">';
+                    print '<input class="UserViewTool" type="button" name="contacts" value="'.$langs->trans("Contacts").'" onclick="switch_user_contatct()">';
+                    print '</div>';
+                    print '</div>';
+                    print '</div>';
+                    print '<div style="height:31px;">';
+                    print '<input type="text" value="" id="user_search" class="UserSearch" placeholder="'.$langs->trans("UserSearchDotDotDot").'">';
+                    //print '<div class="UserSearchButton">';
+                    print '<img id="mute" src="img/mute.png" class="muteclass" title="'.$langs->trans("Mute").'">';
+                    //print '</div>';
+                    print '</div>';
 
-// UserChatDiv
-print '<div class="UserChatDivOut">';
-print '<div class="UserChatDivIn">';
+                    // UserChatDiv
+                    print '<div class="UserChatDivOut">';
+                    print '<div class="UserChatDivIn">';
 
-if(is_array($chat_user_arr))
-    foreach($chat_user_arr as $key => $cuser)
-    {
-        if($cuser->rowid != $user->id)
-        {
-            print '<input type="hidden" value="'.$cuser->firstname.' '.$cuser->lastname.'" id="user_name_of_'.$cuser->rowid.'">';
-            // User Box
-            $object->fetch($cuser->rowid);
+                    if(is_array($chat_user_arr))
+                        foreach($chat_user_arr as $key => $cuser)
+                        {
+                            if($cuser->rowid != $user->id)
+                            {
+                                print '<input type="hidden" value="'.$cuser->firstname.' '.$cuser->lastname.'" id="user_name_of_'.$cuser->rowid.'">';
+                                // User Box
+                                $object->fetch($cuser->rowid);
 
-            $MessageCNT = "";
-            $lmassage = $dolichat->get_last_message($cuser->rowid, $user->id);
-            if(!empty($lmassage->timestamp))
-            {
-                $user_name_div = "user_box_chat";
-                $user_box_visible = "";
-                if($lmassage->user_id != $user->id && $lmassage->gesehen == 0) $MessageCNT = "new";
-            }
-            else
-            {
-                $user_name_div = "user_box_kontakt";
-                $user_box_visible = "display:none;";
-            }
+                                $MessageCNT = "";
+                                $lmassage = $dolichat->get_last_message($cuser->rowid, $user->id);
+                                if(!empty($lmassage->timestamp))
+                                {
+                                    $user_name_div = "user_box_chat";
+                                    $user_box_visible = "";
+                                    if($lmassage->user_id != $user->id && $lmassage->gesehen == 0) $MessageCNT = "new";
+                                }
+                                else
+                                {
+                                    $user_name_div = "user_box_kontakt";
+                                    $user_box_visible = "display:none;";
+                                }
 
-            if(strtotime($lmassage->timestamp) < strtotime("now - ".$conf->global->dolichat_DEL_TIME." days"))
-            {
-                $user_name_div = "user_box_kontakt";
-                $user_box_visible = "display:none;";
-            }
+                                if (isset($conf->global->dolichat_DEL_TIME) || $conf->global->dolichat_DEL_TIME==0) $conf->global->dolichat_DEL_TIME = 360;
 
-            print '<div id="user_detail_box_'.$object->id.'" class="UserKontakttBox" name="'.$user_name_div.'" style="'.$user_box_visible.'" onclick="change_chat_user('.$object->id.')" lastname="'.strtolower($cuser->lastname).'" firstname="'.strtolower($cuser->firstname).'" >';
+                                if(strtotime($lmassage->timestamp) < strtotime("now - ".$conf->global->dolichat_DEL_TIME." days"))
+                                {
+                                    $user_name_div = "user_box_kontakt";
+                                    $user_box_visible = "display:none;";
+                                }
 
-            print '<div class="UserImg">';
-            if($object->photo != "")
-            {
-                print $form->showphoto('userphoto', $object, '','','','user_img');
-            }
-            else
-            {
-                if($object->color == "")
-                {
-                    $object->color = "CCCCCC";
-                    $hex = 'white';
-                }
-                else
-                {
-                    $hex = $dolichat->getContrast50($object->color);
-                }
+                                print '<div id="user_detail_box_'.$object->id.'" class="UserKontakttBox" name="'.$user_name_div.'" style="'.$user_box_visible.'" onclick="change_chat_user('.$object->id.')" lastname="'.strtolower($cuser->lastname).'" firstname="'.strtolower($cuser->firstname).'" >';
 
-                print '<div class="user_img" style="background-color:#'.$object->color.';"><div class="UserBuchstabe" style="color: '.$hex.';">'.$object->lastname[0].'</div></div>';
-            }
-            print '</div>';
+                                print '<div class="UserImg">';
+                                if($object->photo != "")
+                                {
+                                    print $form->showphoto('userphoto', $object, '','','','user_img');
+                                }
+                                else
+                                {
+                                    if($object->color == "")
+                                    {
+                                        $object->color = "CCCCCC";
+                                        $hex = 'white';
+                                    }
+                                    else
+                                    {
+                                        $hex = $dolichat->getContrast50($object->color);
+                                    }
 
-            print '<div class="UserDetail">'; // Left Row Userbox
-            print '<div class="UserDetailName">';
-            // Online Stat
-            print '<div title="'.$langs->trans("OnlineStatusUnknow").'" class="online_stats_'.$object->id.'" style="width: 10px; height: 10px; background-color: grey; border-radius: 90px; position: relative; bottom: -14px; left: 55px; opacity: 0.7;"></div>';
-            print $cuser->firstname;
-            print ' ';
-            print $cuser->lastname;
-            if(empty($MessageCNT)) print '<div name="UserDetailLastMessageCNT_'.$object->id.'" class="UserDetailCNTclass">'.$MessageCNT.'</div>';
-            else print '<div name="UserDetailLastMessageCNT_'.$object->id.'" class="UserDetailCNTclass" style="display: block !important;">'.$MessageCNT.'</div>';
-            print '</div>';
-            print '<div class="UserDetailLastMessage">';
-            print '<div class="UserDetailLastMessageText" name="UserDetailLastMessageText_'.$object->id.'">';
-            if($lmassage->chattextblob) if(!empty($lmassage->timestamp)) print base64_decode($lmassage->chattextblob);
-            else if(!empty($lmassage->timestamp)) print $lmassage->chattext;
-            print '</div>';
-            print '<div class="UserDetailLastMessageTime" name="UserDetailLastMessageTime_'.$object->id.'">';
-            if(!empty($lmassage->timestamp)){
-                if(strtotime($lmassage->timestamp) > strtotime("now - 24 hours")){
-                    print date('H:i', strtotime($lmassage->timestamp)).' ';
-                }else{
-                    print date('d.m.y', strtotime($lmassage->timestamp)).' ';
-                }
-            }
-            print '</div>';
-            print '</div>';
-            print '</div>';
+                                    print '<div class="user_img" style="background-color:#'.$object->color.';"><div class="UserBuchstabe" style="color: '.$hex.';">'.$object->lastname[0].'</div></div>';
+                                }
+                                print '</div>';
 
-
-
-            print '</div>';
-            // Userbox End
-        }
-    }
+                                print '<div class="UserDetail">'; // Left Row Userbox
+                                print '<div class="UserDetailName">';
+                                // Online Stat
+                                print '<div title="'.$langs->trans("OnlineStatusUnknow").'" class="online_stats_'.$object->id.'" style="width: 10px; height: 10px; background-color: grey; border-radius: 90px; position: relative; bottom: -14px; left: 55px; opacity: 0.7;"></div>';
+                                print $cuser->firstname;
+                                print ' ';
+                                print $cuser->lastname;
+                                if(empty($MessageCNT)) print '<div name="UserDetailLastMessageCNT_'.$object->id.'" class="UserDetailCNTclass">'.$MessageCNT.'</div>';
+                                else print '<div name="UserDetailLastMessageCNT_'.$object->id.'" class="UserDetailCNTclass" style="display: block !important;">'.$MessageCNT.'</div>';
+                                print '</div>';
+                                print '<div class="UserDetailLastMessage">';
+                                print '<div class="UserDetailLastMessageText" name="UserDetailLastMessageText_'.$object->id.'">';
+                                if($lmassage->chattextblob) if(!empty($lmassage->timestamp)) print base64_decode($lmassage->chattextblob);
+                                else if(!empty($lmassage->timestamp)) print $lmassage->chattext;
+                                print '</div>';
+                                print '<div class="UserDetailLastMessageTime" name="UserDetailLastMessageTime_'.$object->id.'">';
+                                if(!empty($lmassage->timestamp)){
+                                    if(strtotime($lmassage->timestamp) > strtotime("now - 24 hours")){
+                                        print date('H:i', strtotime($lmassage->timestamp)).' ';
+                                    }else{
+                                        print date('d.m.y', strtotime($lmassage->timestamp)).' ';
+                                    }
+                                }
+                                print '</div>';
+                                print '</div>';
+                                print '</div>';
 
 
 
-print '</div>';
-print '</div>';
+                                print '</div>';
+                                // Userbox End
+                            }
+                        }
 
-// UserChatDiv End
+
+
+                    print '</div>';
+                    print '</div>';
+
+                    // UserChatDiv End
 
 print '<a href="javascript:void(0)" class="btn_boots_hide" id="toggle_chat_up"></a>';
-print '</div>';
-print '<a href="javascript:void(0)" class="b_hide btn_boots_show" id="toggle_chat_down"></a>';
+                    print '</div>';
+                    print '<a href="javascript:void(0)" class="b_hide btn_boots_show" id="toggle_chat_down"></a>';
 
-print '</div>';
+        print '</div>';
 
 
-// Rechts Unten --------------------------------------------------------------------------------------
-print '<div class="pane-in ecm-in-layout-south layout-padding valignmiddle" style="width: 100%">';
-// Rechts Oben ---------------------------------------------------------------------------------------
-print '<div class="pane-in ecm-in-layout-center">';
-print '<div id="ecmfileview" class="ecmfileview" style="height:100%;">'; //overflow: hidden;
+		// Rechts Unten --------------------------------------------------------------------------------------
+		print '<div class="pane-in ecm-in-layout-south layout-padding valignmiddle" style="width: 100%">';
+                            // Rechts Oben ---------------------------------------------------------------------------------------
+                            print '<div class="pane-in ecm-in-layout-center">';
+                            print '<div id="ecmfileview" class="ecmfileview" style="height:100%;">'; //overflow: hidden;
 
-// Chat Frame
-print '<div id="chat_detail">';
-print '';
-print '</div>';
+                            // Chat Frame
+                            print '<div id="chat_detail">';
+                            print '';
+                            print '</div>';
 
-print '<div style="height:91%;">';
-print '<iframe id="mainframe" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>'; // dol_buildpath('/dolichat',1)./indexFrameChatMain.php?cuser='.$standard_user.'
-print '</div>';
+                            print '<div style="height:91%;">';
+                            print '<iframe id="mainframe" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>'; // dol_buildpath('/dolichat',1)./indexFrameChatMain.php?cuser='.$standard_user.'
+                            print '</div>';
 
-print '</div>';
-print '</div>';
-// End Rechts Oben  ----------------------------------------------------------------------------------
-// TOOL
-print '<div style="border-bottom: 1px solid #BBBBBB;padding: 5px 5px 5px 5px;">';
+                            print '</div>';
+                            print '</div>';
+                            // End Rechts Oben  ----------------------------------------------------------------------------------
+			// TOOL
+			print '<div style="border-bottom: 1px solid #BBBBBB;padding: 5px 5px 5px 5px;">';
 
-// IMG UPL
-print '<input type="hidden" id="SavedPicID'.$standard_user.'">';
-print '<iframe src="'.dol_buildpath('/dolichat',1).'/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe><div id="progressbar"></div>'; // title="'.$langs->trans('UploadImg').'"
+				// IMG UPL
+				print '<input type="hidden" id="SavedPicID'.$standard_user.'">';
+				print '<iframe src="'.dol_buildpath('/dolichat',1).'/lib/indexN.php?cuser='.$standard_user.'" style="width: 30px;height: 30px;margin-bottom: -4px;" frameborder="0" scrolling="no" id="uploadF"></iframe><div id="progressbar"></div>'; // title="'.$langs->trans('UploadImg').'"
 
-// IMG URL
-//print '<img title="'.$langs->trans('UploadImgWithURL').'" src="'.DOL_URL_ROOT.dol_buildpath('/dolichat',1).'/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';
+				// IMG URL
+				//print '<img title="'.$langs->trans('UploadImgWithURL').'" src="'.DOL_URL_ROOT.dol_buildpath('/dolichat',1).'/images/upload_url.png" style="width:26px;" onclick="$( \'#dialog\' ).dialog( \'open\');">';
 
-print '<div class="entertosend">';
-print '<span style="position: relative; bottom: 3px;">'.$langs->trans("PressEnterToSend").' </span>';
-print '<input type="checkbox" value="0" id="EnterSenden" >';
-print '</div>';
+				print '<div class="entertosend">';
+					print '<span style="position: relative; bottom: 3px;">'.$langs->trans("PressEnterToSend").' </span>';
+					print '<input type="checkbox" value="0" id="EnterSenden" >';
+				print '</div>';
 
-print '</div>';
+			print '</div>';
 
 // Message
 print '<div style="padding: 5px 5px 5px 5px; clear: both;">';

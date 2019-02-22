@@ -33,7 +33,7 @@
 
     .downfile {
         border: 1px solid grey;
-        border-radius: 15px;
+        border-radius: 8px!important;
     }
 
     .downfile:hover {
@@ -60,7 +60,7 @@
         background: linear-gradient(transparent 420px, #D4FFCF);
         pointer-events: none;
     }
-    
+
     .chatdiv2To:after {
         content: '';
         width: 100%;
@@ -76,10 +76,10 @@
     {
         max-width: 80px !important;
     }
-/* --------------------------------------------------------------------------------    
+/* --------------------------------------------------------------------------------
     Textarea 02*/
-    
-    .textareadiv:before { 
+
+    .textareadiv:before {
 				/* EFFFED */
 			float: right;
   		content: "\A";
@@ -88,7 +88,7 @@
   		border-color: transparent transparent transparent #FFFFFF;
   		margin-top: 10px;
 		}
-		
+
 		/* Der Lade Balcken */
 		.loadAll{
 			background-color: rgba(74, 74, 74, 0.33);
@@ -106,19 +106,19 @@
 				display: 	table;
 				clear: 		both;
 		}
-		
+
 		.dateshower{
 			position: fixed;
-  		top: 0px;
-  		left: 0px;
-  		width: 100%;
-  		/* height: 25px; */
-  		/* border-radius: 20px; */
-  		background-color: rgba(108, 108, 108, 0.26);
-  		padding: 10px 0px 10px 0px;
-  		border-bottom: 2px solid rgb(255, 194, 0);
+  		    top: 0px;
+  		    left: 0px;
+  		    width: 100%;
+  		    /* height: 25px; */
+  		    /* border-radius: 20px; */
+  		    background-color: rgba(108, 108, 108, 0.26);
+  		    padding: 10px 0px 10px 0px;
+  		    border-bottom: 2px solid rgb(255, 194, 0);
 		}
-		
+
 		.date{
             border: 1px solid #b3b3b3!important;
             width: 15%!important;
@@ -127,11 +127,11 @@
             padding: 10px 0px 10px 0px!important;
             background-color: #99979099!important;
 		}
-/* --------------------------------------------------------------------------------    
+/* --------------------------------------------------------------------------------
     Tabel einstellungen o2*/
 		.webback{
 			background: rgba(0, 0, 0, 0);
-			margin: 20px;			
+			margin: 20px;
 		}
 		.webback2{
 			/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e5e5e5+0,becdb1+100 */
@@ -146,32 +146,32 @@
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#d6d6ba',GradientType=0 ); /* IE6-9 */
 
 		}
-		
+
 		/*
 		.msg-lineR{
 				display: inline-block;
 				float:	 right;
-				
-		}	
+
+		}
 		*/
 		.msg-lineR:after{
 				content: 	'';
 				display: 	table;
 				clear: 		both;
-		}	
-		
+		}
+
 		/*
 		.msg-lineL{
 				display: inline-block;
-				
-		}	
+
+		}
 		*/
 		.msg-lineL:after{
 				content: 	'';
 				display: 	table;
 				clear: 		both;
-		}	
-		
+		}
+
 		/*
 		chatdiv2You -> From You Chat
 		chatdiv2To  -> To You Chat
@@ -182,15 +182,15 @@
         {
             width: 70px;
             z-index: 1;
-            float: right; 
-            position: absolute; 
-            bottom: 10px; 
-            right: 10px; 
-            text-align: right; 
+            float: right;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            text-align: right;
             font-size: 12px;
-            color: #838383; 
-            padding-left: 30px; 
-            padding-right: 10px; 
+            color: #838383;
+            padding-left: 30px;
+            padding-right: 10px;
         }
 
         .your_tr_cl
@@ -200,9 +200,9 @@
         }
 
         .chatdiv2You2
-        {		
+        {
             width:100%;
-            max-height:460px; 
+            max-height:460px;
             overflow:hidden;
 		}
 
@@ -213,19 +213,19 @@
 		    margin-bottom: 20px;
   			padding: 10px 0px 10px 10px;
   			display: inline-block;
-  			background-color: #D4FFCF; 
+  			background-color: #D4FFCF;
   			border-radius: 13px;
   			/*box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.37);*/
             border: 1px solid #bbbbbb;
             word-wrap: break-word;
             position: relative;
-            font-size:14px; 
-            max-width: 90%; 
+            font-size:14px;
+            max-width: 90%;
             max-height: 450px;
 		}
-		
-		.chatdiv2You:before {  
-		    /* EFFFED 
+
+		.chatdiv2You:before {
+		    /* EFFFED
 		    float: right;
     		content:"\A";
     		border-style: solid;
@@ -235,44 +235,44 @@
     		right: -20px;
             */
 		}
-		
+
 		.chatdiv2To{
 				/* #EFFFED */
 				margin-bottom: 20px;
   			padding: 10px 10px 10px 10px;
   			display: inline-block;
-  			background-color: #FFFFF2; 
+  			background-color: #FFFFF2;
   			border-radius: 13px;
   			/*box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.37);*/
             border: 1px solid #bbbbbb;
 		}
-		
+
 		.chatdiv2To:before {
-				/* EFFFED 
+				/* EFFFED
     		content:"\A";
     		border-style: solid;
     		border-width: 10px 15px 4px 0;
-    		border-color: transparent #FFFFF2 transparent transparent; 
+    		border-color: transparent #FFFFF2 transparent transparent;
     		position: absolute;
     		left: -15px;*/
 		}
-		
+
 		.chatdiv2Br{
 				/* #EFFFED */
 				margin-bottom: 20px;
   			padding: 10px 10px 10px 10px;
-  			display: inline-block;  			
-  			background-color: #FF9F9F; 
+  			display: inline-block;
+  			background-color: #FF9F9F;
   			border-radius: 13px;
   			box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.37);
 		}
-		
+
 		.chatdiv2Br:before {
 				/* EFFFED */
     		content:"\A";
     		border-style: solid;
     		border-width: 10px 15px 4px 0;
-    		border-color: transparent #FF9F9F transparent transparent; 
+    		border-color: transparent #FF9F9F transparent transparent;
     		position: absolute;
     		left: 6px;
 		}
@@ -280,17 +280,17 @@
     Tabel einstellungen */
     #chattabel{
         border-collapse: collapse;
-        
+
     }
     #your_tr{
-        
+
         /*background-image: url(../images/metall-iphone5s-hd-wallpaper.jpg);*/
     }
     #to_you_tr{
-        
+
     }
     #Broadcast_tr{
-       
+
     }
 /* --------------------------------------------------------------------------------
     Text der rechts steht (der von einen selbst kommt) */
@@ -310,14 +310,14 @@
         font-size:10px;
         text-align: left;
         vertical-align: bottom;
-        background-color:#D4FFCF;      
+        background-color:#D4FFCF;
         /*border-bottom: 1px dashed black;*/
     }
     #your_time{
         color:#000000;
-        font-size:8px;        
+        font-size:8px;
         vertical-align: bottom;
-        background-color:#D4FFCF;   
+        background-color:#D4FFCF;
         /*border-bottom: 1px dashed black;*/
     }
 /* --------------------------------------------------------------------------------
@@ -326,7 +326,7 @@
         color:#000000;
         font-size:8px;
         vertical-align: bottom;
-        background-color:#FFFFF2;     
+        background-color:#FFFFF2;
         /*border-bottom: 1px dashed black;*/
     }
     #to_you_who{
@@ -339,13 +339,13 @@
     #to_you_text{
         color:#000000;
 
-        background-color:#FFFFF2;        
+        background-color:#FFFFF2;
         /*border-bottom: 1px dashed black;*/
     }
     #to_you_text2{
         color:#000000;
 
-        background-color:#FFFFF2;        
+        background-color:#FFFFF2;
     }
     #to_you_time_nicht_gesehen{
         color:#000000;
@@ -364,13 +364,13 @@
     #to_you_text_nicht_gesehen{
         color:#000000;
         text-align: left;
-        background-color:#BBB5FF;        
+        background-color:#BBB5FF;
         /*border-bottom: 1px dashed black;*/
-    }    
+    }
     #to_you_text_nicht_gesehen2{
         color:#000000;
         text-align: left;
-        background-color:#BBB5FF;        
+        background-color:#BBB5FF;
     }
 /* --------------------------------------------------------------------------------
     Broadcast der lenks steht (nicht von einem selbst)*/
@@ -408,7 +408,7 @@
     }
     #Bro_trenstrich{
         background-color:#FF9F9F;
-    }    
+    }
     #to_col{
         border-style:hidden;
     }
@@ -436,7 +436,7 @@
     .f1 { top:10%; background-image: url(../images/Hoch.jpg);}
     .f2 { top:90%; background-image: url(../images/Runter.jpg);}
     .back{
-        position:fixed; 
+        position:fixed;
         left:97%;
         opacity: 0.5;
         width:50px;
@@ -474,7 +474,7 @@
     color:#D5D5D5;
 }
 #button:hover{
-    background-color:#EDEDED;  
+    background-color:#EDEDED;
     color:#909090;
 }
 #textbox{
@@ -485,14 +485,14 @@
     box-shadow:         5px 3px 10px 0px rgba(50, 50, 50, 0.75);
 }
 #textbox:hover{
-    background-color:#EDEDED; 
+    background-color:#EDEDED;
     color:#000000;
     -webkit-box-shadow: 5px 3px 10px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow:    5px 3px 10px 0px rgba(50, 50, 50, 0.75);
     box-shadow:         5px 3px 10px 0px rgba(50, 50, 50, 0.75);
 }
 #textbox:active{
-    background-color:#EDEDED; 
+    background-color:#EDEDED;
     color:#000000;
     -webkit-box-shadow: 5px 3px 10px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow:    5px 3px 10px 0px rgba(50, 50, 50, 0.75);
@@ -508,18 +508,18 @@
     height:60px;
 }
 /*--------------------------------------RELOAD---------------------------------------------*/
-#Reload_td{  
+#Reload_td{
     position:fixed;
     width:95px;
     height:75px;
-    top:75px;     
-    left:107px;  
+    top:75px;
+    left:107px;
     background-color:#FFFFFF;
     z-index:1;
 }
 #Chat_name{
     position:fixed;
-    top:55px;     
+    top:55px;
     left:104px;
     text-align: right;
     color:#FFFF00;
@@ -527,7 +527,7 @@
 }
 #Reload_text{
     position:fixed;
-    top:75px;     
+    top:75px;
     left:109px;
     text-align: right;
     color:#D5D5D5;
@@ -535,7 +535,7 @@
 }
 #Reload_text2{
     position:fixed;
-    top:95px;     
+    top:95px;
     left:124px;
     text-align: right;
     color:#D5D5D5;
@@ -543,7 +543,7 @@
 }
 #Reload_text3{
     position:fixed;
-    top:135px;  
+    top:135px;
     left:132px;
     text-align: right;
     color:#D5D5D5;
@@ -567,10 +567,10 @@
 }
 #Reload{
     position:fixed;
-    top:78px;     
+    top:78px;
     left:190px;
     width:10px;
-    height:10px;    
+    height:10px;
     background-color:#DC0000;
     border-radius: 10px;
     -webkit-box-shadow: 2px 1px 14px 0px rgba(50, 50, 50, 0.98);
@@ -579,22 +579,22 @@
 }
 #Reload2{
     position:fixed;
-    top:98px;     
+    top:98px;
     left:190px;
     width:10px;
-    height:10px;    
+    height:10px;
     background-color:#E9AE00;
     border-radius: 10px;
     -webkit-box-shadow: 2px 1px 14px 0px rgba(50, 50, 50, 0.98);
     -moz-box-shadow:    2px 1px 14px 0px rgba(50, 50, 50, 0.98);
-    box-shadow:         2px 1px 14px 0px rgba(50, 50, 50, 0.98);  
+    box-shadow:         2px 1px 14px 0px rgba(50, 50, 50, 0.98);
 }
 #Reload3{
     position:fixed;
     top:138px;
     left:190px;
     width:10px;
-    height:10px;    
+    height:10px;
     background-color:#04E900;
     border-radius: 10px;
     -webkit-box-shadow: 2px 1px 14px 0px rgba(50, 50, 50, 0.98);
@@ -603,10 +603,10 @@
 }
 #Reload4{
     position:fixed;
-    top:118px;    
+    top:118px;
     left:190px;
     width:10px;
-    height:10px;    
+    height:10px;
     background-color:#FFFC00;
     border-radius: 10px;
     -webkit-box-shadow: 2px 1px 14px 0px rgba(50, 50, 50, 0.98);
@@ -615,10 +615,10 @@
 }
 #Reload5{
     position:fixed;
-    top:158px;    
+    top:158px;
     left:190px;
     width:10px;
-    height:10px;    
+    height:10px;
     background-color:#0000FF;
     border-radius: 10px;
     -webkit-box-shadow: 2px 1px 14px 0px rgba(50, 50, 50, 0.98);
@@ -632,7 +632,7 @@
     box-shadow:         5px 3px 10px 0px rgba(50, 50, 50, 0.75);
 }
 .shadow2{
-    
+
 }
 .shadow3{
     box-shadow:         22px 12px 14px 0px rgba(50, 50, 50, 0.75);
@@ -640,7 +640,7 @@
 .f1 { top:5%; background-image: url(images/Hoch.png);border-radius: 39px;}
 .f2 { top:92.5%; background-image: url(images/Runter.png);border-radius: 39px;}
 .back{
-    position:fixed; 
+    position:fixed;
     left:97%;
     opacity: 0.5;
     width:50px;
@@ -649,7 +649,7 @@
     background-repeat:no-repeat;
 }
 .back:hover{
-    position:fixed; 
+    position:fixed;
     left:97%;
     opacity: 1.0;
     width:50px;

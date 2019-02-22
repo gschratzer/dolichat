@@ -34,7 +34,6 @@ if (! $res) die("Include of main fails");
 // Load user to have $user->conf loaded (not done into main because of NOLOGIN constant defined)
 if (empty($user->id) && ! empty($_SESSION['dol_login'])) $user->fetch('',$_SESSION['dol_login']);
 
-
 // Define css type
 header('Content-type: text/css');
 // Important: Following code is to avoid page request by browser and PHP CPU at
@@ -50,8 +49,16 @@ div.mainmenu.chat {
     background-image: url(<?php echo dol_buildpath($path.'/dolichat/img/menus/dolichat.png',1) ?>);
 }
 
-<?php
 
+<?php
+if(!file_exists( dol_buildpath($path.'/dolichat/img/object_communications_w.png',1) )){
+	?>
+div.mainmenu.communications {
+    background-image: url(<?php echo dol_buildpath($path.'/custom/dolichat/img/object_communications_w.png',1); ?>) !important;
+}
+
+<?php
+}
 
 if (is_object($db)) $db->close();
 }
