@@ -102,31 +102,7 @@ After enabling the module:
 - a Dolichat entry should appear in the left menu of the communication area
 - chat access can also be integrated through the top-right menu hook
 
-FIRST USE
-=========
 
-Once enabled, users with the correct permission can open Dolichat and start
-communicating with other Dolibarr users.
-
-Typical first steps:
-
-1. Enable the module
-2. Grant chat permissions to the desired user or user roles
-3. Open the communication menu
-4. Start a chat session
-
-PERMISSIONS
-===========
-
-Dolichat defines several permissions, including:
-
-- Use chat
-- Chat administration
-- Picture upload
-- Read picture access
-
-If a user can see the module but cannot use it, check the user or group rights
-in Dolibarr.
 
 DIRECTORY OVERVIEW
 ==================
@@ -144,47 +120,13 @@ The repository currently contains a structure similar to this:
 - sound/       sound assets
 - images/, img/  image assets
 
-DATABASE
-========
-
-The module creates and/or uses chat-related tables during initialization,
-including tables for:
-
-- chat status
-- chat messages
-- chat pictures
-
-These are created automatically by the module initialization process.
-
-UPGRADES
-========
-
-If you are upgrading from a very old Dolichat installation:
-
-- back up your database first
-- back up your Dolicharr custom directory first
-- replace the old module files with the new version
-- re-enable or test the module in a staging environment before production use
-
-Older installation instructions that refer to Dolibarr 3.x or to placing the
-module directly into the old root/htdocs layout are obsolete.
-
-DEVELOPMENT
-===========
-
-This repository contains the develop branch of Dolichat.
-
-For developers:
-
-- keep the module inside htdocs/custom/dolichat in your Dolibarr instance
-- test with a compatible Dolibarr 21 environment
-- verify menu integration, permissions, chat sending, and uploads after changes
 
 SUPPORT
 =======
 
-If you need help installing or adapting Dolichat, open an issue in the GitHub
-repository or contact the maintainer through the project links.
+If you need help installing or adapting Dolichat, we are open to make you an offer for this service
+In case you want to contribute in this project please be welcome to send us your pull requests
+in case you want to send an bug-report open an issue here in the GitHub repository.
 
 LICENSE
 =======
