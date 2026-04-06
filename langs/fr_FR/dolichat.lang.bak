@@ -90,6 +90,3 @@ OnlineStatusUnknow=Inconnu
 
 ChatAdminFunction=l'action d'administration (les commandes à exécuter directement dans le chat)
 DelAllMessages=Supprimer toutes les conversations
-
-###MENU###
-CommunicationsMenuTitle=communication

@@ -1,0 +1,145 @@
+<?php  
+//Config auslesen 
+$res = 0;
+if (!$res && file_exists(__DIR__ . '/../main.inc.php')) {
+    $res = @include __DIR__ . '/../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../../main.inc.php';
+}
+if (!$res) {
+    die('Include of main fails');
+}
+dol_include_once('/dolichat/class/dolichat.class.php');
+
+$dolichat = new dolichat($db);
+
+function dolichatStatusJsonResponse($status, $message, $extra = array())
+{
+    header('Content-Type: application/json; charset=UTF-8');
+    $payload = array_merge(array('status' => $status, 'message' => $message), $extra);
+    echo json_encode($payload);
+    exit;
+}
+
+    $ges = GETPOSTINT('ges_id');
+    $id = GETPOSTINT('id');
+    $del = GETPOSTINT('del');
+    $pruf = GETPOSTINT('pruf');
+    $userid = GETPOSTINT('userid');
+    $tmp_userid = GETPOSTINT('tmp_user');
+    $chat_stat = GETPOSTINT('chat_stat');
+    $get_user_info = GETPOST('get_user_info', 'alpha');
+    dol_syslog("DOLICHAT ajax_proc_status.php params: id=".var_export($id, true)." del=".var_export($del, true)." ges_id=".var_export($ges_id, true)." pruf=".var_export($pruf, true)." chat_stat=".var_export($chat_stat, true), LOG_DEBUG);
+    if(isset($id) && $del == 0){ 
+    
+        $dolichat->markMessageSeen($id);
+
+    }elseif(isset($ges)){ 
+    
+        $dolichat->markMessagesSeenForReceiver($ges, $user->id);
+
+    }elseif(isset($id) && $del == 1){
+	dol_syslog("DOLICHAT delete branch entered for message id=".$id, LOG_DEBUG);
+        $row = $dolichat->getMessageById($id);
+        if (!is_object($row)) {
+	    dol_syslog("Message not found : ".array('messageId' => (int) $id), LOG_DEBUG);
+            dolichatStatusJsonResponse('error', 'Message not found.', array('messageId' => (int) $id));
+        }
+
+        if ((int) $row->user_id !== (int) $user->id && empty($user->admin)) {
+	    dol_syslog("You can only delete your own messages=".$id, LOG_DEBUG);
+            dolichatStatusJsonResponse('error', 'You can only delete your own messages.', array('messageId' => (int) $id));
+        }
+
+        $chattext = !empty($row->chattextblob) ? base64_decode($row->chattextblob) : $row->chattext;
+        $picReference = '';
+        if (strpos((string) $chattext, '%picto=') !== false) {
+            $picReference = substr(strrchr((string) $chattext, '%picto='), 7);
+        }
+
+        if ($picReference !== '') {
+            $uploadBase = DOL_DATA_ROOT . '/dolichat/uploads/' . ((int) $row->user_id) . '/';
+            $mainFile = $uploadBase . $picReference;
+            $thumbFile = $uploadBase . 't_' . basename($picReference);
+
+            if (is_file($mainFile)) {
+                @unlink($mainFile);
+            }
+            if (is_file($thumbFile)) {
+                @unlink($thumbFile);
+            }
+        }
+        $deleteResult = $dolichat->deleteMessageById($id);
+        if ($deleteResult <= 0) {
+            dolichatStatusJsonResponse('error', 'Message could not be deleted.', array('messageId' => (int) $id));
+        }
+        $verifyDeleted = $dolichat->getMessageById($id);
+        if (is_object($verifyDeleted)) {
+            dolichatStatusJsonResponse('error', 'Delete could not be verified.', array('messageId' => (int) $id));
+        }
+
+        dolichatStatusJsonResponse('success', 'Message deleted.', array('messageId' => (int) $id));
+	    }elseif($pruf == 1){
+
+        if (empty($chat_stat)) {
+            $chat_stat = 1;
+        }
+
+        $dolichat->updateChatStat($user->id, $chat_stat);
+        $chat_users_stats = array();
+        foreach ($dolichat->listChatStats() as $stat) {
+            if ((int) $stat->user_id !== (int) $user->id) {
+                $chat_users_stats[$stat->user_id] = (strtotime($stat->last_stat) > strtotime('-10 sec')) ? $stat->online : 0;
+            }
+        }
+
+        $rowid = $dolichat->getLatestIncomingRowId($user->id, $userid);
+
+        echo $rowid;
+        if(is_array($chat_users_stats))
+        foreach($chat_users_stats as $key => $chat_user)
+        {
+            echo '%<|>%';
+            echo $key;
+            echo '%<>%';
+            echo $chat_user;
+        }
+
+    }
+    elseif($pruf == 2)
+    {
+        $first = true;
+        foreach ($dolichat->getUnreadSenders($user->id) as $gese) {
+            $rowsUnread = $dolichat->getUnreadMessagesFromSender($gese->user_id, $user->id);
+            $cn_gesehen = count($rowsUnread);
+            $row = $cn_gesehen > 0 ? $rowsUnread[0] : null;
+            if (!$row) {
+                continue;
+            }
+
+            $rowid = $row->rowid;
+            if($user->id != $row->user_id) $ruser = $row->user_id;
+            if($user->id != $row->privat) $ruser = $row->privat;
+            
+            if($first == false) echo '%<|>%';         
+            if($row->chattextblob) echo $rowid.'%<>%'.$ruser.'%<>%'.base64_decode($row->chattextblob).'%<>%'.date('H:i', strtotime($row->timestamp)).'%<>%'.$user->id.'%<>%'.$row->user_id; // .'-'.$sql
+            elseif($row->chattext) echo $rowid.'%<>%'.$ruser.'%<>%'.$row->chattext.'%<>%'.date('H:i', strtotime($row->timestamp)).'%<>%'.$user->id.'%<>%'.$row->user_id; // .'-'.$sql
+            echo '%<>%'.$cn_gesehen;
+            //echo '%<>%'.$sql;
+
+            $staticuser=new User($db);
+            $staticuser->fetch($row->user_id);
+
+            echo '%<>%'.($staticuser->lastname).' '.($staticuser->firstname);
+
+            $first = false;
+        }
+    }
+

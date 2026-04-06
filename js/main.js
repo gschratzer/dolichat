@@ -106,7 +106,7 @@
 			{
 				if(sendwithenter == true)
 				{
-					event.preventDefault();
+					e.preventDefault();
 					SendText($('#nameforsend').val());
 				}
 			}
@@ -168,17 +168,19 @@
 	function switch_user_chat()
 	{
 		switch_tmp = true;
-		$('input[name="chats"]').css('background-color', '#FFFFFF');
-		$('input[name="contacts"]').css('background-color', '#F1F1F1');
+		$('input[name="chats"]').addClass('UserViewToolActive');
+		$('input[name="contacts"]').removeClass('UserViewToolActive');
 		$('div[name="user_box_kontakt"]').hide();
+		$('div[name="user_box_chat"]').show();
 	}
 
 	function switch_user_contatct()
 	{
 		switch_tmp = false;
-		$('input[name="contacts"]').css('background-color', '#FFFFFF');
-		$('input[name="chats"]').css('background-color', '#F1F1F1');
+		$('input[name="contacts"]').addClass('UserViewToolActive');
+		$('input[name="chats"]').removeClass('UserViewToolActive');
 		$('div[name="user_box_kontakt"]').show();
+		$('div[name="user_box_chat"]').hide();
 	}
 
 	var user_id_tmp = 0;
@@ -186,9 +188,9 @@
 	{
 		eraseCookie('chat_user' + userselfid);
 		createCookie('chat_user' + userselfid, userid, 365);
-		$('div[name="user_box_chat"]').css('background-color', '');
-		$('div[name="user_box_kontakt"]').css('background-color', '');
-		$('#user_detail_box_'+userid).css('background-color', '#DDFFE0');
+		$('div[name="user_box_chat"]').removeClass('UserKontakttBoxSelected');
+		$('div[name="user_box_kontakt"]').removeClass('UserKontakttBoxSelected');
+		$('#user_detail_box_'+userid).addClass('UserKontakttBoxSelected');
 
 		user_id_tmp = userid;
 		$('#uploadF').attr('src', $('#dolichat_path').val()+'/lib/indexN.php?cuser='+userid); // for User Pic Upload
@@ -197,7 +199,7 @@
 		tmp_html = $('#user_detail_box_' + userid).html();
 		$('#chat_detail').html(tmp_html);
 
-		$('#chat_detail').css('background-color', '#DDFFE0');
+		$('#chat_detail').addClass('dolichat-chat-detail-active');
 
 		cnt_usr[userid] = 1;
 		$('div[name="UserDetailLastMessageCNT_' + userid + '"]').fadeOut();
@@ -210,44 +212,185 @@
 		});
 	}
 
-	function SendText(nick) 
-    {   
-    	//var eintrag = CKEDITOR.instances['message'].getData();
-        var eintrag = $('#message').val();
-        //var nick = '';
-        var cuser = '';
+	function showSubmitStatus(type, text)
+    {
+        var box = $('#dolichat_submit_status');
+        if (box.length === 0) {
+            alert(text);
+            return;
+        }
+
+        box.removeClass('error success info').addClass(type).text(text).stop(true, true).fadeIn('fast');
+        if (type !== 'error') {
+            box.delay(2500).fadeOut('slow');
+        }
+    }
+
+    function validateChatSelection()
+    {
+        if (!user_id_tmp || parseInt(user_id_tmp, 10) <= 0) {
+            showSubmitStatus('error', 'Please select a chat or contact first.');
+            return false;
+        }
+        return true;
+    }
+
+    function validateBeforeUpload()
+    {
+        return validateChatSelection();
+    }
+
+    function parseAjaxJsonResponse(rawResponse)
+    {
+        if (typeof rawResponse === 'object' && rawResponse !== null) {
+            return rawResponse;
+        }
+
+        if (typeof rawResponse !== 'string') {
+            return null;
+        }
+
+        var trimmed = $.trim(rawResponse);
+        if (trimmed === '') {
+            return null;
+        }
+
+        try {
+            return JSON.parse(trimmed);
+        } catch (e) {
+            var start = trimmed.lastIndexOf('{');
+            var end = trimmed.lastIndexOf('}');
+            if (start !== -1 && end !== -1 && end > start) {
+                try {
+                    return JSON.parse(trimmed.substring(start, end + 1));
+                } catch (ignored) {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    function refreshMainChatFrame(messageId)
+    {
+        if (!user_id_tmp || parseInt(user_id_tmp, 10) <= 0) {
+            return;
+        }
+
+        var iframe = document.getElementById('mainframe');
+        var basePath = $('#dolichat_path').val() + '/indexFrameChatMain.php';
+        var newUrl = basePath + '?cuser=' + encodeURIComponent(user_id_tmp) + '&sent=' + encodeURIComponent(messageId || 0) + '&_=' + new Date().getTime();
+
+        if (iframe && iframe.contentWindow) {
+            try {
+                iframe.contentWindow.location.href = newUrl;
+                return;
+            } catch (e) {
+                // fallback below
+            }
+        }
+
+        $('#mainframe').attr('src', newUrl);
+    }
+
+    function updateCurrentChatPreview(messageText)
+    {
+        if (!user_id_tmp || parseInt(user_id_tmp, 10) <= 0) {
+            return;
+        }
+
+        var preview = $.trim(String(messageText || '').replace(/\s+/g, ' '));
+        if (preview.length > 120) {
+            preview = preview.substring(0, 117) + '...';
+        }
+
+        $('div[name="UserDetailLastMessageText_' + user_id_tmp + '"]').text(preview);
+
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, '0');
+        var mm = String(now.getMinutes()).padStart(2, '0');
+        $('div[name="UserDetailLastMessageTime_' + user_id_tmp + '"]').text(hh + ':' + mm + ' ');
+    }
+
+    function SendText(nick)
+    {
+        var messageField = $('#message');
+        var eintrag = messageField.val();
+        var cuser = user_id_tmp;
         var PicSavedID = 0;
+        var sendButton = $('#sendmail');
+        var originalText = eintrag;
 
-       	cuser = user_id_tmp;
+        if (!validateChatSelection()) {
+            return false;
+        }
 
-        $('#message').val('');    
-        $('#message').focus();
-        //CKEDITOR.instances['message'].setData('');
+        if ($.trim(eintrag) === '') {
+            showSubmitStatus('error', 'Please enter a message first.');
+            messageField.focus();
+            return false;
+        }
 
-        if(eintrag == ''){
+        sendButton.prop('disabled', true);
+        showSubmitStatus('info', 'Sending message ...');
+        $('#load').fadeIn('slow');
 
-        }else{
-        	$( "#load" ).fadeIn("slow");
-        	console.log(eintrag);
-			//eintrag = btoa(eintrag);
-			//console.log(eintrag);
-			$.ajax({
-				method: "POST",
-				url: "core/ajax/ajax_proc_dbase.php",
-				data: { 
-					eintrag: eintrag, 
-					nick: nick, 
-					cuser: cuser, 
-					PicSavedID: PicSavedID 
-				}
-			})
-			.done(function( msg ) {
-				$('#load').delay(1000).fadeOut('slow');
-			});
+        $.ajax({
+            method: 'POST',
+            url: 'core/ajax/ajax_proc_dbase.php',
+            dataType: 'text',
+            timeout: 20000,
+            data: {
+                eintrag: eintrag,
+                nick: nick,
+                cuser: cuser,
+                PicSavedID: PicSavedID
+            }
+        })
+        .done(function (rawResponse) {
+            var response = parseAjaxJsonResponse(rawResponse);
+            if (!response || response.status !== 'success' || !response.messageId || parseInt(response.messageId, 10) <= 0) {
+                var errorMessage = 'Message could not be sent.';
+                if (response && response.message) {
+                    errorMessage = response.message;
+                } else if (typeof rawResponse === 'string' && $.trim(rawResponse) !== '') {
+                    errorMessage = 'Message could not be sent. Server response: ' + $.trim(rawResponse).substring(0, 250);
+                }
+                messageField.val(originalText).focus();
+                showSubmitStatus('error', errorMessage);
+                return;
+            }
 
-        }   
+            messageField.val('');
+            messageField.focus();
+            updateCurrentChatPreview(originalText);
+            switch_user_chat();
+            showSubmitStatus('success', response.message || 'Message sent.');
+            refreshMainChatFrame(response.messageId);
+        })
+        .fail(function (xhr, textStatus) {
+            var message = 'Message could not be sent.';
+            var response = null;
+            if (xhr && typeof xhr.responseText === 'string') {
+                response = parseAjaxJsonResponse(xhr.responseText);
+            }
+            if (response && response.message) {
+                message = response.message;
+            } else if (textStatus === 'timeout') {
+                message = 'Sending timed out. The text is still in the field so you can try again.';
+            } else if (xhr && xhr.responseText) {
+                message = 'Message could not be sent. Server response: ' + $.trim(xhr.responseText).substring(0, 250);
+            }
+            messageField.val(originalText).focus();
+            showSubmitStatus('error', message);
+        })
+        .always(function () {
+            sendButton.prop('disabled', false);
+            $('#load').delay(300).fadeOut('slow');
+        });
 
-       	$('#SavedPicID').val('');  	  
+        return false;
     }
 
     var last_rowid = [];
@@ -374,13 +517,14 @@
         }
 	}
 
-	function imgload_faild()
+	function imgload_faild(msg)
 	{
 		progressbar = $( "#progressbar" ),
         progressbarValue = progressbar.find( ".ui-progressbar-value" );
 		progressbar.css({
 			"background": "red"
 		});
+        showSubmitStatus('error', msg || 'Upload failed.');
 	}
 
 	function createCookie(name, value, days) 

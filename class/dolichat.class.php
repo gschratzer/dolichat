@@ -51,6 +51,17 @@ class dolichat extends CommonObject
 			return 1;
 		}
 
+		/**
+		 * Backward-compatible constructor wrapper.
+		 *
+		 * @param DoliDB $db Database handler
+		 * @return void
+		 */
+		function dolichat($db)
+		{
+			self::__construct($db);
+		}
+
 
 		/**
 		 *  Create object into database
@@ -90,7 +101,13 @@ class dolichat extends CommonObject
 		}
 		if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
-		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
+		if (!empty($includeUsers)) {
+            if (is_array($includeUsers)) {
+                $sql .= " AND u.rowid IN ('".implode("','", $includeUsers)."')";
+            } else {
+                $sql .= " AND u.rowid IN ('".$includeUsers."')";
+            }
+        }
 		$sql.= " Where u.statut<>0 ";
 		$sql.= " AND u.rowid>1 ";
 		$sql.= " AND u.rowid <> '".$userid."'";
@@ -171,7 +188,13 @@ class dolichat extends CommonObject
 			}
 		}
 
-		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
+		if (!empty($includeUsers)) {
+            if (is_array($includeUsers)) {
+                $sql .= " AND u.rowid IN ('".implode("','", $includeUsers)."')";
+            } else {
+                $sql .= " AND u.rowid IN ('".$includeUsers."')";
+            }
+        }
 		$sql.= " AND u.statut <> 0 ";
 		$sql.= " AND u.rowid > 0 ";
 		$sql.= " AND u.rowid!='".$user->id."' ";        
@@ -211,6 +234,404 @@ class dolichat extends CommonObject
 			}
 		}
 	}
+
+
+    /**
+     * Return one user parameter value.
+     *
+     * @param int $userId User id
+     * @param string $param Parameter name
+     * @param mixed $default Default value
+     * @return mixed
+     */
+    public function getUserParamValue($userId, $param, $default = '')
+    {
+        $sql = 'SELECT value FROM ' . MAIN_DB_PREFIX . "user_param WHERE fk_user = " . ((int) $userId) . " AND param = '" . $this->db->escape($param) . "'";
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj) && isset($obj->value)) {
+                return $obj->value;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * Return one user parameter row.
+     *
+     * @param int $userId User id
+     * @param string $param Parameter name
+     * @return object|null
+     */
+    public function getUserParamRow($userId, $param)
+    {
+        $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . "user_param WHERE fk_user = " . ((int) $userId) . " AND param = '" . $this->db->escape($param) . "'";
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj)) {
+                return $obj;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Create one chat message.
+     *
+     * @param User $author Current user
+     * @param string|int $target Target user or special code
+     * @param string $message Message text
+     * @param int $picSavedId Pending picture message id
+     * @return int
+     */
+    public function createMessage($author, $target, $message, $picSavedId = 0)
+    {
+        $this->error = '';
+        $this->errors = array();
+
+        if (!is_object($author) || empty($author->id)) {
+            $this->error = 'Invalid author';
+            return -1;
+        }
+
+        $message = trim((string) $message);
+        $target = (string) $target;
+        $picSavedId = (int) $picSavedId;
+
+        $pictureText = '';
+        if ($picSavedId > 0) {
+            $pics = $this->getPicturesByMessageId($picSavedId);
+            foreach ($pics as $pic) {
+                $pictureText .= ' %picto=' . $picSavedId . '/' . $pic->PicName;
+            }
+        }
+
+        if ($message === '%picto=notext') {
+            $message = '';
+        }
+
+        $fullMessage = $message . $pictureText;
+        if ($fullMessage === '') {
+            $this->error = 'Empty message';
+            return -2;
+        }
+
+        $privatUser = $target;
+        $privatName = '';
+        if (is_numeric($target) && (int) $target > 0) {
+            $targetUser = new User($this->db);
+            if ($targetUser->fetch((int) $target) > 0) {
+                $privatName = ' sagt zu ' . $targetUser->lastname . ' ' . $targetUser->firstname;
+            }
+        } elseif ((string) $target === '-1') {
+            $privatUser = '0';
+        }
+
+        $baseMessage = base64_encode($fullMessage);
+        $sql = 'INSERT INTO ' . MAIN_DB_PREFIX . 'chattext ('
+            . 'chattextblob, user, user_id, privat, privat_name, timestamp'
+            . ') VALUES ('
+            . "'" . $this->db->escape($baseMessage) . "', "
+            . "'" . $this->db->escape(trim($author->lastname . ' ' . $author->firstname)) . "', "
+            . ((int) $author->id) . ', '
+            . "'" . $this->db->escape($privatUser) . "', "
+            . "'" . $this->db->escape($privatName) . "', CURRENT_TIMESTAMP)";
+
+        if (!$this->db->query($sql)) {
+            $this->error = $this->db->lasterror();
+            return -3;
+        }
+
+        $messageId = (int) $this->db->last_insert_id(MAIN_DB_PREFIX . 'chattext');
+        if ($messageId <= 0) {
+            $messageId = $this->getLatestChatRowId();
+        }
+
+        if ($picSavedId > 0 && $messageId > 0) {
+            $this->reassignChatPictures($picSavedId, $messageId);
+        }
+
+        return $messageId;
+    }
+
+    public function getLatestChatRowId()
+    {
+        $sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . 'chattext ORDER BY rowid DESC LIMIT 1';
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj) && isset($obj->rowid)) {
+                return (int) $obj->rowid;
+            }
+        }
+
+        return 0;
+    }
+
+    public function countPrivateConversationMessages($userId, $otherUserId, $days = 0)
+    {
+        $sql = 'SELECT COUNT(rowid) as total FROM ' . MAIN_DB_PREFIX . 'chattext'
+            . ' WHERE ((privat = ' . ((int) $otherUserId) . ' AND user_id = ' . ((int) $userId) . ')'
+            . ' OR (privat = ' . ((int) $userId) . ' AND user_id = ' . ((int) $otherUserId) . '))';
+        if ((int) $days > 0) {
+            $sql .= ' AND timestamp > now() - INTERVAL ' . ((int) $days) . ' DAY';
+        }
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj) && isset($obj->total)) {
+                return (int) $obj->total;
+            }
+        }
+        return 0;
+    }
+
+    public function fetchMessagesForContext($currentUserId, $cuser, $days = 0, $fromrow = 0, $alldays = 0)
+    {
+        $rows = array();
+        $sql = '';
+        $cuser = (string) $cuser;
+
+        if ($fromrow > 0) {
+            $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE (privat IN (0, ' . ((int) $currentUserId) . ') OR user_id = ' . ((int) $currentUserId) . ')'
+                . ' AND rowid > ' . ((int) $fromrow) . ' ORDER BY timestamp ASC LIMIT 10';
+        } elseif (is_numeric($cuser) && (int) $cuser > 0) {
+            $other = (int) $cuser;
+            $total = $this->countPrivateConversationMessages($currentUserId, $other, $days);
+            if ($total < 10) {
+                $total = 10;
+            }
+            $offset = $alldays ? 0 : max(0, $total - 10);
+            $limit = $alldays ? max(0, $total - 10) : 10;
+            $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE ((privat = ' . $other . ' AND user_id = ' . ((int) $currentUserId) . ')'
+                . ' OR (privat = ' . ((int) $currentUserId) . ' AND user_id = ' . $other . '))';
+            if ((int) $days > 0) {
+                $sql .= ' AND timestamp > now() - INTERVAL ' . ((int) $days) . ' DAY';
+            }
+            $sql .= ' ORDER BY timestamp ASC';
+            if ($limit > 0) {
+                $sql .= ' LIMIT ' . $offset . ', ' . $limit;
+            }
+        } elseif ($cuser === '0') {
+            $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE privat = 0';
+            if ((int) $days > 0) {
+                $sql .= ' AND timestamp > now() - INTERVAL ' . ((int) $days) . ' DAY';
+            }
+            $sql .= ' ORDER BY timestamp ASC';
+        } elseif ($cuser === '-1') {
+            $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE ((privat IN (0, ' . ((int) $currentUserId) . ') OR user_id = ' . ((int) $currentUserId) . '))';
+            if ((int) $days > 0) {
+                $sql .= ' AND timestamp > now() - INTERVAL ' . ((int) $days) . ' DAY';
+            }
+            if (!$alldays) {
+                $sql .= ' AND rowid IN (SELECT foo.rowid FROM (SELECT rowid FROM ' . MAIN_DB_PREFIX . 'chattext ORDER BY rowid DESC LIMIT 10) AS foo)';
+            } else {
+                $sql .= ' AND rowid NOT IN (SELECT foo.rowid FROM (SELECT rowid FROM ' . MAIN_DB_PREFIX . 'chattext ORDER BY rowid DESC LIMIT 10) AS foo)';
+            }
+            $sql .= ' ORDER BY timestamp ASC';
+            if (!$alldays) {
+                $sql .= ' LIMIT 10';
+            }
+        }
+
+        if ($sql === '') {
+            return $rows;
+        }
+
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $rows[] = $obj;
+            }
+        }
+
+        return $rows;
+    }
+
+    public function getMessageById($messageId)
+    {
+        $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE rowid = ' . ((int) $messageId);
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj)) {
+                return $obj;
+            }
+        }
+        return null;
+    }
+
+    public function getPicturesByMessageId($messageId)
+    {
+        $rows = array();
+        $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chatpic WHERE MsgID = ' . ((int) $messageId) . ' ORDER BY rowid DESC';
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $rows[] = $obj;
+            }
+        }
+        return $rows;
+    }
+
+    public function createChatPicture($messageId, $picName, $userId)
+    {
+        $sql = 'INSERT INTO ' . MAIN_DB_PREFIX . "chatpic (PicName, MsgID, UserID) VALUES ('" . $this->db->escape($picName) . "', " . ((int) $messageId) . ', ' . ((int) $userId) . ')';
+        if (!$this->db->query($sql)) {
+            $this->error = $this->db->lasterror();
+            return -1;
+        }
+        return 1;
+    }
+
+    public function reassignChatPictures($oldMessageId, $newMessageId)
+    {
+        $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'chatpic SET MsgID = ' . ((int) $newMessageId) . ' WHERE MsgID = ' . ((int) $oldMessageId);
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+    public function deletePictureByMessageAndName($messageId, $picName)
+    {
+        $sql = 'DELETE FROM ' . MAIN_DB_PREFIX . 'chatpic WHERE MsgID = ' . ((int) $messageId) . " AND PicName = '" . $this->db->escape($picName) . "'";
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+    public function deleteMessageById($messageId)
+    {
+        $sql = 'DELETE FROM ' . MAIN_DB_PREFIX . 'chattext WHERE rowid = ' . ((int) $messageId);
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+    public function markMessageSeen($messageId)
+    {
+        $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'chattext SET gesehen = 1 WHERE rowid = ' . ((int) $messageId);
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+    public function markMessagesSeenForReceiver($fromUserId, $toUserId)
+    {
+        $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'chattext SET gesehen = 1 WHERE user_id = ' . ((int) $fromUserId) . ' AND privat = ' . ((int) $toUserId) . ' AND gesehen = 0';
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+    public function getOrCreateChatStat($userId)
+    {
+        $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chatstat WHERE user_id = ' . ((int) $userId);
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj)) {
+                return $obj;
+            }
+        }
+        $sql = 'INSERT INTO ' . MAIN_DB_PREFIX . 'chatstat (user_id, online, last_stat) VALUES (' . ((int) $userId) . ', 1, CURRENT_TIMESTAMP)';
+        $this->db->query($sql);
+        $resql = $this->db->query('SELECT * FROM ' . MAIN_DB_PREFIX . 'chatstat WHERE user_id = ' . ((int) $userId));
+        return $resql ? $this->db->fetch_object($resql) : null;
+    }
+
+    public function updateChatStat($userId, $online)
+    {
+        $stat = $this->getOrCreateChatStat($userId);
+        $newChecks = is_object($stat) && isset($stat->checks) ? ((int) $stat->checks + 1) : 1;
+        $sql = 'UPDATE ' . MAIN_DB_PREFIX . 'chatstat SET checks = ' . $newChecks . ', online = ' . ((int) $online) . ' WHERE user_id = ' . ((int) $userId);
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+    public function listChatStats()
+    {
+        $rows = array();
+        $resql = $this->db->query('SELECT * FROM ' . MAIN_DB_PREFIX . 'chatstat');
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $rows[] = $obj;
+            }
+        }
+        return $rows;
+    }
+
+    public function getLatestIncomingRowId($currentUserId, $fromUserId = 0)
+    {
+        $sql = 'SELECT rowid FROM ' . MAIN_DB_PREFIX . 'chattext';
+        if ((int) $fromUserId > 0) {
+            $sql .= ' WHERE user_id = ' . ((int) $fromUserId) . ' AND privat = ' . ((int) $currentUserId);
+        }
+        $sql .= ' ORDER BY rowid DESC LIMIT 1';
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            $obj = $this->db->fetch_object($resql);
+            if (is_object($obj) && isset($obj->rowid)) {
+                return (int) $obj->rowid;
+            }
+        }
+        return 0;
+    }
+
+    public function getUnreadSenders($currentUserId)
+    {
+        $rows = array();
+        $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE privat = ' . ((int) $currentUserId) . ' AND gesehen = 0 GROUP BY user_id';
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $rows[] = $obj;
+            }
+        }
+        return $rows;
+    }
+
+    public function getUnreadMessagesFromSender($senderId, $currentUserId)
+    {
+        $rows = array();
+        $sql = 'SELECT rowid, user_id, privat, chattext, chattextblob, timestamp FROM ' . MAIN_DB_PREFIX . 'chattext WHERE user_id = ' . ((int) $senderId) . ' AND privat = ' . ((int) $currentUserId) . ' AND gesehen = 0 ORDER BY rowid DESC';
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $rows[] = $obj;
+            }
+        }
+        return $rows;
+    }
+
+    public function appendBroadcastSeenUser($messageId, $userId)
+    {
+        $message = $this->getMessageById($messageId);
+        if (!is_object($message)) {
+            return -1;
+        }
+        $existing = trim((string) $message->gesehen_Broadcast);
+        if ($existing === '') {
+            $newValue = (string) ((int) $userId);
+        } else {
+            $ids = explode(', ', $existing);
+            if (in_array((string) ((int) $userId), $ids, true) || in_array((int) $userId, $ids, true)) {
+                return 1;
+            }
+            $newValue = $existing . ', ' . ((int) $userId);
+        }
+        $sql = 'UPDATE ' . MAIN_DB_PREFIX . "chattext SET gesehen_Broadcast = '" . $this->db->escape($newValue) . "' WHERE rowid = " . ((int) $messageId);
+        return $this->db->query($sql) ? 1 : -1;
+    }
+
+
+    public function getMessagesForBroadcastSeen($groupMode = false)
+    {
+        $rows = array();
+        $sql = 'SELECT * FROM ' . MAIN_DB_PREFIX . 'chattext WHERE ';
+        $sql .= $groupMode ? "privat LIKE '%G%'" : 'privat = 0';
+        $sql .= ' ORDER BY timestamp ASC';
+        $resql = $this->db->query($sql);
+        if ($resql) {
+            while ($obj = $this->db->fetch_object($resql)) {
+                $rows[] = $obj;
+            }
+        }
+        return $rows;
+    }
 
 	/**
 	 *	Return select list of users
@@ -268,7 +689,13 @@ class dolichat extends CommonObject
 		}
 		if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
-		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
+		if (!empty($includeUsers)) {
+            if (is_array($includeUsers)) {
+                $sql .= " AND u.rowid IN ('".implode("','", $includeUsers)."')";
+            } else {
+                $sql .= " AND u.rowid IN ('".$includeUsers."')";
+            }
+        }
 		$sql.= " AND u.statut<>0 ";
 		$sql.= " AND u.rowid>1 ";
 		$sql.= " AND u.rowid!='".$user->id."' ";        
@@ -530,7 +957,13 @@ class dolichat extends CommonObject
 		}
 		if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
-		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
+		if (!empty($includeUsers)) {
+            if (is_array($includeUsers)) {
+                $sql .= " AND u.rowid IN ('".implode("','", $includeUsers)."')";
+            } else {
+                $sql .= " AND u.rowid IN ('".$includeUsers."')";
+            }
+        }
 		$sql.= " AND u.statut<>0 ";
 		$sql.= " AND u.rowid>1 ";
 		$sql.= " AND u.rowid!='".$user->id."' ";
@@ -705,7 +1138,13 @@ class dolichat extends CommonObject
 		}
 		if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
-		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
+		if (!empty($includeUsers)) {
+            if (is_array($includeUsers)) {
+                $sql .= " AND u.rowid IN ('".implode("','", $includeUsers)."')";
+            } else {
+                $sql .= " AND u.rowid IN ('".$includeUsers."')";
+            }
+        }
 		$sql.= " Where u.statut<>0 ";
 		$sql.= " AND u.rowid>1 ";
 		$sql.= " AND u.rowid <> '".$userid."'";
@@ -796,7 +1235,13 @@ class dolichat extends CommonObject
 		}
 		if (! empty($user->societe_id)) $sql.= " AND u.fk_societe = ".$user->societe_id;
 
-		if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
+		if (!empty($includeUsers)) {
+            if (is_array($includeUsers)) {
+                $sql .= " AND u.rowid IN ('".implode("','", $includeUsers)."')";
+            } else {
+                $sql .= " AND u.rowid IN ('".$includeUsers."')";
+            }
+        }
 		$sql.= " Where u.statut<>0 ";
 		$sql.= " AND u.rowid>1 ";
 		$sql.= " AND u.rowid <> '".$userid."'";

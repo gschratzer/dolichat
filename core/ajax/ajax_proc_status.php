@@ -1,151 +1,178 @@
 <?php  
 //Config auslesen 
-$res=0;
-if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");         // to work if your module directory is into dolibarr root htdocs directory
-if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");     // to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
-if (! $res) die("Include of main fails");
+$res = 0;
+if (!$res && file_exists(__DIR__ . '/../main.inc.php')) {
+    $res = @include __DIR__ . '/../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../../main.inc.php';
+}
+if (!$res) {
+    die('Include of main fails');
+}
+dol_include_once('/dolichat/class/dolichat.class.php');
 
-    $ges = $_GET['ges_id'];
-    $id = $_GET['id'];
-    $del = $_GET['del'];
-    $pruf = $_GET['pruf'];
-    $userid = $_GET['userid'];
-    $tmp_userid = $_GET['tmp_user'];
-    $chat_stat = $_GET['chat_stat'];
-    $get_user_info = $_GET['get_user_info'];
+$dolichat = new dolichat($db);
 
-    if(isset($id) && $del == 0){ 
-    
-        $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
-        $sql.= ' SET gesehen =  "1"';
-        $sql.= ' WHERE rowid = "'.$id.'"'; 
-
-        $up_gesehen = $db->query($sql);
-        
-    }elseif(isset($ges)){ 
-    
-        $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
-        $sql.= ' SET gesehen =  "1"';
-        $sql.= ' WHERE user_id = "'.$ges.'"'; 
-        $sql.= ' AND privat = "'.$user->id.'"'; 
-        $sql.= ' AND gesehen = 0';
-        //echo $sql;
-        $up_gesehen = $db->query($sql);
-        
-    }elseif(isset($id) && $del == 1){
-
-        $sql = "SELECT * FROM  `" . MAIN_DB_PREFIX . "chattext` WHERE rowid = ".$id;
-        $res = $db->query($sql);
-        $row = $db->fetch_object($res);
-
-        if(!empty($row->chattextblob)) $chattext = base64_decode($row->chattextblob);
-        else $chattext = $row->chattext;
-
-        $PIC = substr (strrchr ($chattext, "%picto="), 7);
-        $Pic = $PIC; 
-        $url = $row->user_id;
-        if($Bildernum == 1 || $Bildernum == ""){
-            if($Pic!=""){
-                $path = DOL_DATA_ROOT.dol_buildpath('/dolichat',1).'/uploads/'.$user->id.'/'.$PIC;
-                unlink($path);
-            
-                $path2 = DOL_DATA_ROOT.dol_buildpath('/dolichat',1).'/uploads/'.$user->id.'/t_'.$PIC;
-                unlink($path2);
-                
-            } 
-        }
-
-
-
-
-        $sql="DELETE FROM " . MAIN_DB_PREFIX . "chattext WHERE rowid = ".$id;
-        $up_gelöscht = $db->query($sql);
-    }elseif($pruf == 1){
-
-        $sql0 = "SELECT * FROM " . MAIN_DB_PREFIX . "chatstat where user_id = ".$user->id;
-        $res0 = $db->query($sql0);
-        $stat = $db->fetch_object($res0);
-
-        if(empty($stat))
-        {
-            $sql = "INSERT INTO " . MAIN_DB_PREFIX . "chatstat (`rowid`, `user_id`, `online`, `last_stat`) VALUES (NULL, '".$user->id."', '1', CURRENT_TIMESTAMP);";
-            $db->query($sql);
-        }
-
-        $sql0 = "SELECT * FROM " . MAIN_DB_PREFIX . "chatstat";
-        $res0 = $db->query($sql0);
-        while($stat = $db->fetch_object($res0))
-        {
-            if($stat->user_id == $user->id)
-            {
-                if(empty($chat_stat)) $chat_stat = 1;
-                $sql = "UPDATE " . MAIN_DB_PREFIX . "chatstat SET `checks` = '".($stat->checks + 1)."', online = '".$chat_stat."' WHERE `" . MAIN_DB_PREFIX . "chatstat`.`user_id` = ".$user->id.";";
-                $db->query($sql);
-            }
-            else
-            {
-                if(strtotime($stat->last_stat) > strtotime('- 10 sec.')) $chat_users_stats[$stat->user_id] = $stat->online;
-                if(strtotime($stat->last_stat) < strtotime('- 10 sec.')) $chat_users_stats[$stat->user_id] = 0;
-            }
-        }
-
-
-        $sql ="SELECT rowid FROM " . MAIN_DB_PREFIX . "chattext ";
-        if($userid > 0) $sql.= " Where user_id = ".$userid." and privat = ".$user->id;
-        $sql.=" ORDER BY rowid  DESC ";
-        $sql.=" LIMIT 0 , 1";
-        $res = $db->query($sql);
-        $row = $db->fetch_object($res);
-
-        $rowid = $row->rowid;
-		
-        echo $rowid;
-        if(is_array($chat_users_stats))
-        foreach($chat_users_stats as $key => $chat_user)
-        {
-            echo '%<|>%';
-            echo $key;
-            echo '%<>%';
-            echo $chat_user;
-        }
-
+function dolichatStatusJsonResponse($status, $message, $extra = array())
+{
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=UTF-8');
     }
-    elseif($pruf == 2)
-    {
-        $sql1 = "SELECT * FROM `" . MAIN_DB_PREFIX . "chattext`";
-        if($user->id > 0) $sql1.= " Where privat = ".$user->id;
-        $sql1.= " and gesehen = 0 Group by user_id";
-        $res1 = $db->query($sql1);
-        //echo $sql;
+    $payload = array_merge(
+        array(
+            'status' => $status,
+            'message' => $message,
+        ),
+        is_array($extra) ? $extra : array()
+    );
+    echo json_encode($payload);
+    exit;
+}
 
-        $first = true;
-        while($gese = $db->fetch_object($res1)) 
-        {
-            $sql ="SELECT rowid, user_id, privat, chattext, chattextblob, timestamp FROM " . MAIN_DB_PREFIX . "chattext ";
-            if($user->id > 0) $sql.= " Where user_id = ".$gese->user_id." and privat = ".$user->id.' and gesehen = 0';
-            $sql.=" ORDER BY rowid DESC ";
-            //$sql.=" LIMIT 0 , 1";
-            $res = $db->query($sql);
-            //$row = $db->fetch_object($res);
+    $ges = GETPOSTINT('ges_id');
+    $id = GETPOSTINT('id');
+    $del = GETPOSTINT('del');
+    $pruf = GETPOSTINT('pruf');
+    $userid = GETPOSTINT('userid');
+    $tmp_userid = GETPOSTINT('tmp_user');
+    $chat_stat = GETPOSTINT('chat_stat');
+    $get_user_info = GETPOST('get_user_info', 'alpha');
+    dol_syslog("DOLICHAT status hit: uri=" . $_SERVER['REQUEST_URI'], LOG_WARNING);
+    dol_syslog(
+    "DOLICHAT params: id=" . $id .
+    " del=" . $del .
+    " ges_id=" . $ges .
+    " pruf=" . $pruf .
+    " userid=" . $userid .
+    " tmp_user=" . $tmp_userid .
+    " chat_stat=" . $chat_stat,
+    LOG_WARNING
+    );
 
-            $cn_gesehen = 0;
-            while($row_cm = $db->fetch_object($res))
-            {
-                if($cn_gesehen == 0) $row = $row_cm;
-                $cn_gesehen++;
-            }
+    /**
+    * DELETE FIRST
+    * Must run before any polling/status logic.
+    */
+    if ((int) $id > 0 && (int) $del === 1) {
+    dol_syslog("DOLICHAT delete branch entered for message id=" . $id, LOG_WARNING);
 
-            $rowid = $row->rowid;
-            if($user->id != $row->user_id) $ruser = $row->user_id;
-            if($user->id != $row->privat) $ruser = $row->privat;
-            
-            if($first == false) echo '%<|>%';         
+    if (empty($user->id)) {
+        dolichatStatusJsonResponse('error', 'User not authenticated.', array('messageId' => (int) $id));
+    }
+
+    $row = $dolichat->getMessageById((int) $id);
+    if (!is_object($row)) {
+        dolichatStatusJsonResponse('error', 'Message not found.', array('messageId' => (int) $id));
+    }
+
+    // Prefer a class method if you have one:
+    // if (!$dolichat->canDeleteMessage($row, $user)) { ... }
+
+    $ownerId = 0;
+    if (isset($row->user_id) && (int) $row->user_id > 0) {
+        $ownerId = (int) $row->user_id;
+    }
+
+    if ($ownerId !== (int) $user->id && empty($user->admin)) {
+        dolichatStatusJsonResponse('error', 'You can only delete your own messages.', array('messageId' => (int) $id));
+    }
+
+    /**
+     * Best solution:
+     * Move picture/file cleanup into dolichat.class.php and call one method here:
+     *
+     * $deleteResult = $dolichat->deleteMessageWithAssets((int) $id, $user);
+     *
+     * For now, if deleteMessageById() in your class already handles cleanup,
+     * this controller stays clean.
+     */
+    $deleteResult = $dolichat->deleteMessageById((int) $id);
+
+    if ((int) $deleteResult <= 0) {
+        $errorMessage = !empty($dolichat->error) ? $dolichat->error : 'Message could not be deleted.';
+        dol_syslog("DOLICHAT delete failed for id=" . $id . " error=" . $errorMessage, LOG_WARNING);
+        dolichatStatusJsonResponse('error', $errorMessage, array('messageId' => (int) $id));
+    }
+
+    $verifyDeleted = $dolichat->getMessageById((int) $id);
+    if (is_object($verifyDeleted)) {
+        dol_syslog("DOLICHAT delete verify failed for id=" . $id, LOG_WARNING);
+        dolichatStatusJsonResponse('error', 'Delete could not be verified.', array('messageId' => (int) $id));
+    }
+
+    dol_syslog("DOLICHAT delete success for id=" . $id, LOG_WARNING);
+    dolichatStatusJsonResponse('success', 'Message deleted.', array('messageId' => (int) $id));
+}
+
+/**
+ * MARK ONE MESSAGE AS SEEN
+ */
+if ((int) $id > 0 && (int) $del === 0) {
+    $dolichat->markMessageSeen((int) $id);
+    exit;
+}
+
+/**
+ * MARK RECEIVED MESSAGES AS SEEN
+ */
+if ((int) $ges > 0) {
+    $dolichat->markMessagesSeenForReceiver((int) $ges, (int) $user->id);
+    exit;
+}
+
+/**
+ * STATUS / ONLINE USERS
+ */
+if ((int) $pruf === 1) {
+    if (empty($chat_stat)) {
+        $chat_stat = 1;
+    }
+
+    $dolichat->updateChatStat((int) $user->id, (int) $chat_stat);
+
+    $chat_users_stats = array();
+    foreach ($dolichat->listChatStats() as $stat) {
+        if ((int) $stat->user_id !== (int) $user->id) {
+            $chat_users_stats[$stat->user_id] = (strtotime($stat->last_stat) > strtotime('-10 sec')) ? $stat->online : 0;
+        }
+    }
+
+        $rowid = $dolichat->getLatestIncomingRowId((int) $user->id, (int) $userid);
+        if(is_array($chat_users_stats))
+	        foreach($chat_users_stats as $key => $chat_user)
+	        {
+	            echo '%<|>%';
+        	    echo $key;
+	            echo '%<>%';
+	            echo $chat_user;
+	        }
+	    }
+	    elseif($pruf == 2)
+	    {
+	        $first = true;
+	        foreach ($dolichat->getUnreadSenders($user->id) as $gese) {
+        	    $rowsUnread = $dolichat->getUnreadMessagesFromSender($gese->user_id, $user->id);
+	            $cn_gesehen = count($rowsUnread);
+	            $row = $cn_gesehen > 0 ? $rowsUnread[0] : null;
+	            if (!$row) {
+        	        continue;
+	            }
+
+        	    $rowid = $row->rowid;
+	            if($user->id != $row->user_id) $ruser = $row->user_id;
+        	    if($user->id != $row->privat) $ruser = $row->privat;
+
+            if($first == false) echo '%<|>%';
             if($row->chattextblob) echo $rowid.'%<>%'.$ruser.'%<>%'.base64_decode($row->chattextblob).'%<>%'.date('H:i', strtotime($row->timestamp)).'%<>%'.$user->id.'%<>%'.$row->user_id; // .'-'.$sql
             elseif($row->chattext) echo $rowid.'%<>%'.$ruser.'%<>%'.$row->chattext.'%<>%'.date('H:i', strtotime($row->timestamp)).'%<>%'.$user->id.'%<>%'.$row->user_id; // .'-'.$sql
             echo '%<>%'.$cn_gesehen;
-            //echo '%<>%'.$sql;
 
             $staticuser=new User($db);
             $staticuser->fetch($row->user_id);

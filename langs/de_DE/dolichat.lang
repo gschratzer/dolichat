@@ -73,25 +73,6 @@ Werbung4=Das Module Webapp field staff bietet außerdem auch: (+ Google Map Funk
 Werbung5=Das Module Webapp field staff bietet außerdem auch: (+ Chat mit dolichat Module)
 Werbung6=Das Module Webapp field staff bietet außerdem auch: (+ Statistiken)
 Kaufen=Kaufen
-WhatsAppDesc=Dolichat kann durch die WhatsApp Funktion erweitert werden. Hier definieren Sie das WhatsApp Konto des Dolibarr-System:
-WhatsAppSetup=WhatsApp Einstellungen
-MAIN_DISABLE_WHATSAPP=WhatsApp Funktion abschalten
-MAIN_WHATSAPP_UN=WhatsApp - Benutzername 
-MAIN_WHATSAPP_NN=WhatsApp - Nickname
-MAIN_WHATSAPP_PW=WhatsApp - Passwort
-WhatsAppUNDescTitle=WhatsApp Benutzer
-WhatsAppUNDescDesc=Telefonnummer mit Vorwahl ohne "00" oder "+"
-WhatsAppPWDescTitle=WhatsApp Passwort
-WhatsAppPWDescDesc=Mit einem gerooteten Mobiltelefon kann dies z.B. gelesen werden
-WhatsAppNNDescTitle=WhatsApp Nickname
-WhatsAppNNDescDesc=This is the username (or nickname) displayed by WhatsApp clients
-WhatsAppPWDescTitle=WhatsApp Passwort
-WhatsAppPWDescDesc=WhatsApp Registrierungs-Passwort
-WAText=Nachricht
-WhatsAppTo=Empfängeradresse
-MAIN_WHATSAPP_STATUS=WhatsApp - Status
-WhatsAppStatusDescTitle=Status
-WhatsAppStatusDescDesc=der Status ist für alle WhatsApp-Kontakte sichtbar - z.B. Benutze gerade WhatsApp
 
 ### Next Gen Chat ###
 
@@ -113,4 +94,7 @@ OnlineStatusUnknow=Unbekannt
 ### Admin ###
 
 ChatAdminFunction=Chat Admin funktionen (befehle sind direkt im chat auszuführen)
-DelAllMessages=Lösche alle nachrichten
+DelAllMessages=Lösche alle Nachrichten
+
+###MENU###
+CommunicationsMenuTitle=Kommunikation

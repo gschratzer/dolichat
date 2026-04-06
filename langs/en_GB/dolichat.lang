@@ -1,22 +1,10 @@
-﻿
-/*
-* NIKLAS SPANRING @ Backbone internet service GMBH AT
-* Language code: en_UK
-* QA release date 2014-08-18
-* $langs->trans("");
+﻿/*
+* @ Backbone internet service GMBH AT
+* Guido Schratzer, Niklas Spanring
+* Language code: en_GB
+* QA release date 2016-03-03
 * 
-* 
-* 
-*/
-
-
-
-CHARSET=UTF-8
-
-
-
-
-DelShowInt=Chat alert next to the login name? (disable if not main.inc.php was not changed! acc the Readme.txt) 
+*/DelShowInt=Chat alert next to the login name? (disable if not main.inc.php was not changed! acc the Readme.txt) 
 DelShowLinkAsItOwn=View chat as a separate Main Menu? 
 DelShowLink=Show the Main Menu partner Chat Link? 
 DelShowLinkAgenda=Show the Main Menu Agenda Chat Link? 
@@ -56,18 +44,18 @@ Write=letter
 PicUpload=Upload 
 GruppenBenutzerc=User groups: 
 Speichernc=Save: 
-StandartauswahlcKSendenancK=Standart choice: to (send :) 
+StandartauswahlcKSendenancK=Standard choice: to (send :) 
 BilderAnzeigenf=Photo ads? 
 SekundenK3isrecommendedK=Seconds (3 is strongly discouraged) 
 Kontakteverwalten=Manage contacts 
 LinkzumKontakteverwalten=Link to manage contacts 
 GruppenEinstllungen=groups settings 
-GruppeErstellen=
+GruppeErstellen=add Group
 AusGruppeaustrehten=Emerge from group 
 GruppenVerwaltenKnurAdminK=Group Managing 
 zum=for 
 BitteNachrichteingeben=Enter your message
-Nachricht bei Klick Löschen=Nachricht bei Klick Löschen
+Nachricht bei Klick Löschen=Delete message on click
 Linke Spalte ausblenden?=Hide left column?
 So=Sun
 Mo=Mon 
@@ -84,7 +72,6 @@ Werbung4=The modules webapp field staff also offers also: (+ Google map function
 Werbung5=The modules webapp field staff also offers also: (+ Chat with dolichat modules)
 Werbung6=The modules webapp field staff also offers: (+ stats)
 Kaufen=buy
-
 
 ### Next Gen Chat ###
 
@@ -107,3 +94,7 @@ OnlineStatusUnknow=Unkown
 
 ChatAdminFunction=Chat Admin function (write your action direct in the chat)
 DelAllMessages=Delete all messages from every user
+
+###MENU###
+CommunicationsMenuTitle=Communication
+DolichatMenuTitle=Chat
