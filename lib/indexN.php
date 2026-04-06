@@ -1,33 +1,44 @@
 
 <?php 
-$res=0;
-if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");			// to work if your module directory is into dolibarr root htdocs directory
-if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res) die("Include of main fails");
+$res = 0;
+if (!$res && file_exists(__DIR__ . '/../main.inc.php')) {
+    $res = @include __DIR__ . '/../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../../main.inc.php';
+}
+if (!$res) {
+    die('Include of main fails');
+}
+dol_include_once('/dolichat/class/dolichat.class.php');
 
-	ini_set('display_errors', '0');
-	$eintrag = $_GET['eintrag'];
-	$cuser = $_GET['cuser'];
-	$nick = $_GET['nick'];
-	$rowid = $_GET['rowid'];
-	$boxid = $_GET['boxid'];
-	$del = $_GET['delimg'];
+    ini_set('display_errors', '0');
+    $dolichat = new dolichat($db);
+    $eintrag = GETPOST('eintrag', 'alpha');
+    $cuser = GETPOSTINT('cuser');
+    $nick = GETPOST('nick', 'alpha');
+    $rowid = GETPOSTINT('rowid');
+    $boxid = GETPOST('boxid', 'alpha');
+    $del = GETPOST('delimg', 'alpha');
+    $mobile = GETPOSTINT('mobile');
 
-	$sql ="DELETE FROM " . MAIN_DB_PREFIX . "chatpic Where MsgID = ".$rowid." AND PicName = '".$del."'";
-	$res = $db->query($sql);
+    $phone = 0;
+    $tablet = 0;
 
-	$sql ="SELECT rowid FROM " . MAIN_DB_PREFIX . "chattext ";
-	$sql.="ORDER BY rowid  DESC ";
-	$sql.="LIMIT 0 , 1";
-	$res = $db->query($sql);
-	$row = $db->fetch_object($res);
-	
-	$rowid = $row->rowid + 1;
-	if($_GET['rowid']){
-		$rowid = $_GET['rowid'];
-	}
+    if ($rowid > 0 && $del !== '') {
+        $dolichat->deletePictureByMessageAndName($rowid, $del);
+    }
+
+	$rowid = max(1, $dolichat->getLatestChatRowId() + 1);
+    if (GETPOSTINT('rowid') > 0) {
+        $rowid = GETPOSTINT('rowid');
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,7 +63,7 @@ if (! $res) die("Include of main fails");
 	<body style="margin: 0px;">
 <?php
 	print '<form id="upload" method="post" action="upload.php?N=1&eintrag='.$eintrag.'&cuser='.$cuser.'&nick='.$nick.'&rowid='.$rowid.'" enctype="multipart/form-data">';	
-	if(($phone == 0 && $tablet == 0 ) && $_GET['mobile'] == 0){
+	if(($phone == 0 && $tablet == 0 ) && $mobile == 0){
 			print '<div id="drop">';
 			print '<a style="position: absolute; top: 0px; left: 0px;"><img id="'.$boxid.'uplicon" src="../images/upload.png" style="width: 26px;border: 1px solid black; border-radius: 5px;"></a>';
 			print '<input type="file" name="upl" id="upl" multiple capture="camera"/>';
@@ -75,27 +86,11 @@ if (! $res) die("Include of main fails");
 
 		</form>
 
-		<script>
-			$('.UploadPicImg'+'<?php print $boxid; ?>', window.parent.document).click(function() {
-    			$('#upl').trigger('click');
-			});
-			var sending = false;
-			$(document).ready(function(){
-				$('form#upload').submit(function( event ){
-					if(sending == false)
-					{
-					    event.preventDefault();
-					    var r = confirm("Upload?");
-					    if (r == true) {
-					        sending = true;
-					        $('form#upload').submit();
-					    } else {
-					        //event.preventDefault();
-					    }
-					}
-				});
-			});
-		</script>
+        <script>
+            $('.UploadPicImg' + '<?php print $boxid; ?>', window.parent.document).click(function () {
+                $('#upl').trigger('click');
+            });
+        </script>
         
 		<!-- JavaScript Includes -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

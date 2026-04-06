@@ -1,32 +1,37 @@
 
 <?php 
-$res=0;
-if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");			// to work if your module directory is into dolibarr root htdocs directory
-if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res) die("Include of main fails");
+$res = 0;
+if (!$res && file_exists(__DIR__ . '/../main.inc.php')) {
+    $res = @include __DIR__ . '/../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../../main.inc.php';
+}
+if (!$res) {
+    die('Include of main fails');
+}
+dol_include_once('/dolichat/class/dolichat.class.php');
 
 	ini_set('display_errors', '0');
-	$eintrag = $_GET['eintrag'];
-	$cuser = $_GET['cuser'];
-	$nick = $_GET['nick'];
-	$rowid = $_GET['rowid'];
-	$boxid = $_GET['boxid'];
-	$del = $_GET['delimg'];
+	$dolichat = new dolichat($db);
+	$eintrag = GETPOST('eintrag', 'restricthtml');
+	$cuser = GETPOST('cuser', 'alphanohtml');
+	$nick = GETPOST('nick', 'alpha');
+	$rowid = GETPOSTINT('rowid');
+	$boxid = GETPOST('boxid', 'alpha');
+	$del = GETPOST('delimg', 'alpha');
 
-	$sql ="DELETE FROM " . MAIN_DB_PREFIX . "chatpic Where MsgID = ".$rowid." AND PicName = '".$del."'";
-	$res = $db->query($sql);
+	$dolichat->deletePictureByMessageAndName($rowid, $del);
 
-	$sql ="SELECT rowid FROM " . MAIN_DB_PREFIX . "chattext ";
-	$sql.="ORDER BY rowid  DESC ";
-	$sql.="LIMIT 0 , 1";
-	$res = $db->query($sql);
-	$row = $db->fetch_object($res);
-	
-	$rowid = $row->rowid + 1;
-	if($_GET['rowid']){
-		$rowid = $_GET['rowid'];
+	$rowid = max(1, $dolichat->getLatestChatRowId() + 1);
+	if (GETPOSTINT('rowid') > 0) {
+		$rowid = GETPOSTINT('rowid');
 	}
 ?>
 <!DOCTYPE html>

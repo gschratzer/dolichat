@@ -1,139 +1,172 @@
-<?php  
-//Config auslesen 
-$res=0;
-if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");         // to work if your module directory is into dolibarr root htdocs directory
-if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");     // to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");       // to work if your module directory is into a subdir of root htdocs directory
-if (! $res) die("Include of main fails");
+<?php
+ob_start();
+$res = 0;
+if (!$res && file_exists(__DIR__ . '/../main.inc.php')) {
+    $res = @include __DIR__ . '/../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../../main.inc.php';
+}
+if (!$res) {
+    http_response_code(500);
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode(array('status' => 'error', 'message' => 'Include of main fails'));
+    exit;
+}
 
 dol_include_once('/dolichat/class/dolichat.class.php');
 
-$dolichat=new dolichat($db);
-$langs->load("dolichat@dolichat");
-$staticuser=new User($db);
+header('Content-Type: application/json; charset=UTF-8');
+
+function dolichat_send_json_and_exit($response)
+{
+    $buffer = '';
+    if (ob_get_level() > 0) {
+        $buffer = trim((string) ob_get_clean());
+    }
+    if ($buffer !== '') {
+        if (empty($response['debug'])) {
+            $response['debug'] = $buffer;
+        }
+        if (empty($response['message'])) {
+            $response['message'] = $buffer;
+        }
+    }
+    echo json_encode($response);
+    exit;
+}
+
+$dolichat = new dolichat($db);
+$langs->load('dolichat@dolichat');
+
+$staticuser = new User($db);
 $staticuser->fetch($user->id);
 
-$staticuser2=new User($db);
+$staticuser2 = new User($db);
 
-    $cuser = $_POST['cuser'];
-    $PicSavedID = $_POST['PicSavedID'];
-    $Pic_text = '';
-    if($PicSavedID)
-    {
-        $sql ="SELECT * FROM  " . MAIN_DB_PREFIX . "chatpic where MsgID = '".$PicSavedID."' ORDER BY  " . MAIN_DB_PREFIX . "chatpic.rowid DESC ";
-        $ergebnis = $db->query($sql);      
-        while($row = $db->fetch_object($resql)) 
-        { 
-            $Pic = $row->PicName;  
-            $Picuser = $row->UserID;  
+$cuser = GETPOST('cuser', 'alphanohtml');
+$picSavedId = GETPOSTINT('PicSavedID');
+$eintrag = GETPOST('eintrag', 'restricthtml');
+$nick = GETPOST('nick', 'alphanohtml');
 
-            $Pic_text.= ' %picto='.$PicSavedID.'/'.$Pic;
-        }
-    }   
+$response = array(
+    'status' => 'error',
+    'message' => '',
+    'messageId' => 0,
+);
 
-    $testFgroup = $cuser[0];
-    $write = 1;
-    if($testFgroup == "G")
-    {
-        $rowidG = substr($cuser,1);
-        $sql ="SELECT * FROM  " . MAIN_DB_PREFIX . "chatgroup where rowid = '".$rowidG."'";
-        $resql=$db->query($sql);
-        $obj = $db->fetch_object($resql);
-        $write = $obj->G_write;        
+if (empty($nick) || trim((string) $eintrag) === '') {
+    $response['message'] = $langs->trans('BitteNachrichteingeben');
+    dolichat_send_json_and_exit($response);
+}
+
+if (empty($cuser) || $cuser === '0' || $cuser === '-1') {
+    $response['message'] = 'Please select a chat or contact first.';
+    dolichat_send_json_and_exit($response);
+}
+
+$picText = '';
+if ($picSavedId > 0) {
+    foreach ($dolichat->getPicturesByMessageId($picSavedId) as $row) {
+        $picText .= ' %picto=' . $picSavedId . '/' . $row->PicName;
     }
-    if($write == 1)
-    {
-        if(isset($_POST['eintrag']))
-        { 
-    
-        if(empty($_POST['nick']) || empty($_POST['eintrag']))
-        { 
-            echo '<script>alert("'.$langs->trans("BitteNachrichteingeben").'")</script>'; 
+}
+
+$testFgroup = substr((string) $cuser, 0, 1);
+$write = 1;
+$rightsfail = '';
+$rightsfail_c = 0;
+
+if ($testFgroup === 'G') {
+    $rowidG = (int) substr((string) $cuser, 1);
+    $sql = 'SELECT G_write FROM ' . MAIN_DB_PREFIX . 'chatgroup WHERE rowid = ' . $rowidG;
+    $resql = $db->query($sql);
+    if ($resql) {
+        $obj = $db->fetch_object($resql);
+        if ($obj) {
+            $write = (int) $obj->G_write;
         }
-        else
-        {
-            $rightsfail = "";
-            $privatuser = $_POST['cuser'];
-            if($privatuser > 0 || $testFgroup == "G")
-            {
+    }
+}
 
-            }
-            else
-            {
-                if(!$user->rights->dolichat->UseBroadcast)
-                {
-                    $privatuser = $user->id;
-                    $rightsfail = ' No Permison to make a Broadcast ';
-                    $rightsfail_c = 1;
-                }
-                else
-                {
-                    $privatuser = 0;
-                }
-            }
-            //Variablen definieren und mit "POST" Daten füllen (Mit htmlspecialchars filtern..) 
+if ((int) $write !== 1) {
+    $response['message'] = 'Writing to this chat is currently disabled.';
+    dolichat_send_json_and_exit($response);
+}
 
-            $nick = htmlspecialchars($_POST['nick']); 
-            $eintrag = htmlspecialchars(($_POST['eintrag'])); 
+$privatuser = $cuser;
+if ((is_numeric($privatuser) && (int) $privatuser > 0) || $testFgroup === 'G') {
+    // keep selected receiver
+} else {
+    if (empty($user->rights->dolichat->UseBroadcast)) {
+        $privatuser = (string) $user->id;
+        $rightsfail = ' No Permison to make a Broadcast ';
+        $rightsfail_c = 1;
+    } else {
+        $privatuser = '0';
+    }
+}
 
-            //if(empty($eintrag)) $eintrag = ($_POST['eintrag']);
-            //$eintrag = nl2br($eintrag);
-            //Die 2 oben definierten Variablen zusammensetzen 
-            if($eintrag != "%picto=notext")
-            {
-                $alles = $eintrag; 
-            }
+$alles = '';
+if ($eintrag !== '%picto=notext') {
+    $alles = htmlspecialchars($eintrag, ENT_QUOTES, 'UTF-8');
+}
+if ($rightsfail_c === 1) {
+    $alles = $rightsfail;
+}
+$alles = str_replace('&lt;br&gt;', '<br>', $alles);
+$alles .= $picText;
 
-            if($rightsfail_c == 1) $alles = $rightsfail;
-            $alles = ($alles);  
-            //$alles = str_replace('<','&lt;',$alles);
-            //$alles = str_replace('>','&gt;',$alles);
-            $alles = str_replace('&lt;br&gt;','<br>',$alles);
-            $alles = $alles.$Pic_text;
+if ((is_numeric($privatuser) && (int) $privatuser > 0) && $testFgroup !== 'G') {
+    $staticuser2->fetch((int) $privatuser);
+}
 
-            if($privatuser>0)
-            {
-                $staticuser2->fetch($privatuser); 
-                $privatnachricht = ' sagt zu '.$staticuser2->lastname.' '.$staticuser2->firstname;
-            }
+if ($alles === '/clear' && !empty($user->admin)) {
+    $db->query('DELETE FROM ' . MAIN_DB_PREFIX . 'chattext');
+    $response['status'] = 'success';
+    $response['message'] = 'Chat history cleared.';
+    dolichat_send_json_and_exit($response);
+}
 
-            if($alles == "/clear" && $user->admin)
-            {
-                $sql ="DELETE FROM `" . MAIN_DB_PREFIX . "chattext` WHERE 1";
-            }
-            else
-            {
+$messageId = $dolichat->createMessage($staticuser, $privatuser, $alles, $picSavedId);
+if ($messageId <= 0) {
+    $response['message'] = !empty($dolichat->error) ? $dolichat->error : 'Message could not be saved.';
+    dolichat_send_json_and_exit($response);
+}
 
+$savedMessage = $dolichat->getMessageById($messageId);
+if (!is_object($savedMessage) || (int) $savedMessage->rowid !== (int) $messageId) {
+    $response['message'] = 'Message insert returned an ID, but the saved message could not be verified.';
+    dolichat_send_json_and_exit($response);
+}
+if ((int) $savedMessage->user_id !== (int) $user->id) {
+    $response['message'] = 'Message save verification failed for the sender.';
+    dolichat_send_json_and_exit($response);
+}
+if ((string) $savedMessage->privat !== (string) $privatuser) {
+    $response['message'] = 'Message save verification failed for the receiver.';
+    dolichat_send_json_and_exit($response);
+}
+if (trim((string) $savedMessage->chattextblob) === '') {
+    $response['message'] = 'Message save verification failed because the stored payload is empty.';
+    dolichat_send_json_and_exit($response);
+}
 
-                $base_alles = base64_encode($alles);
-                if(!empty($base_alles))
-                {
-                    //Nick + Eintrag in die Datenbank schreiben 
-                    //".MAIN_DB_PREFIX."
-                    $sql ="INSERT INTO " . MAIN_DB_PREFIX . "chattext (";
-                    $sql.="rowid ,";
-                    $sql.="chattextblob ,";
-                    $sql.="user ,";
-                    $sql.="user_id ,";        
-                    $sql.="privat ,";
-                    $sql.="privat_name ,";        
-                    $sql.="timestamp";
-                    $sql.=") ";
-                    $sql.="VALUES (";
-                    $sql.="'', '".($base_alles)."', '".$staticuser->lastname.' '.$staticuser->firstname."', '".$user->id."','".$privatuser."', '".$privatnachricht."', NOW( )";
-                    $sql.=");";
-                }
-            }
+$decodedSavedMessage = base64_decode((string) $savedMessage->chattextblob, true);
+if ($decodedSavedMessage === false) {
+    $response['message'] = 'Message save verification failed because the stored payload could not be decoded.';
+    dolichat_send_json_and_exit($response);
+}
 
-            $res = $db->query($sql);
-    
-            $sql="UPDATE " . MAIN_DB_PREFIX . "chattext";
-            $sql.= ' SET gesehen =  "1"';
-            $sql.= ' WHERE privat = '.$user->id.' ;'; 
+$dolichat->markMessagesSeenForReceiver($user->id, $user->id);
 
-            $up_gesehen = $db->query($sql);
-
-        }   
-    }                                 
-} 
+$response['status'] = 'success';
+$response['message'] = 'Message saved and sent.';
+$response['messageId'] = (int) $messageId;
+dolichat_send_json_and_exit($response);

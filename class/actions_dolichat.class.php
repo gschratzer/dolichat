@@ -1,5 +1,7 @@
 <?php
 
+dol_include_once('/dolichat/class/dolichat.class.php');
+
 class Actionsdolichat {
 
 	var $db;
@@ -47,12 +49,10 @@ class Actionsdolichat {
 			$temp_user_id = $user->id;
         	if($user->rights->dolichat->UseChat && $_SERVER['PHP_SELF'] != dol_buildpath('/dolichat',1)."/index.php" && $_SERVER['PHP_SELF'] != "htdocs/dolichat/index.php" && $_SERVER['PHP_SELF'] != DOL_URL_ROOT."/dolichat/index.php")
         	{
-				$sql1 = "SELECT * FROM `" . MAIN_DB_PREFIX . "chattext`";
-				$sql1.= " Where privat = ".$user->id;
-				$sql1.= " and gesehen = 0 Group by user_id";
-				$res1 = $db->query($sql1);
-				$gese = $db->fetch_object($res1);
-				if($gese->rowid > 0)
+				$dolichat = new dolichat($db);
+				$unreadSenders = $dolichat->getUnreadSenders($user->id);
+				$gese = !empty($unreadSenders) ? $unreadSenders[0] : null;
+				if(is_object($gese) && !empty($gese->rowid))
 				{
 					$unseen = true;
 					$callsign = '!';

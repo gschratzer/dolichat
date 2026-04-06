@@ -22,12 +22,22 @@
  *	\ingroup    mobiles
  *	\brief      Setup page for mobiles module
  */
-$res=0;
-if (! $res && file_exists("../main.inc.php")) $res=@include("../main.inc.php");			// to work if your module directory is into dolibarr root htdocs directory
-if (! $res && file_exists("../../main.inc.php")) $res=@include("../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../main.inc.php")) $res=@include("../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res && file_exists("../../../../main.inc.php")) $res=@include("../../../../main.inc.php");		// to work if your module directory is into a subdir of root htdocs directory
-if (! $res) die("Include of main fails");
+$res = 0;
+if (!$res && file_exists(__DIR__ . '/../main.inc.php')) {
+    $res = @include __DIR__ . '/../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../main.inc.php';
+}
+if (!$res && file_exists(__DIR__ . '/../../../../main.inc.php')) {
+    $res = @include __DIR__ . '/../../../../main.inc.php';
+}
+if (!$res) {
+    die('Include of main fails');
+}
 
 require_once(DOL_DOCUMENT_ROOT."/core/lib/admin.lib.php");
 
